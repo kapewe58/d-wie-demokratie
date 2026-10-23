@@ -1,0 +1,16 @@
+# Build-Ergebnis
+dist/
+.astro/
+
+# Abhängigkeiten
+node_modules/
+
+# Logs
+npm-debug.log*
+
+# Umgebungsvariablen
+.env
+.env.production
+
+# macOS
+.DS_Store

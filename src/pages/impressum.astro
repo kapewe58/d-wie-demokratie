@@ -1,0 +1,77 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+	title="Impressum – D wie Demokratie"
+	description="Impressum und Anbieterkennzeichnung von d-wie-demokratie.de."
+>
+	<h1>Impressum</h1>
+
+	<section aria-labelledby="anbieterkennzeichnung">
+		<h2 id="anbieterkennzeichnung">Angaben gemäß § 5 DDG</h2>
+
+		<address>
+			Klaus P. Wolf<br />
+			Bavariafilmplatz 7<br />
+			82031 Grünwald<br />
+			Deutschland
+		</address>
+	</section>
+
+	<section aria-labelledby="kontakt">
+		<h2 id="kontakt">Kontakt</h2>
+
+		<p>
+			E-Mail:
+			<a href="mailto:kpw@5-finger.com">kpw@5-finger.com</a>
+		</p>
+	</section>
+
+	<section aria-labelledby="verantwortlich">
+		<h2 id="verantwortlich">Verantwortlich für den Inhalt</h2>
+
+		<p>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV:</p>
+
+		<address>
+			Klaus P. Wolf<br />
+			Bavariafilmplatz 7<br />
+			82031 Grünwald<br />
+			Deutschland
+		</address>
+	</section>
+
+	<section aria-labelledby="haftung-inhalte">
+		<h2 id="haftung-inhalte">Haftung für Inhalte</h2>
+
+		<p>
+			Die Inhalte dieser Website wurden mit größter Sorgfalt erstellt. Für die
+			Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann ich jedoch keine
+			Gewähr übernehmen.
+		</p>
+	</section>
+
+	<section aria-labelledby="nachdruck">
+		<h2 id="nachdruck">Nachdruck des Aufklebers</h2>
+
+		<p>
+			Der Aufkleber „D wie Demokratie“ darf ausdrücklich nachgedruckt und verbreitet
+			werden.
+		</p>
+	</section>
+</Layout>
+
+<style>
+	h1 {
+		font-size: clamp(2rem, 8vw, 3rem);
+	}
+
+	h2 {
+		margin-top: 2em;
+		font-size: clamp(1.25rem, 5vw, 1.6rem);
+	}
+
+	address {
+		font-style: normal;
+	}
+</style>

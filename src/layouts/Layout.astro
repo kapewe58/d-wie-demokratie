@@ -1,0 +1,139 @@
+---
+// Gemeinsamer Rahmen für alle Seiten: <head>, Farbstreifen oben, Fußzeile.
+import aufkleber from '../assets/aufkleber.png';
+
+interface Props {
+	title: string;
+	description: string;
+}
+
+const { title, description } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
+---
+
+<!doctype html>
+<html lang="de">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="sitemap" href="/sitemap-index.xml" />
+		<link rel="canonical" href={canonicalURL} />
+
+		<title>{title}</title>
+		<meta name="description" content={description} />
+
+		<!-- Vorschau beim Teilen in Messengern und sozialen Netzwerken -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content={String(aufkleber.width)} />
+		<meta property="og:image:height" content={String(aufkleber.height)} />
+		<meta name="twitter:card" content="summary_large_image" />
+	</head>
+	<body>
+		<div class="flagge" aria-hidden="true"></div>
+
+		<main>
+			<slot />
+		</main>
+
+		<footer>
+			<a href="/">Startseite</a>
+			<a href="/impressum/">Impressum</a>
+			<a href="/datenschutz/">Datenschutz</a>
+		</footer>
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		--schwarz: #000000;
+		--rot: #dd0000;
+		--gold: #ffce00;
+		--text: #1a1a1a;
+		--grau: #5a5a5a;
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+
+	body {
+		margin: 0;
+		background: #ffffff;
+		color: var(--text);
+		font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		font-size: 1.15rem;
+		line-height: 1.6;
+	}
+
+	main {
+		width: 100%;
+		max-width: 680px; /* Seitenbreite */
+		margin: 0 auto;
+		padding: 2em 1em 3em;
+		overflow-wrap: break-word;
+	}
+
+	h1,
+	h2 {
+		line-height: 1.2;
+	}
+
+	a {
+		color: var(--text);
+		text-decoration-color: var(--rot);
+		text-decoration-thickness: 2px;
+		text-underline-offset: 3px;
+	}
+
+	a:hover {
+		color: var(--rot);
+	}
+
+	/* Für Screenreader lesbar, aber unsichtbar */
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
+	}
+</style>
+
+<style>
+	/* Schwarz-Rot-Gold als schmaler Streifen am oberen Rand */
+	.flagge {
+		height: 12px;
+		background: linear-gradient(
+			to bottom,
+			var(--schwarz) 0 33.33%,
+			var(--rot) 33.33% 66.66%,
+			var(--gold) 66.66% 100%
+		);
+	}
+
+	footer {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.5em 2em;
+		padding: 2em 1em;
+		border-top: 1px solid #e5e5e5;
+		font-size: 0.95rem;
+	}
+
+	footer a {
+		color: var(--grau);
+		text-decoration: none;
+	}
+
+	footer a:hover {
+		color: var(--rot);
+	}
+</style>
