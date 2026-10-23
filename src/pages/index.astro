@@ -57,8 +57,17 @@ import Layout from '../layouts/Layout.astro';
 	.download {
 		margin-top: 2.5em;
 		padding: 1.5em;
-		border-left: 6px solid var(--gold);
-		background: #fafafa;
+		/* Platz für den 12px breiten Streifen links */
+		padding-left: calc(1.5em + 12px);
+		/* Schwarz-Rot-Gold nebeneinander, wie der Streifen am oberen Rand, nur um 90° gedreht */
+		background:
+			linear-gradient(
+				to right,
+				var(--schwarz) 0 33.33%,
+				var(--rot) 33.33% 66.66%,
+				var(--gold) 66.66% 100%
+			) left / 12px 100% no-repeat,
+			#fafafa;
 	}
 
 	.download h2 {
