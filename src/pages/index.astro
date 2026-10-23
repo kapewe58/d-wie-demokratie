@@ -47,7 +47,15 @@ import Layout from '../layouts/Layout.astro';
 		display: block;
 		width: 100%;
 		height: auto;
-		margin: 1em 0 2em;
+		/* zusammen mit dem Innenabstand von main (36,8px) genau 40px bis zum Streifen */
+		margin: 3.2px 0 2em;
+	}
+
+	/* Auf dem Handy rückt der Aufkleber noch näher an den oberen Rand */
+	@media (max-width: 680px) {
+		.aufkleber {
+			margin-top: -0.125em;
+		}
 	}
 
 	.lead {
