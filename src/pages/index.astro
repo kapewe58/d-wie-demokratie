@@ -49,19 +49,45 @@ import Layout from '../layouts/Layout.astro';
 		</ul>
 
 		<p>
-			Aus diesem Grund haben wir den Aufkleber entworfen. Wir wünschen ihm große
+			Aus diesem Grund haben wir die Aufkleber entworfen. Wir wünschen ihnen große
 			Verbreitung.
 		</p>
 	</section>
 
 	<section class="download" aria-labelledby="download-titel">
-		<h2 id="download-titel">Der Aufkleber zum Herunterladen</h2>
+		<h2 id="download-titel">Jetzt schon: der Aufkleber zum Herunterladen</h2>
 
 		<p>Der Nachdruck ist ausdrücklich erwünscht.</p>
 
 		<a class="button" href="/aufkleber-d-wie-demokratie.png" download>
 			Aufkleber herunterladen (PNG)
 		</a>
+	</section>
+
+	<section class="postkarte" aria-labelledby="postkarte-titel">
+		<h2 id="postkarte-titel">Bald auch als Postkarte</h2>
+
+		<!-- Postkarte im Querformat DIN A6 (148 × 105 mm), nur mit CSS gezeichnet -->
+		<div class="karte" aria-hidden="true">
+			<span class="demnaechst">Demnächst</span>
+			<div class="stanzung">
+				<svg viewBox="0 0 100 100" preserveAspectRatio="none">
+					<ellipse cx="50" cy="50" rx="49" ry="48.5" vector-effect="non-scaling-stroke" />
+				</svg>
+				<Image src={aufkleber} alt="" widths={[300, 600]} sizes="(max-width: 680px) 70vw, 420px" />
+			</div>
+			<span class="format">DIN A6</span>
+		</div>
+
+		<p>
+			Bald gibt es den Aufkleber auch als Postkartenaufkleber: eine Postkarte im Format
+			DIN&nbsp;A6 (10,5&nbsp;×&nbsp;14,8&nbsp;cm), auf deren Vorderseite der Aufkleber zum
+			Abziehen sitzt – hochwertig, wetterfest und rückstandslos ablösbar.
+		</p>
+		<p>
+			Die Rückseite lässt sich wie bei jeder Postkarte beschreiben, verschickt wird sie mit
+			einer normalen Postkartenmarke. So können Sie den Aufkleber gleich weiterverschenken.
+		</p>
 	</section>
 </Layout>
 
@@ -134,5 +160,83 @@ import Layout from '../layouts/Layout.astro';
 	.button:hover {
 		background: var(--rot);
 		color: #ffffff;
+	}
+
+	.postkarte {
+		margin-top: 3em;
+	}
+
+	.postkarte h2 {
+		font-size: 1.4rem;
+	}
+
+	.karte {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		max-width: 520px;
+		aspect-ratio: 148 / 105;
+		margin: 1.5em auto 1.8em;
+		border-radius: 4px;
+		background: #ffffff;
+		box-shadow:
+			0 1px 2px rgba(0, 0, 0, 0.12),
+			0 8px 24px rgba(0, 0, 0, 0.12);
+		/* leicht schräg, wie auf den Tisch gelegt */
+		transform: rotate(-1.5deg);
+	}
+
+	/* gestrichelte Schnittlinie rund um den Aufkleber: zeigt, dass er sich abziehen lässt */
+	.stanzung {
+		position: relative;
+		width: 80%;
+		padding: 3%;
+		line-height: 0;
+	}
+
+	/* als SVG statt border: dashed, weil Browser gestrichelte Ovale lückenhaft zeichnen */
+	.stanzung svg {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		overflow: visible;
+	}
+
+	.stanzung ellipse {
+		fill: none;
+		stroke: #b0b0b0;
+		stroke-width: 2;
+		stroke-dasharray: 6 5;
+	}
+
+	.stanzung img {
+		width: 100%;
+		height: auto;
+	}
+
+	.demnaechst {
+		position: absolute;
+		top: -0.7em;
+		right: 0.8em;
+		padding: 0.3em 0.8em;
+		background: var(--gold);
+		color: var(--schwarz);
+		font-size: 0.9rem;
+		font-weight: bold;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		transform: rotate(6deg);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+	}
+
+	.format {
+		position: absolute;
+		bottom: 0.5em;
+		right: 0.8em;
+		color: var(--grau);
+		font-size: 0.75rem;
 	}
 </style>
