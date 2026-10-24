@@ -43,6 +43,7 @@ const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
 				<a href="/" aria-current={pfad === '/' ? 'page' : undefined}>Startseite</a>
 				<a href="/haeufige-fragen/" aria-current={pfad.startsWith('/haeufige-fragen') ? 'page' : undefined}>Häufige Fragen</a>
 				<a href="/unterstuetzer/" aria-current={pfad.startsWith('/unterstuetzer') ? 'page' : undefined}>Unterstützer</a>
+				<a href="/sag-es-weiter/" aria-current={pfad.startsWith('/sag-es-weiter') ? 'page' : undefined}>Sag’s weiter</a>
 			</nav>
 		</header>
 
@@ -125,13 +126,17 @@ const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
 		top: 0;
 		z-index: 10;
 		background: #ffffff;
-		border-bottom: 1px solid #e5e5e5;
+		/* Trennlinie als Schatten, damit der rote Balken des aktiven Reiters darüberliegt */
+		box-shadow: inset 0 -1px 0 #e5e5e5;
 	}
 
 	nav {
 		display: flex;
-		flex-wrap: wrap; /* Notlösung für sehr schmale Bildschirme statt seitlichem Überlaufen */
-		gap: 0 1.8em;
+		gap: 1.8em;
+		/* passen die Reiter nicht in die Breite, lässt sich die Leiste seitlich wischen */
+		overflow-x: auto;
+		scrollbar-width: none;
+		white-space: nowrap;
 		max-width: 680px; /* Seitenbreite, damit die Links bündig mit dem Text stehen */
 		margin: 0 auto;
 		padding: 0 1em;
@@ -143,15 +148,14 @@ const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
 	nav a {
 		padding: 0.75em 0 calc(0.75em - 3px);
 		border-bottom: 3px solid transparent;
-		margin-bottom: -1px; /* Balken liegt auf der grauen Trennlinie */
 		color: var(--grau);
 		text-decoration: none;
 	}
 
-	/* drei Reiter passen so auch auf schmale Handys in eine Zeile */
-	@media (max-width: 420px) {
+	/* auf dem Handy enger, damit möglichst alle Reiter sichtbar sind */
+	@media (max-width: 560px) {
 		nav {
-			gap: 0 1.1em;
+			gap: 1.1em;
 			font-size: 0.95rem;
 		}
 	}
