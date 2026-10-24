@@ -24,6 +24,7 @@ Push to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`), which b
 
 - `src/layouts/Layout.astro`: shared `<head>`, black-red-gold stripe at the top, footer links. Global CSS variables live here.
 - `src/pages/index.astro`: landing page with the sticker and download button.
+- `src/pages/ueber-uns.astro`: who started the initiative, with portrait (`src/assets/klaus-p-wolf.jpg`).
 - `src/pages/impressum.astro`, `src/pages/datenschutz.astro`: legal pages.
 - `src/assets/aufkleber.png`: sticker image shown on the page (optimized by Astro).
 - `public/aufkleber-d-wie-demokratie.png`: the same sticker as the download file.
