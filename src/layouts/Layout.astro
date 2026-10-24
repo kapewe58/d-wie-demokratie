@@ -8,6 +8,7 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+const pfad = Astro.url.pathname;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
 ---
@@ -35,15 +36,20 @@ const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
 		<meta name="twitter:card" content="summary_large_image" />
 	</head>
 	<body>
-		<div class="flagge" aria-hidden="true"></div>
+		<!-- Kopfzeile bleibt beim Scrollen oben stehen -->
+		<header class="kopf">
+			<div class="flagge" aria-hidden="true"></div>
+			<nav aria-label="Hauptnavigation">
+				<a href="/" aria-current={pfad === '/' ? 'page' : undefined}>Startseite</a>
+				<a href="/haeufige-fragen/" aria-current={pfad.startsWith('/haeufige-fragen') ? 'page' : undefined}>Häufige Fragen</a>
+			</nav>
+		</header>
 
 		<main>
 			<slot />
 		</main>
 
 		<footer>
-			<a href="/">Startseite</a>
-			<a href="/haeufige-fragen/">Häufige Fragen</a>
 			<a href="/impressum/">Impressum</a>
 			<a href="/datenschutz/">Datenschutz</a>
 		</footer>
@@ -61,6 +67,11 @@ const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
 
 	* {
 		box-sizing: border-box;
+	}
+
+	/* Sprungziele (#…) nicht unter der festen Kopfzeile verstecken */
+	html {
+		scroll-padding-top: 5rem;
 	}
 
 	body {
@@ -108,6 +119,42 @@ const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
 </style>
 
 <style>
+	.kopf {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		background: #ffffff;
+		border-bottom: 1px solid #e5e5e5;
+	}
+
+	nav {
+		display: flex;
+		gap: 1.8em;
+		max-width: 680px; /* Seitenbreite, damit die Links bündig mit dem Text stehen */
+		margin: 0 auto;
+		padding: 0 1em;
+		font-size: 1rem;
+		font-weight: bold;
+	}
+
+	/* Reiter: hohe Klickfläche (auch für Finger), aktuelle Seite mit rotem Balken unten */
+	nav a {
+		padding: 0.75em 0 calc(0.75em - 3px);
+		border-bottom: 3px solid transparent;
+		margin-bottom: -1px; /* Balken liegt auf der grauen Trennlinie */
+		color: var(--grau);
+		text-decoration: none;
+	}
+
+	nav a[aria-current='page'] {
+		border-bottom-color: var(--rot);
+		color: var(--text);
+	}
+
+	nav a:hover {
+		color: var(--rot);
+	}
+
 	/* Schwarz-Rot-Gold als schmaler Streifen am oberen Rand */
 	.flagge {
 		height: 18px;
