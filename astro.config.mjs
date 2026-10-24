@@ -7,4 +7,8 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
 	site: 'https://d-wie-demokratie.de',
 	integrations: [sitemap()],
+	// alte Adresse der Seite, damit bestehende Links weiter funktionieren
+	redirects: {
+		'/ueber-uns': '/ueber-d-wie-demokratie',
+	},
 });
