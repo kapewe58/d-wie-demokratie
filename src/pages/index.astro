@@ -22,8 +22,28 @@ import Layout from '../layouts/Layout.astro';
 	<section class="text">
 		<p class="lead">
 			<strong>d-wie-demokratie.de</strong> ist eine Initiative für alle, die zeigen wollen,
-			dass sie unsere Demokratie schätzen.
+			dass sie unsere Demokratie und die zentralen Werte unseres Grundgesetzes schätzen:
 		</p>
+
+		<ul class="lead werte">
+			<li>
+				die Menschenwürde
+				<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_1.html" target="_blank" rel="noopener">Art.&nbsp;1&nbsp;GG</a>
+			</li>
+			<li>
+				die freie Entfaltung der Persönlichkeit
+				<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_2.html" target="_blank" rel="noopener">Art.&nbsp;2&nbsp;GG</a>
+			</li>
+			<li>
+				die Gleichheit vor dem Gesetz unabhängig von der Herkunft
+				<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_3.html" target="_blank" rel="noopener">Art.&nbsp;3&nbsp;GG</a>
+			</li>
+			<li>
+				die Glaubens- und Meinungsfreiheit
+				<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_4.html" target="_blank" rel="noopener">Art.&nbsp;4&nbsp;GG</a>
+				<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_5.html" target="_blank" rel="noopener">Art.&nbsp;5&nbsp;GG</a>
+			</li>
+		</ul>
 
 		<p>
 			Aus diesem Grund haben wir den Aufkleber entworfen. Wir wünschen ihm große
@@ -60,6 +80,21 @@ import Layout from '../layouts/Layout.astro';
 
 	.lead {
 		font-size: 1.3rem;
+	}
+
+	/* Liste direkt unter dem Einleitungssatz, ohne großen Abstand dazwischen */
+	.werte {
+		margin-top: -0.5em;
+	}
+
+	/* Verweise aufs Grundgesetz: klein und grau, damit sie den Text nicht stören */
+	.gg {
+		margin-left: 0.3em;
+		font-size: 0.65em;
+		color: var(--grau);
+		text-decoration-color: currentColor;
+		text-decoration-thickness: 1px;
+		white-space: nowrap;
 	}
 
 	.download {
