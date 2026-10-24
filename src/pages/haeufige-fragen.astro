@@ -1,0 +1,114 @@
+---
+import { Image } from 'astro:assets';
+import portrait from '../assets/klaus-p-wolf.jpg';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+	title="Häufige Fragen – D wie Demokratie"
+	description="Häufige Fragen zu d-wie-demokratie.de: wer hinter der Initiative steht, warum es den Aufkleber gibt und ob man ihn nachdrucken darf."
+>
+	<h1>Häufige Fragen</h1>
+
+		<section aria-labelledby="warum">
+		<h2 id="warum">Warum gibt es d-wie-demokratie.de?</h2>
+
+		<p>
+			Die Idee zu d-wie-demokratie.de und den Aufklebern entstand aus dem Wunsch heraus, zeigen zu können, dass man hinter unserer Demokratie und ihren Werten steht. 
+		</p>
+	</section>
+
+		<section aria-labelledby="seit-wann">
+		<h2 id="seit-wann">Seit wann gibt es d-wie-demokratie.de?</h2>
+
+		<p>
+			Seit dem 23. Oktober 2026. Die Initiative ist also praktisch neugeboren und steckt noch
+			nicht einmal in den Kinderschühchen. Mal sehen, ob sie laufen lernt.
+		</p>
+	</section>
+
+	<section aria-labelledby="wer">
+		<h2 id="wer">Wer steckt hinter d-wie-demokratie.de?</h2>
+
+		<Image
+			src={portrait}
+			alt="Porträtfoto von Klaus P. Wolf"
+			class="portrait"
+		/>
+
+		<p>
+			Bisher ist d-wie-demokratie.de eine private Initiative von Klaus P. Wolf.
+		</p>
+
+		<p>
+			Er wurde 1958 in München geboren und studierte Jura. Nach kurzer Zeit als Anwalt
+			widmete er sich ganz der Fotografie. Als Tier-, Natur- und Reisefotografen bereisen
+			seine Frau und er seitdem die Welt. 2003 gründete er die Bildagentur <a href="https://www.imagebroker.com" target="_blank" rel="noopener">imageBROKER.com</a>,
+			die er über 20 Jahre aufbaute und die mittlerweile sein Sohn leitet. Momentan schreibt er auf <a href="https://5-finger.com" target="_blank" rel="noopener">5-finger.com</a> an seinem ersten Buch.
+		</p>
+
+		<p>Er hat einiges von der Welt gesehen und lebt sehr gerne in unserem wunderbaren Land.</p>
+	</section>
+
+
+
+
+
+	<section aria-labelledby="nachdruck">
+		<h2 id="nachdruck">Darf ich den Aufkleber selbst drucken?</h2>
+
+		<p>
+			Ja, der Nachdruck ist ausdrücklich erwünscht. Den Aufkleber gibt es
+			<a href="/aufkleber-d-wie-demokratie.png" download>hier zum Herunterladen</a>.
+		</p>
+	</section>
+
+	<section aria-labelledby="verteilung">
+		<h2 id="verteilung">Wie werden die Postkarten mit den Aufklebern verteilt?</h2>
+
+		<p>
+			Das wird sich zeigen. Über Ideen und Bestellanfragen freuen wir uns sehr. Ebenso, wenn Sie oder Ihre Firma oder Organisation uns unterstützen wollen – schreiben Sie
+			uns einfach eine E-Mail an
+			<a href="mailto:info@d-wie-demokratie.de?subject=Postkarten%20D%20wie%20Demokratie">info@d-wie-demokratie.de</a>.
+		</p>
+	</section>
+</Layout>
+
+<style>
+	h1 {
+		font-size: clamp(1.85rem, 7.5vw, 2.75rem);
+	}
+
+	/* Porträt rechts in den Text eingebettet; die Zeilen folgen dem Kreis */
+	.portrait {
+		float: right;
+		width: 150px;
+		height: 150px;
+		margin: 0.3em 0 0.8em 1.2em;
+		border-radius: 50%;
+		object-fit: cover;
+		shape-outside: circle(50%);
+		shape-margin: 0.8em;
+	}
+
+	@media (max-width: 480px) {
+		.portrait {
+			width: 110px;
+			height: 110px;
+		}
+	}
+
+	/* damit das Porträt nicht in die nächste Frage hineinragt */
+	section {
+		display: flow-root;
+	}
+
+	h2 {
+		margin-top: 2em;
+		font-size: 1.4rem;
+	}
+
+	.lead {
+		font-size: 1.3rem;
+	}
+</style>
