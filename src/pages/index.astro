@@ -67,22 +67,26 @@ import Layout from '../layouts/Layout.astro';
 	<section class="postkarte" aria-labelledby="postkarte-titel">
 		<h2 id="postkarte-titel">Bald auch als Postkarte</h2>
 
-		<!-- Postkarte im Querformat DIN A6 (148 × 105 mm), nur mit CSS gezeichnet -->
+		<!-- Postkarte im Querformat DIN A6 (148 × 105 mm) mit einem großen und zwei kleineren
+		     Aufklebern, nur mit CSS gezeichnet -->
 		<div class="karte" aria-hidden="true">
 			<span class="demnaechst">Demnächst</span>
-			<div class="stanzung">
-				<svg viewBox="0 0 100 100" preserveAspectRatio="none">
-					<ellipse cx="50" cy="50" rx="49" ry="48.5" vector-effect="non-scaling-stroke" />
-				</svg>
-				<Image src={aufkleber} alt="" widths={[300, 600]} sizes="(max-width: 680px) 70vw, 420px" />
-			</div>
+			{['gross', 'mittel', 'klein'].map((groesse) => (
+				<div class={`stanzung ${groesse}`}>
+					<svg viewBox="0 0 100 100" preserveAspectRatio="none">
+						<ellipse cx="50" cy="50" rx="49" ry="48.5" vector-effect="non-scaling-stroke" />
+					</svg>
+					<Image src={aufkleber} alt="" widths={[300, 600, 1000]} sizes="(max-width: 680px) 90vw, 460px" />
+				</div>
+			))}
 			<span class="format">DIN A6</span>
 		</div>
 
 		<p>
 			Bald gibt es den Aufkleber auch als Postkartenaufkleber: eine Postkarte im Format
-			DIN&nbsp;A6 (10,5&nbsp;×&nbsp;14,8&nbsp;cm), auf deren Vorderseite der Aufkleber zum
-			Abziehen sitzt – hochwertig, wetterfest und rückstandslos ablösbar.
+			DIN&nbsp;A6 (10,5&nbsp;×&nbsp;14,8&nbsp;cm), auf deren Vorderseite ein großer und zwei
+			kleinere Aufkleber zum Abziehen sitzen – hochwertig, wetterfest und rückstandslos
+			ablösbar.
 		</p>
 		<p>
 			Die Rückseite lässt sich wie bei jeder Postkarte beschreiben, verschickt wird sie mit
@@ -172,9 +176,6 @@ import Layout from '../layouts/Layout.astro';
 
 	.karte {
 		position: relative;
-		display: flex;
-		align-items: center;
-		justify-content: center;
 		width: 100%;
 		max-width: 520px;
 		aspect-ratio: 148 / 105;
@@ -189,11 +190,12 @@ import Layout from '../layouts/Layout.astro';
 	}
 
 	/* gestrichelte Schnittlinie rund um den Aufkleber: zeigt, dass er sich abziehen lässt */
+	/* left/top geben den Mittelpunkt an, in Prozent der Karte (148 × 105 mm), damit alles mitskaliert */
 	.stanzung {
-		position: relative;
-		width: 80%;
-		padding: 3%;
+		position: absolute;
+		padding: 1.5%;
 		line-height: 0;
+		transform: translate(-50%, -50%) rotate(-20deg);
 	}
 
 	/* als SVG statt border: dashed, weil Browser gestrichelte Ovale lückenhaft zeichnen */
@@ -205,6 +207,25 @@ import Layout from '../layouts/Layout.astro';
 		overflow: visible;
 	}
 
+	/* großer Aufkleber schräg über die Karte (130 mm lang), die kleinen in den frei werdenden Ecken */
+	.gross {
+		left: 52.7%;
+		top: 52.4%;
+		width: 87.8%;
+	}
+
+	.mittel {
+		left: 17.9%;
+		top: 17.9%;
+		width: 27.7%;
+	}
+
+	.klein {
+		left: 85.5%;
+		top: 85%;
+		width: 20.9%;
+	}
+
 	.stanzung ellipse {
 		fill: none;
 		stroke: #b0b0b0;
@@ -212,13 +233,16 @@ import Layout from '../layouts/Layout.astro';
 		stroke-dasharray: 6 5;
 	}
 
+	/* Das Bild hat weiße Ecken, die gedreht über die Karte ragen würden: oval zuschneiden */
 	.stanzung img {
 		width: 100%;
 		height: auto;
+		border-radius: 50%;
 	}
 
 	.demnaechst {
 		position: absolute;
+		z-index: 1;
 		top: -0.7em;
 		right: 0.8em;
 		padding: 0.3em 0.8em;
@@ -235,7 +259,7 @@ import Layout from '../layouts/Layout.astro';
 	.format {
 		position: absolute;
 		bottom: 0.5em;
-		right: 0.8em;
+		left: 0.8em;
 		color: var(--grau);
 		font-size: 0.75rem;
 	}
