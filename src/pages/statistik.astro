@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout
 	title="Besucherstatistik – D wie Demokratie"
-	description="Die Besucherstatistik für dieses Gerät ab- oder wieder einschalten."
+	description="Die Besucherstatistik für diesen Browser ab- oder wieder einschalten."
 	noindex
 >
 	<h1>Besucherstatistik</h1>
@@ -29,10 +29,10 @@ import Layout from '../layouts/Layout.astro';
 
 	function zeigen() {
 		if (abgeschaltet()) {
-			stand.innerHTML = 'Dieses Gerät wird <strong>nicht gezählt</strong>.';
+			stand.innerHTML = 'Dieser Browser wird <strong>nicht gezählt</strong>.';
 			schalter.textContent = 'Wieder mitzählen';
 		} else {
-			stand.innerHTML = 'Dieses Gerät wird <strong>gezählt</strong>.';
+			stand.innerHTML = 'Dieser Browser wird <strong>gezählt</strong>.';
 			schalter.textContent = 'Nicht mehr mitzählen';
 		}
 	}
