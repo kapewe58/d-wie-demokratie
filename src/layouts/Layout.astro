@@ -12,6 +12,8 @@ const { title, description } = Astro.props;
 const pfad = Astro.url.pathname;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
+// Reihenfolge der Reiter, für das Wischen auf dem Handy und die Richtung der Animation
+const reiter = ['/', '/haeufige-fragen/', '/unterstuetzer/', '/sag-es-weiter/'];
 ---
 
 <!doctype html>
@@ -35,6 +37,59 @@ const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
 		<meta property="og:image:width" content={String(aufkleber.width)} />
 		<meta property="og:image:height" content={String(aufkleber.height)} />
 		<meta name="twitter:card" content="summary_large_image" />
+
+		<!-- Wischen zwischen den Reitern; beim Wechsel gleitet der Inhalt seitlich herein.
+		     Steht im <head>, damit „pagereveal“ vor dem ersten Zeichnen abgefangen wird. -->
+		<script is:inline define:vars={{ reiter }}>
+			const nummer = (url) => {
+				const pfad = new URL(url, location.href).pathname;
+				return reiter.findIndex((r) => r === pfad || r === pfad + '/');
+			};
+
+			// Richtung der Animation: zum Reiter weiter rechts „vor“, nach links „zurueck“
+			addEventListener('pagereveal', (e) => {
+				if (!e.viewTransition) return;
+				const von = nummer(navigation?.activation?.from?.url ?? document.referrer);
+				const nach = nummer(location.href);
+				if (von === -1 || nach === -1 || von === nach) {
+					e.viewTransition.skipTransition();
+					return;
+				}
+				document.documentElement.dataset.richtung = nach > von ? 'vor' : 'zurueck';
+				e.viewTransition.finished.finally(() => delete document.documentElement.dataset.richtung);
+			});
+
+			let start = null;
+			addEventListener(
+				'touchstart',
+				(e) => {
+					const t = e.touches[0];
+					start = null;
+					// Start am Bildschirmrand gehört dem „Zurück“ des Browsers, die Reiterleiste wischt selbst
+					if (e.touches.length !== 1 || t.clientX < 30 || t.clientX > innerWidth - 30) return;
+					if (e.target.closest('nav, input, textarea')) return;
+					start = { x: t.clientX, y: t.clientY, zeit: Date.now() };
+				},
+				{ passive: true }
+			);
+			addEventListener(
+				'touchend',
+				(e) => {
+					if (!start) return;
+					const t = e.changedTouches[0];
+					const dx = t.clientX - start.x;
+					const dy = t.clientY - start.y;
+					const dauer = Date.now() - start.zeit;
+					start = null;
+					// nur eine kurze, deutlich waagerechte Bewegung; nicht beim Markieren oder Hineinzoomen
+					if (Math.abs(dx) < 70 || Math.abs(dx) < 2 * Math.abs(dy) || dauer > 700) return;
+					if (getSelection()?.toString() || (visualViewport && visualViewport.scale > 1.05)) return;
+					const ziel = reiter[nummer(location.href) + (dx < 0 ? 1 : -1)];
+					if (nummer(location.href) !== -1 && ziel) location.href = ziel;
+				},
+				{ passive: true }
+			);
+		</script>
 	</head>
 	<body>
 		<!-- Kopfzeile bleibt beim Scrollen oben stehen -->
@@ -115,6 +170,66 @@ const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
 	/* „d-wie-demokratie.de“ nie umbrechen (wird in src/middleware.ts automatisch gesetzt) */
 	.nobr {
 		white-space: nowrap;
+	}
+
+	/* Seitenwechsel zwischen den Reitern: nur der Inhalt gleitet, Kopf- und Fußzeile bleiben stehen */
+	@view-transition {
+		navigation: auto;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		@view-transition {
+			navigation: none;
+		}
+	}
+
+	main {
+		view-transition-name: inhalt;
+	}
+
+	::view-transition-old(root),
+	::view-transition-new(root) {
+		animation: none;
+	}
+
+	::view-transition-group(inhalt) {
+		animation-duration: 0.3s;
+	}
+
+	[data-richtung='vor']::view-transition-old(inhalt) {
+		animation: 0.3s ease-in-out both inhalt-nach-links;
+	}
+	[data-richtung='vor']::view-transition-new(inhalt) {
+		animation: 0.3s ease-in-out both inhalt-von-rechts;
+	}
+	[data-richtung='zurueck']::view-transition-old(inhalt) {
+		animation: 0.3s ease-in-out both inhalt-nach-rechts;
+	}
+	[data-richtung='zurueck']::view-transition-new(inhalt) {
+		animation: 0.3s ease-in-out both inhalt-von-links;
+	}
+
+	/* auf dem Handy um die volle Breite, am großen Bildschirm nur ein Stück mit Überblendung */
+	:root {
+		--weg: 3rem;
+	}
+	@media (max-width: 560px) {
+		:root {
+			--weg: 100vw;
+		}
+	}
+
+	@keyframes inhalt-nach-links {
+		to { transform: translateX(calc(-1 * var(--weg))); opacity: 0; }
+	}
+	@keyframes inhalt-von-rechts {
+		from { transform: translateX(var(--weg)); opacity: 0; }
+	}
+	@keyframes inhalt-nach-rechts {
+		to { transform: translateX(var(--weg)); opacity: 0; }
+	}
+	@keyframes inhalt-von-links {
+		from { transform: translateX(calc(-1 * var(--weg))); opacity: 0; }
 	}
 
 	/* Für Screenreader lesbar, aber unsichtbar */
