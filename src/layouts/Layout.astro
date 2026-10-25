@@ -112,6 +112,11 @@ const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
 		color: var(--rot);
 	}
 
+	/* „d-wie-demokratie.de“ nie umbrechen (wird in src/middleware.ts automatisch gesetzt) */
+	.nobr {
+		white-space: nowrap;
+	}
+
 	/* Für Screenreader lesbar, aber unsichtbar */
 	.sr-only {
 		position: absolute;
