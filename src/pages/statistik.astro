@@ -81,7 +81,10 @@ import Layout from '../layouts/Layout.astro';
 		display: none;
 	}
 
-	.knopf:hover {
-		background: #333333;
+	/* nur mit Maus: auf dem Handy bliebe die Hover-Farbe nach dem Antippen hängen */
+	@media (hover: hover) {
+		.knopf:hover {
+			background: #333333;
+		}
 	}
 </style>
