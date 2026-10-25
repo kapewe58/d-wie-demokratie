@@ -37,17 +37,26 @@ import Layout from '../layouts/Layout.astro';
 		}
 	}
 
+	function fehler() {
+		schalter.hidden = true;
+		stand.textContent =
+			'Die Einstellung lässt sich in diesem Browser nicht speichern, zum Beispiel im privaten Modus.';
+	}
+
 	try {
 		zeigen();
 		schalter.hidden = false;
 		schalter.addEventListener('click', () => {
-			if (abgeschaltet()) localStorage.removeItem('umami.disabled');
-			else localStorage.setItem('umami.disabled', '1');
-			zeigen();
+			try {
+				if (abgeschaltet()) localStorage.removeItem('umami.disabled');
+				else localStorage.setItem('umami.disabled', '1');
+				zeigen();
+			} catch {
+				fehler();
+			}
 		});
 	} catch {
-		stand.textContent =
-			'Die Einstellung lässt sich in diesem Browser nicht speichern, zum Beispiel im privaten Modus.';
+		fehler();
 	}
 </script>
 
