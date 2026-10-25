@@ -22,14 +22,14 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 			mit einem Klick.
 		</p>
 
-		<!-- Knöpfe in Schwarz, Rot, Gold wie die Flagge -->
+		<!-- Knöpfe in Schwarz, Rot, Gold wie die Flagge; Klicks zählt Umami als Ereignis (data-umami-event) -->
 		<div class="knoepfe">
-			<a class="knopf schwarz" href={whatsappHref} target="_blank" rel="noopener">Auf WhatsApp teilen</a>
-			<a class="knopf rot" href={mailtoHref}>Per E-Mail empfehlen</a>
-			<button class="knopf gold" id="kopieren" type="button" data-url={seite}>Link kopieren</button>
+			<a class="knopf schwarz" data-umami-event="teilen-whatsapp" href={whatsappHref} target="_blank" rel="noopener">Auf WhatsApp teilen</a>
+			<a class="knopf rot" data-umami-event="teilen-email" href={mailtoHref}>Per E-Mail empfehlen</a>
+			<button class="knopf gold" data-umami-event="link-kopieren" id="kopieren" type="button" data-url={seite}>Link kopieren</button>
 			<!-- nur sichtbar, wenn das Gerät eigenes Teilen anbietet (meist Handys); steht unten,
 			     damit oben die Flaggenfolge erhalten bleibt -->
-			<button class="knopf schwarz" id="teilen" type="button" data-url={seite} data-text={nachricht} hidden>
+			<button class="knopf schwarz" data-umami-event="teilen-geraet" id="teilen" type="button" data-url={seite} data-text={nachricht} hidden>
 				Teilen
 			</button>
 		</div>

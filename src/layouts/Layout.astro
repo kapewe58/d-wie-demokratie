@@ -6,9 +6,10 @@ import Logo from '../assets/logo-d.svg';
 interface Props {
 	title: string;
 	description: string;
+	noindex?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, noindex = false } = Astro.props;
 const pfad = Astro.url.pathname;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
@@ -27,6 +28,7 @@ const reiter = ['/', '/haeufige-fragen/', '/unterstuetzer/', '/sag-es-weiter/'];
 
 		<title>{title}</title>
 		<meta name="description" content={description} />
+		{noindex && <meta name="robots" content="noindex" />}
 
 		<!-- Vorschau beim Teilen in Messengern und sozialen Netzwerken -->
 		<meta property="og:type" content="website" />
@@ -37,6 +39,15 @@ const reiter = ['/', '/haeufige-fragen/', '/unterstuetzer/', '/sag-es-weiter/'];
 		<meta property="og:image:width" content={String(aufkleber.width)} />
 		<meta property="og:image:height" content={String(aufkleber.height)} />
 		<meta name="twitter:card" content="summary_large_image" />
+
+		<!-- Besucherstatistik mit Umami (selbst betrieben, ohne Cookies); zählt nur auf der echten Domain, nicht lokal -->
+		<script
+			is:inline
+			defer
+			src="https://stats.5-finger.com/script.js"
+			data-website-id="1700ae4d-0b3e-4de1-8e27-dd8e4a7c96d3"
+			data-domains="d-wie-demokratie.de"
+		></script>
 
 		<!-- Wischen zwischen den Reitern; beim Wechsel gleitet der Inhalt seitlich herein.
 		     Steht im <head>, damit „pagereveal“ vor dem ersten Zeichnen abgefangen wird. -->

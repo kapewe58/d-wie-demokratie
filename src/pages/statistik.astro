@@ -1,0 +1,78 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+	title="Besucherstatistik – D wie Demokratie"
+	description="Die Besucherstatistik für dieses Gerät ab- oder wieder einschalten."
+	noindex
+>
+	<h1>Besucherstatistik</h1>
+
+	<p>
+		Diese Website zählt Besuche mit Umami, ohne Cookies und ohne Ihre IP-Adresse zu
+		speichern. Mehr dazu in der <a href="/datenschutz/">Datenschutzerklärung</a>.
+	</p>
+
+	<!-- Umami prüft beim Laden jeder Seite den Eintrag „umami.disabled“ im Browser -->
+	<p id="stand" aria-live="polite">
+		<noscript>Ohne JavaScript werden Sie ohnehin nicht gezählt.</noscript>
+	</p>
+	<button class="knopf" id="schalter" type="button" hidden></button>
+</Layout>
+
+<script>
+	const stand = document.getElementById('stand') as HTMLParagraphElement;
+	const schalter = document.getElementById('schalter') as HTMLButtonElement;
+
+	const abgeschaltet = () => localStorage.getItem('umami.disabled') === '1';
+
+	function zeigen() {
+		if (abgeschaltet()) {
+			stand.innerHTML = 'Dieses Gerät wird <strong>nicht gezählt</strong>.';
+			schalter.textContent = 'Wieder mitzählen';
+		} else {
+			stand.innerHTML = 'Dieses Gerät wird <strong>gezählt</strong>.';
+			schalter.textContent = 'Nicht mehr mitzählen';
+		}
+	}
+
+	try {
+		zeigen();
+		schalter.hidden = false;
+		schalter.addEventListener('click', () => {
+			if (abgeschaltet()) localStorage.removeItem('umami.disabled');
+			else localStorage.setItem('umami.disabled', '1');
+			zeigen();
+		});
+	} catch {
+		stand.textContent =
+			'Die Einstellung lässt sich in diesem Browser nicht speichern, zum Beispiel im privaten Modus.';
+	}
+</script>
+
+<style>
+	h1 {
+		font-size: clamp(2rem, 8vw, 3rem);
+	}
+
+	/* wie die Knöpfe auf „Sag’s weiter“ */
+	.knopf {
+		padding: 0.75em 1.4em;
+		border: 0;
+		border-radius: 6px;
+		background: var(--schwarz);
+		color: #ffffff;
+		font: inherit;
+		font-weight: bold;
+		cursor: pointer;
+	}
+
+	.knopf[hidden] {
+		display: none;
+	}
+
+	.knopf:hover {
+		background: #333333;
+	}
+</style>

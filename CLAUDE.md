@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
-Static website for the initiative *D wie Demokratie*, built with Astro. Published at https://d-wie-demokratie.de. All content is in German. The site's purpose: present the "D wie Demokratie" sticker and let people download it (reprinting is explicitly encouraged).
+Static website for the initiative *D wie Demokratie*, built with Astro. Published at https://d-wie-demokratie.de. All content is in German. The site's purpose: present the "D wie Demokratie" sticker and the initiative behind it, and get people to share it.
 
 ## Commands
 
@@ -22,12 +22,20 @@ Push to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`), which b
 
 ## Architecture
 
-- `src/layouts/Layout.astro`: shared `<head>`, black-red-gold stripe at the top, footer links. Global CSS variables live here.
-- `src/pages/index.astro`: landing page with the sticker and download button.
-- `src/pages/haeufige-fragen.astro`: FAQ page; currently about who started the initiative, with portrait (`src/assets/klaus-p-wolf.jpg`).
+- `src/layouts/Layout.astro`: shared `<head>` (meta, Open Graph, Umami script), sticky header with black-red-gold stripe and tab navigation, footer links. Global CSS variables live here. Also holds the tab order (`reiter`) used for swiping between tabs on mobile and for the slide animation (native cross-document View Transitions); a new tab must be added there as well as in the nav.
+- `src/pages/index.astro`: landing page with the sticker and links to Art. 1–5 GG.
+- `src/pages/haeufige-fragen.astro`: FAQ page, including who started the initiative, with portrait (`src/assets/klaus-p-wolf.jpg`).
+- `src/pages/unterstuetzer.astro`: supporters page.
+- `src/pages/sag-es-weiter.astro`: share buttons (WhatsApp, e-mail, copy link, native share).
 - `src/pages/impressum.astro`, `src/pages/datenschutz.astro`: legal pages.
+- `src/pages/statistik.astro`: opt-out toggle for the visitor statistics (`noindex`, excluded from the sitemap).
+- `src/middleware.ts`: wraps every "d-wie-demokratie.de" in visible text in `.nobr` so it never breaks at the hyphens.
 - `src/assets/aufkleber.png`: sticker image shown on the page (optimized by Astro).
-- `public/aufkleber-d-wie-demokratie.png`: the same sticker as the download file.
+- `public/aufkleber-d-wie-demokratie.png`: the same sticker, used as the Open Graph preview image.
+
+## Statistics
+
+Umami, self-hosted at https://stats.5-finger.com (same server as 5-finger.com; setup documented in the 5-finger repo under `deploy/umami/`). The script in `Layout.astro` only counts on `d-wie-demokratie.de` (`data-domains`), not on localhost. Opt-out sets `localStorage['umami.disabled'] = '1'` via `/statistik/`. Click events use `data-umami-event` attributes (share buttons on "Sag's weiter", support e-mail links). If what is collected changes, update section 3 of `datenschutz.astro`.
 
 ## Design conventions
 
