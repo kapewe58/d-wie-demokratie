@@ -1,6 +1,7 @@
 ---
 // Gemeinsamer Rahmen für alle Seiten: <head>, Farbstreifen oben, Fußzeile.
 import aufkleber from '../assets/aufkleber.png';
+import Logo from '../assets/logo-d.svg';
 
 interface Props {
 	title: string;
@@ -40,7 +41,9 @@ const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
 		<header class="kopf">
 			<div class="flagge" aria-hidden="true"></div>
 			<nav aria-label="Hauptnavigation">
-				<a href="/" aria-current={pfad === '/' ? 'page' : undefined}>Startseite</a>
+				<a href="/" class="logo" aria-current={pfad === '/' ? 'page' : undefined} aria-label="Startseite">
+					<Logo aria-hidden="true" />
+				</a>
 				<a href="/haeufige-fragen/" aria-current={pfad.startsWith('/haeufige-fragen') ? 'page' : undefined}>Häufige Fragen</a>
 				<a href="/unterstuetzer/" aria-current={pfad.startsWith('/unterstuetzer') ? 'page' : undefined}>Unterstützer</a>
 				<a href="/sag-es-weiter/" aria-current={pfad.startsWith('/sag-es-weiter') ? 'page' : undefined}>Sag’s weiter</a>
@@ -158,6 +161,21 @@ const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
 			gap: 1.1em;
 			font-size: 0.95rem;
 		}
+	}
+
+	/* Logo statt „Startseite“: so hoch wie eine Textzeile, damit die Kopfzeile nicht wächst */
+	.logo {
+		display: flex;
+		align-items: center;
+	}
+
+	.logo svg {
+		height: 1.6em;
+		width: auto;
+	}
+
+	.logo:hover {
+		opacity: 0.8;
 	}
 
 	nav a[aria-current='page'] {
