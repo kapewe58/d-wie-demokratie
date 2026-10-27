@@ -289,20 +289,27 @@ const reiter = ['/', '/haeufige-fragen/', '/unterstuetzer/', '/sag-es-weiter/'];
 
 	/* auf dem Handy enger, damit möglichst alle Reiter sichtbar sind */
 	@media (max-width: 560px) {
+		/* passt so gerade auf ein 390 px breites iPhone; schmalere wischen die Leiste */
 		nav {
-			gap: 1.1em;
+			gap: 0.6em;
+			padding: 0 0.3em 0 0.4em;
 			font-size: 0.95rem;
 		}
 	}
 
-	/* Logo statt „Startseite“: so hoch wie eine Textzeile, damit die Kopfzeile nicht wächst */
-	.logo {
+	/* Logo statt „Startseite“: nutzt den Innenabstand der Reiter mit, damit es groß wirkt,
+	   ohne die Kopfzeile zu erhöhen (Reiter: 0,75em + 1,6em Zeile + 0,75em = 3,1em) */
+	/* „nav .logo“ statt „.logo“, sonst gewinnt der Innenabstand aus „nav a“ */
+	nav .logo {
 		display: flex;
 		align-items: center;
+		/* unten knapper als oben: dort folgt noch der (rote) Balken mit 3px */
+		padding: 0.25em 0 0.1em;
 	}
 
 	.logo img {
-		height: 1.6em;
+		/* 3,1em minus Abstände oben und unten minus roter Balken (3px) */
+		height: calc(2.75em - 3px);
 		width: auto;
 	}
 
