@@ -1,7 +1,8 @@
 ---
 // Gemeinsamer Rahmen für alle Seiten: <head>, Farbstreifen oben, Fußzeile.
 import aufkleber from '../assets/aufkleber.png';
-import Logo from '../assets/logo-d.svg';
+import { Image } from 'astro:assets';
+import logo from '../assets/d-wie-demokratie-logo.png';
 
 interface Props {
 	title: string;
@@ -108,7 +109,7 @@ const reiter = ['/', '/haeufige-fragen/', '/unterstuetzer/', '/sag-es-weiter/'];
 			<div class="flagge" aria-hidden="true"></div>
 			<nav aria-label="Hauptnavigation">
 				<a href="/" class="logo" aria-current={pfad === '/' ? 'page' : undefined} aria-label="Startseite">
-					<Logo aria-hidden="true" />
+					<Image src={logo} alt="" width={60} densities={[1, 2, 3]} loading="eager" />
 				</a>
 				<a href="/haeufige-fragen/" aria-current={pfad.startsWith('/haeufige-fragen') ? 'page' : undefined}>Häufige Fragen</a>
 				<a href="/unterstuetzer/" aria-current={pfad.startsWith('/unterstuetzer') ? 'page' : undefined}>Unterstützer</a>
@@ -300,7 +301,7 @@ const reiter = ['/', '/haeufige-fragen/', '/unterstuetzer/', '/sag-es-weiter/'];
 		align-items: center;
 	}
 
-	.logo svg {
+	.logo img {
 		height: 1.6em;
 		width: auto;
 	}
