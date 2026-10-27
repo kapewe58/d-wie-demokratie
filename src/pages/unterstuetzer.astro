@@ -8,6 +8,17 @@ import Layout from '../layouts/Layout.astro';
 >
 	<h1>Unterstützer</h1>
 
+	<p class="lead">Wir suchen …</p>
+
+	<ul class="gesucht">
+		<li>eine Druckerei, die die Aufkleber günstig für uns herstellt,</li>
+		<li>Zeitungen, Zeitschriften und Magazine, die bereit sind, unseren Aufkleber einzulegen,</li>
+		<li>Firmen und Organisationen, die bereit sind, unsere Aufkleber auszulegen und zu verteilen,</li>
+		<li>Firmen, Organisationen und Privatpersonen, die uns finanziell unterstützen,</li>
+		<li>Presseleute, Influencer und Podcaster, die bereit sind, über uns zu berichten,</li>
+		<li>Sie: Klicken Sie einfach oben auf <a href="/sag-es-weiter/">„Sag’s weiter“</a>.</li>
+	</ul>
+
 	<p>
 		Lassen Sie uns in einem persönlichen Gespräch herausfinden, wie Sie d-wie-demokratie.de unterstützen können. Schreiben Sie einfach eine E-Mail an
 		<a href="mailto:info@d-wie-demokratie.de?subject=Unterst%C3%BCtzung%20D%20wie%20Demokratie" data-umami-event="email-unterstuetzung" data-umami-event-seite="unterstuetzer">info@d-wie-demokratie.de</a>.
@@ -21,5 +32,18 @@ import Layout from '../layouts/Layout.astro';
 <style>
 	h1 {
 		font-size: clamp(1.85rem, 7.5vw, 2.75rem);
+	}
+
+	.lead {
+		font-size: 1.3rem;
+	}
+
+	/* Liste direkt unter „Wir suchen …“, mit etwas Luft zwischen den Punkten */
+	.gesucht {
+		margin-top: -0.5em;
+	}
+
+	.gesucht li + li {
+		margin-top: 0.4em;
 	}
 </style>
