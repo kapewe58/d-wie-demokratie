@@ -24,7 +24,7 @@ Push to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`), which b
 
 - `src/layouts/Layout.astro`: shared `<head>` (meta, Open Graph, Umami script), sticky header with black-red-gold stripe and tab navigation, footer links. Global CSS variables live here. Also holds the tab order (`reiter`) used for swiping between tabs on mobile and for the slide animation (native cross-document View Transitions); a new tab must be added there as well as in the nav.
 - `src/pages/index.astro`: landing page with the sticker and links to Art. 1–5 GG.
-- `src/pages/haeufige-fragen.astro`: FAQ page, including who started the initiative, with portrait (`src/assets/klaus-p-wolf.jpg`).
+- `src/pages/haeufige-fragen.astro`: FAQ page, including who started the initiative; the biography with portrait (`src/assets/klaus-p-wolf.jpg`) is collapsed until the name is clicked (open without JavaScript).
 - `src/pages/unterstuetzer.astro`: supporters page.
 - `src/pages/sag-es-weiter.astro`: share buttons (WhatsApp, e-mail, copy link, native share).
 - `src/pages/impressum.astro`, `src/pages/datenschutz.astro`: legal pages.
@@ -35,7 +35,7 @@ Push to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`), which b
 
 ## Statistics
 
-Umami, self-hosted at https://stats.5-finger.com (same server as 5-finger.com; setup documented in the 5-finger repo under `deploy/umami/`). The script in `Layout.astro` only counts on `d-wie-demokratie.de` (`data-domains`), not on localhost. Opt-out sets `localStorage['umami.disabled'] = '1'` via `/statistik/`. Click events use `data-umami-event` attributes (share buttons on "Sag's weiter", support e-mail links). If what is collected changes, update section 3 of `datenschutz.astro`.
+Umami, self-hosted at https://stats.5-finger.com (same server as 5-finger.com; setup documented in the 5-finger repo under `deploy/umami/`). The script in `Layout.astro` only counts on `d-wie-demokratie.de` (`data-domains`), not on localhost. Opt-out sets `localStorage['umami.disabled'] = '1'` via `/statistik/`. Click events use `data-umami-event` attributes (share buttons on "Sag's weiter", support e-mail links); opening the biography on the FAQ page is counted via `umami.track('lebenslauf-aufklappen')`. If what is collected changes, update section 3 of `datenschutz.astro`.
 
 ## Design conventions
 

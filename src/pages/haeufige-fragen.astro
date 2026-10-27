@@ -14,7 +14,7 @@ import Layout from '../layouts/Layout.astro';
 		<h2 id="warum">Warum gibt es d-wie-demokratie.de?</h2>
 
 		<p>
-			Die Idee zu d-wie-demokratie.de und den Aufklebern entstand aus dem Wunsch heraus, zeigen zu können, dass ich hinter unserer Demokratie und ihren Werten stehe. 
+			Die Idee zu d-wie-demokratie.de entstand aus dem Wunsch heraus, zeigen zu können, dass ich hinter unserer Demokratie und ihren Werten stehe. 
 		</p>
 	</section>
 
@@ -22,12 +22,12 @@ import Layout from '../layouts/Layout.astro';
 		<h2 id="ziel">Was macht d-wie-demokratie.de?</h2>
 
 		<p>
-			d-wie-demokratie.de lässt Postkarten mit Aufklebern drucken und verbreitet diese. 
+			d-wie-demokratie.de lässt Aufkleber drucken und verbreitet diese. 
 		</p>
 	</section>
 
 		<section aria-labelledby="postkarten">
-		<h2 id="postkarten">Gibt es die Postkarten mit den Aufklebern schon?</h2>
+		<h2 id="postkarten">Gibt es die Aufkleber schon?</h2>
 
 		<p>
 			Nein, wir sehen uns gerade Muster von verschiedenen Druckereien an und holen Angebote ein.
@@ -46,21 +46,69 @@ import Layout from '../layouts/Layout.astro';
 	<section aria-labelledby="wer">
 		<h2 id="wer">Wer steht hinter d-wie-demokratie.de?</h2>
 
-		<Image
-			src={portrait}
-			alt="Porträtfoto von Klaus P. Wolf"
-			class="portrait"
-		/>
-
 		<p>
-			Bisher ist d-wie-demokratie.de eine private Initiative von Klaus P. Wolf.
+			d-wie-demokratie.de ist bisher eine private Initiative von
+			<button type="button" class="name" aria-expanded="false" aria-controls="lebenslauf" hidden>Klaus P. Wolf</button><span class="name-text">Klaus P. Wolf</span>.
 		</p>
 
-		<p>
-			Klaus P. Wolf wurde 1958 in München geboren und studierte dort Jura. Nach kurzer Zeit als Anwalt
-			widmete er sich ganz der Fotografie. Als Tier-, Natur- und Reisefotografen bereisen
-			seine Frau und er seitdem die Welt. 2003 gründete er die Bildagentur <a href="https://www.imagebroker.com" target="_blank" rel="noopener">imageBROKER.com</a>, die mittlerweile sein Sohn leitet. Momentan schreibt er auf <a href="https://5-finger.com" target="_blank" rel="noopener">5-finger.com</a> an seinem ersten Buch.
-		Er hat einiges von der Welt gesehen und lebt sehr gerne in unserem wunderbaren Land. Er ist in keiner politischen Partei.</p>
+		<!-- Lebenslauf mit Porträt: ohne JavaScript offen, sonst eingeklappt bis zum Klick auf den Namen -->
+		<div class="lebenslauf" id="lebenslauf">
+			<div class="lebenslauf-innen">
+				<Image
+					src={portrait}
+					alt="Porträtfoto von Klaus P. Wolf"
+					class="portrait"
+				/>
+
+				<p>
+					Klaus P. Wolf wurde 1958 in München geboren und studierte dort Jura. Nach kurzer Zeit als Anwalt
+					widmete er sich ganz der Fotografie. Als Tier-, Natur- und Reisefotografen bereisen
+					seine Frau und er seitdem die Welt. 2003 gründete er die Bildagentur <a href="https://www.imagebroker.com" target="_blank" rel="noopener">imageBROKER.com</a>, die mittlerweile sein Sohn leitet. Momentan schreibt er auf <a href="https://5-finger.com" target="_blank" rel="noopener">5-finger.com</a> an seinem ersten Buch.
+				Er hat einiges von der Welt gesehen und lebt sehr gerne in unserem wunderbaren Land. Er ist in keiner politischen Partei.</p>
+			</div>
+		</div>
+
+		<!-- steht direkt hinter dem Abschnitt und läuft sofort, damit der Lebenslauf nicht kurz aufblitzt -->
+		<script is:inline>
+			(() => {
+				const knopf = document.querySelector('.name');
+				const bereich = document.getElementById('lebenslauf');
+				const innen = bereich.firstElementChild;
+
+				knopf.hidden = false;
+				document.querySelector('.name-text').remove();
+				bereich.classList.add('zu');
+				// „until-found“: die Suche im Browser (Strg+F) klappt den Abschnitt bei einem Treffer auf
+				innen.setAttribute('hidden', 'until-found');
+
+				function oeffnen() {
+					knopf.setAttribute('aria-expanded', 'true');
+					innen.hidden = false;
+					bereich.offsetHeight; // erst einblenden, dann aufschieben, sonst springt es ohne Animation auf
+					bereich.classList.remove('zu');
+				}
+
+				function schliessen() {
+					knopf.setAttribute('aria-expanded', 'false');
+					bereich.classList.add('zu');
+					setTimeout(() => {
+						if (bereich.classList.contains('zu')) innen.setAttribute('hidden', 'until-found');
+					}, 300); // Dauer der Animation
+				}
+
+				knopf.addEventListener('click', () => {
+					if (knopf.getAttribute('aria-expanded') === 'true') {
+						schliessen();
+					} else {
+						oeffnen();
+						// nur das Aufklappen zählen, nicht das Zuklappen
+						window.umami?.track('lebenslauf-aufklappen');
+					}
+				});
+
+				innen.addEventListener('beforematch', oeffnen);
+			})();
+		</script>
 	</section>
 
 	<section aria-labelledby="kommerziell">
@@ -118,6 +166,70 @@ import Layout from '../layouts/Layout.astro';
 		.portrait {
 			width: 110px;
 			height: 110px;
+		}
+	}
+
+	/* Name als Knopf, der wie ein Link aussieht; der Pfeil dreht sich beim Aufklappen */
+	.name {
+		padding: 0;
+		border: 0;
+		background: none;
+		color: inherit;
+		font: inherit;
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 3px;
+		cursor: pointer;
+	}
+
+	.name[hidden] {
+		display: none;
+	}
+
+	.name::after {
+		content: '▾';
+		display: inline-block;
+		margin-left: 0.25em;
+		font-size: 0.8em;
+		transition: transform 0.3s;
+	}
+
+	.name[aria-expanded='true']::after {
+		transform: rotate(180deg);
+	}
+
+	@media (hover: hover) {
+		.name:hover {
+			color: var(--rot);
+		}
+	}
+
+	/* Aufschieben über die Zeilenhöhe des Rasters (0fr = zu, 1fr = so hoch wie der Inhalt) */
+	.lebenslauf {
+		display: grid;
+		grid-template-rows: 1fr;
+		transition: grid-template-rows 0.3s ease;
+	}
+
+	.lebenslauf.zu {
+		grid-template-rows: 0fr;
+	}
+
+	/* overflow: hidden schneidet beim Aufschieben ab und hält zugleich das Porträt im Abschnitt */
+	.lebenslauf-innen {
+		min-height: 0;
+		overflow: hidden;
+	}
+
+	/* der Abstand zum Satz darüber kommt schon von dessen Absatz */
+	.lebenslauf-innen p:first-of-type {
+		margin-top: 0;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.lebenslauf,
+		.name::after {
+			transition: none;
 		}
 	}
 
