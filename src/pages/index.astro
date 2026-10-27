@@ -21,8 +21,8 @@ import Layout from '../layouts/Layout.astro';
 
 	<section class="text">
 		<p class="lead">
-			<strong>d-wie-demokratie.de</strong> ist eine unabhängige und überparteiliche Initiative für alle, die zeigen wollen,
-			dass sie unsere Demokratie und die zentralen Werte unseres Grundgesetzes schätzen:
+			<strong>Mit unserem Aufkleber zeigen Sie, dass sie unsere Demokratie und die zentralen Werte unseres Grundgesetzes schätzen:</strong> 
+			
 		</p>
 
 		<ul class="lead werte">
@@ -48,39 +48,10 @@ import Layout from '../layouts/Layout.astro';
 			</li>
 		</ul>
 
+			<p class="lead">
+			Kleben Sie unseren Aufkleber auf ihr Auto, ihr Fahrrad, ihren Laptop oder ihren Koffer. So zeigen Sie, dass Sie hinter unserer Demokratie und ihren Werten stehen. 
+		</p>
 		
-	</section>
-
-	<section class="postkarte" aria-labelledby="postkarte-titel">
-		<h2 id="postkarte-titel">Bald gibt es Aufkleber auf Postkarte</h2>
-
-		<p class="lead">
-			Kleben Sie die Aufkleber auf ihr Auto, ihr Fahrrad, ihren Laptop oder ihren Koffer... So zeigen Sie, dass Sie hinter unserer Demokratie und ihren Werten stehen. 
-		</p>
-
-		<!-- Postkarte im Querformat DIN A6 (148 × 105 mm) mit einem großen und zwei kleineren
-		     Aufklebern, nur mit CSS gezeichnet -->
-		<div class="karte" aria-hidden="true">
-			<span class="demnaechst">Demnächst</span>
-			{['gross', 'mittel', 'klein'].map((groesse) => (
-				<div class={`stanzung ${groesse}`}>
-					<svg viewBox="0 0 100 100" preserveAspectRatio="none">
-						<ellipse cx="50" cy="50" rx="49" ry="48.5" vector-effect="non-scaling-stroke" />
-					</svg>
-					<Image src={aufkleber} alt="" widths={[300, 600, 1000]} sizes="(max-width: 680px) 90vw, 460px" />
-				</div>
-			))}
-			<span class="format">DIN A6</span>
-		</div>
-
-		<p>
-			Postkarte im Format
-			DIN&nbsp;A6 (10,5&nbsp;×&nbsp;14,8&nbsp;cm) mit Aufklebern zum Abziehen –  wetterfest und rückstandslos
-			ablösbar.
-		</p>
-		<p>
-			Die Rückseite lässt sich wie bei jeder Postkarte beschreiben. So können Sie die Aufkleber leicht weiterverschenken.
-		</p>
 	</section>
 </Layout>
 
@@ -153,104 +124,5 @@ import Layout from '../layouts/Layout.astro';
 	.button:hover {
 		background: var(--rot);
 		color: #ffffff;
-	}
-
-	.postkarte {
-		margin-top: 3em;
-	}
-
-	.postkarte h2 {
-		font-size: 1.4rem;
-	}
-
-
-	.karte {
-		position: relative;
-		width: 100%;
-		max-width: 520px;
-		aspect-ratio: 148 / 105;
-		margin: 1.5em auto 1.8em;
-		border-radius: 4px;
-		background: #ffffff;
-		box-shadow:
-			0 1px 2px rgba(0, 0, 0, 0.12),
-			0 8px 24px rgba(0, 0, 0, 0.12);
-		/* leicht schräg, wie auf den Tisch gelegt */
-		transform: rotate(-1.5deg);
-	}
-
-	/* gestrichelte Schnittlinie rund um den Aufkleber: zeigt, dass er sich abziehen lässt */
-	/* left/top geben den Mittelpunkt an, in Prozent der Karte (148 × 105 mm), damit alles mitskaliert */
-	.stanzung {
-		position: absolute;
-		padding: 1.5%;
-		line-height: 0;
-		transform: translate(-50%, -50%) rotate(-20deg);
-	}
-
-	/* als SVG statt border: dashed, weil Browser gestrichelte Ovale lückenhaft zeichnen */
-	.stanzung svg {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		overflow: visible;
-	}
-
-	/* großer Aufkleber schräg über die Karte (130 mm lang), die kleinen in den frei werdenden Ecken */
-	.gross {
-		left: 52.7%;
-		top: 52.4%;
-		width: 87.8%;
-	}
-
-	.mittel {
-		left: 17.9%;
-		top: 17.9%;
-		width: 27.7%;
-	}
-
-	.klein {
-		left: 85.5%;
-		top: 85%;
-		width: 20.9%;
-	}
-
-	.stanzung ellipse {
-		fill: none;
-		stroke: #b0b0b0;
-		stroke-width: 2;
-		stroke-dasharray: 6 5;
-	}
-
-	/* Das Bild hat weiße Ecken, die gedreht über die Karte ragen würden: oval zuschneiden */
-	.stanzung img {
-		width: 100%;
-		height: auto;
-		border-radius: 50%;
-	}
-
-	.demnaechst {
-		position: absolute;
-		z-index: 1;
-		top: -0.7em;
-		right: 0.8em;
-		padding: 0.3em 0.8em;
-		background: var(--gold);
-		color: var(--schwarz);
-		font-size: 0.9rem;
-		font-weight: bold;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		transform: rotate(6deg);
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-	}
-
-	.format {
-		position: absolute;
-		bottom: 0.5em;
-		left: 0.8em;
-		color: var(--grau);
-		font-size: 0.75rem;
 	}
 </style>
