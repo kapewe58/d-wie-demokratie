@@ -33,7 +33,7 @@ Push to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`), which b
 - `src/assets/aufkleber.png`: sticker image shown on the page (optimized by Astro).
 - `public/aufkleber-d-wie-demokratie.png`: the same sticker, used as the Open Graph preview image.
 - `src/assets/d-wie-demokratie-logo.png`: logo in the header.
-- `public/manifest.webmanifest`, `public/icon-192.png`, `public/icon-512.png`, `public/apple-touch-icon.png`: home-screen web app (name "Demokratie", standalone). The smaller icons are scaled from `icon-512.png`.
+- `public/manifest.json`, `public/icon-192.png`, `public/icon-512.png`, `public/apple-touch-icon.png`: home-screen web app (name "Demokratie", standalone). The smaller icons are scaled from `icon-512.png`.
 
 ## Statistics
 
