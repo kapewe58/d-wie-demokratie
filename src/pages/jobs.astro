@@ -1,0 +1,134 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Offene Stellen. Neue Ausschreibung = neuer Eintrag, erledigte Stelle = Eintrag löschen.
+// Ist die Liste leer, zeigt die Seite automatisch den Hinweis „Gerade ist keine Stelle ausgeschrieben“.
+// „id“ ist die Sprungmarke zum Teilen einer einzelnen Stelle: d-wie-demokratie.de/jobs/#<id>
+const stellen = [
+	{
+		id: 'vertrieb',
+		titel: 'Wir suchen ein Vertriebsgenie und Organisationstalent!',
+		eckdaten: ['Ehrenamtlich', 'Bundesweit', 'Ortsunabhängig'],
+		einleitung: [
+			'd-wie-demokratie.de ist eine junge, unabhängige Bürgerinitiative. Wir möchten möglichst viele Menschen ermutigen, sich sichtbar zu unserer Demokratie und ihren Werten zu bekennen.',
+			'Dafür suchen wir jemanden, der hilft, die Initiative bekannt zu machen und weiterzuentwickeln.',
+		],
+		aufgaben: [
+			'Unternehmen, Medien und Organisationen als Unterstützer gewinnen',
+			'Neue Wege zur Verbreitung unserer Demokratie-Aufkleber entwickeln',
+			'Kontakte und Kooperationen aufbauen',
+			'Die organisatorische Weiterentwicklung unserer Initiative mitgestalten',
+			'Eigene Ideen einbringen und selbstständig umsetzen',
+		],
+		wichtig: [
+			'Du kannst Menschen begeistern, denkst unternehmerisch, organisierst gerne und stehst aus Überzeugung hinter unserer freiheitlichen Demokratie.',
+			'Berufserfahrung in Vertrieb, Marketing, Kommunikation oder Projektmanagement wäre hilfreich, ist aber keine Voraussetzung.',
+		],
+		bieten: [
+			'Die Möglichkeit, eine Bürgerinitiative von Anfang an mitzugestalten, eigene Ideen zu verwirklichen und gesellschaftlich etwas zu bewegen.',
+			'Die Tätigkeit ist ehrenamtlich, zeitlich flexibel und vollständig ortsunabhängig.',
+		],
+		betreff: 'Ehrenamt: Vertrieb und Organisation',
+	},
+];
+
+const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${encodeURIComponent(betreff)}`;
+---
+
+<Layout
+	title="Jobs – D wie Demokratie"
+	description="Ehrenamtlich bei d-wie-demokratie.de mitmachen: offene Aufgaben, zeitlich flexibel und ortsunabhängig."
+>
+	<h1>Jobs</h1>
+
+	<p class="lead">
+		Wir suchen Menschen, die ehrenamtlich mitmachen. Alle Aufgaben sind zeitlich flexibel und ortsunabhängig.
+	</p>
+
+	{stellen.length === 0 && (
+		<p>
+			Gerade ist keine Stelle ausgeschrieben. Wenn du mitmachen möchtest, schreib uns trotzdem gerne an
+			<a href={mailto('Ehrenamt')} data-umami-event="email-job" data-umami-event-stelle="initiativ">info@d-wie-demokratie.de</a>.
+		</p>
+	)}
+
+	{stellen.map((stelle) => (
+		<section class="stelle" id={stelle.id} aria-labelledby={`${stelle.id}-titel`}>
+			<h2 id={`${stelle.id}-titel`}>{stelle.titel}</h2>
+			<p class="eckdaten">{stelle.eckdaten.join(' · ')}</p>
+
+			{stelle.einleitung.map((absatz) => <p>{absatz}</p>)}
+
+			<h3>Deine möglichen Aufgaben</h3>
+			<ul>
+				{stelle.aufgaben.map((aufgabe) => <li>{aufgabe}</li>)}
+			</ul>
+
+			<h3>Was uns wichtig ist</h3>
+			{stelle.wichtig.map((absatz) => <p>{absatz}</p>)}
+
+			<h3>Was wir bieten</h3>
+			{stelle.bieten.map((absatz) => <p>{absatz}</p>)}
+
+			<h3>Interesse?</h3>
+			<p>
+				Dann freuen wir uns über eine Nachricht an
+				<a href={mailto(stelle.betreff)} data-umami-event="email-job" data-umami-event-stelle={stelle.id}>info@d-wie-demokratie.de</a>.
+				Mehr über uns erfährst du unter <a href="/haeufige-fragen/">„Fragen“</a>.
+			</p>
+		</section>
+	))}
+</Layout>
+
+<style>
+	h1 {
+		font-size: clamp(1.85rem, 7.5vw, 2.75rem);
+	}
+
+	.lead {
+		font-size: 1.3rem;
+	}
+
+	/* jede Stelle als Kasten mit Schwarz-Rot-Gold links, wie auf „Sag’s weiter“ */
+	.stelle {
+		margin-top: 2.5em;
+		padding: 0.2em 1.5em 0.5em;
+		padding-left: calc(1.5em + 12px);
+		background:
+			linear-gradient(
+				to right,
+				var(--schwarz) 0 33.33%,
+				var(--rot) 33.33% 66.66%,
+				var(--gold) 66.66% 100%
+			) left / 12px 100% no-repeat,
+			#fafafa;
+	}
+
+	/* auf dem Handy weniger Innenabstand, damit der Text nicht zu schmal wird */
+	@media (max-width: 480px) {
+		.stelle {
+			padding-right: 1em;
+			padding-left: calc(1em + 12px);
+		}
+	}
+
+	h2 {
+		font-size: 1.4rem;
+	}
+
+	.eckdaten {
+		margin-top: -0.4em;
+		color: var(--grau);
+		font-weight: bold;
+	}
+
+	h3 {
+		margin: 1.6em 0 0.4em;
+		font-size: 1.1rem;
+	}
+
+	h3 + p,
+	h3 + ul {
+		margin-top: 0;
+	}
+</style>
