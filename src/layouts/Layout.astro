@@ -68,6 +68,14 @@ const reiter = ['/', '/haeufige-fragen/', '/unterstuetzer/', '/sag-es-weiter/'];
 			// Richtung der Animation: zum Reiter weiter rechts „vor“, nach links „zurueck“
 			addEventListener('pagereveal', (e) => {
 				if (!e.viewTransition) return;
+				// Zurück/Vorwärts (z. B. Wischen vom Rand): dort animiert Safari selbst, sonst bewegt sich die Seite doppelt
+				const zurueckVor =
+					navigation?.activation?.navigationType === 'traverse' ||
+					performance.getEntriesByType('navigation')[0]?.type === 'back_forward';
+				if (zurueckVor) {
+					e.viewTransition.skipTransition();
+					return;
+				}
 				const von = nummer(navigation?.activation?.from?.url ?? document.referrer);
 				const nach = nummer(location.href);
 				if (von === -1 || nach === -1 || von === nach) {
@@ -191,7 +199,9 @@ const reiter = ['/', '/haeufige-fragen/', '/unterstuetzer/', '/sag-es-weiter/'];
 		white-space: nowrap;
 	}
 
-	/* Seitenwechsel zwischen den Reitern: nur der Inhalt gleitet, Kopf- und Fußzeile bleiben stehen */
+	/* Seitenwechsel zwischen den Reitern: der sichtbare Bildschirm gleitet seitlich, die Kopfzeile bleibt stehen.
+	   Bewusst der ganze Bildschirm (root) statt nur <main>: sonst springt der Inhalt beim Wechsel von einer
+	   heruntergescrollten Seite zusätzlich nach oben und ändert seine Höhe, was auf dem Handy wackelt. */
 	@view-transition {
 		navigation: auto;
 	}
@@ -202,29 +212,29 @@ const reiter = ['/', '/haeufige-fragen/', '/unterstuetzer/', '/sag-es-weiter/'];
 		}
 	}
 
-	main {
-		view-transition-name: inhalt;
+	.kopf {
+		view-transition-name: kopf;
 	}
 
-	::view-transition-old(root),
-	::view-transition-new(root) {
+	/* Kopfzeile wechselt ohne Bewegung (nur der rote Balken springt zum neuen Reiter) */
+	::view-transition-group(kopf),
+	::view-transition-new(kopf) {
 		animation: none;
 	}
-
-	::view-transition-group(inhalt) {
-		animation-duration: 0.3s;
+	::view-transition-old(kopf) {
+		display: none;
 	}
 
-	[data-richtung='vor']::view-transition-old(inhalt) {
+	[data-richtung='vor']::view-transition-old(root) {
 		animation: 0.3s ease-in-out both inhalt-nach-links;
 	}
-	[data-richtung='vor']::view-transition-new(inhalt) {
+	[data-richtung='vor']::view-transition-new(root) {
 		animation: 0.3s ease-in-out both inhalt-von-rechts;
 	}
-	[data-richtung='zurueck']::view-transition-old(inhalt) {
+	[data-richtung='zurueck']::view-transition-old(root) {
 		animation: 0.3s ease-in-out both inhalt-nach-rechts;
 	}
-	[data-richtung='zurueck']::view-transition-new(inhalt) {
+	[data-richtung='zurueck']::view-transition-new(root) {
 		animation: 0.3s ease-in-out both inhalt-von-links;
 	}
 
