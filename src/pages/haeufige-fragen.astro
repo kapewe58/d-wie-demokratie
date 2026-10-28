@@ -18,6 +18,19 @@ import Layout from '../layouts/Layout.astro';
 		</p>
 	</section>
 
+			<section aria-labelledby="wichtig">
+		<h2 id="wichtig">Warum ist es so wichtig, dass sich viele Menschen sichtbar zu unserer Demokratie bekennen?</h2>
+
+		<ul class="gruende">
+			<li><label><input type="checkbox" /> Die schweigende Mehrheit bekommt eine Stimme.</label></li>
+			<li><label><input type="checkbox" /> Es betont das Verbindende, statt das Trennende.</label></li>
+			<li><label><input type="checkbox" /> Wer sieht, dass andere ähnlich denken, zeigt eher selbst Haltung.</label></li>
+			<li><label><input type="checkbox" /> Es stärkt alle, die sich für unsere Demokratie einsetzen.</label></li>
+			<li><label><input type="checkbox" /> Unsere Grundrechte bleiben nur stark, wenn wir für sie einstehen.</label></li>
+			<li><label><input type="checkbox" /> ...............................................................................</label></li>
+		</ul>
+	</section>
+
 		<section aria-labelledby="ziel">
 		<h2 id="ziel">Was macht d-wie-demokratie.de?</h2>
 
@@ -236,5 +249,30 @@ import Layout from '../layouts/Layout.astro';
 
 	.lead {
 		font-size: 1.3rem;
+	}
+
+	/* Gründe zum Ankreuzen: Kästchen statt Aufzählungspunkten, ganze Zeile anklickbar */
+	.gruende {
+		padding: 0;
+		list-style: none;
+	}
+
+	.gruende li + li {
+		margin-top: 0.4em;
+	}
+
+	.gruende label {
+		display: flex;
+		gap: 0.6em;
+		align-items: baseline;
+		cursor: pointer;
+	}
+
+	.gruende input {
+		flex-shrink: 0;
+		width: 1.1em;
+		height: 1.1em;
+		accent-color: var(--rot);
+		cursor: pointer;
 	}
 </style>
