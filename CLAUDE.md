@@ -25,7 +25,7 @@ Push to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`), which b
 - `src/layouts/Layout.astro`: shared `<head>` (meta, Open Graph, Umami script), sticky header with black-red-gold stripe and tab navigation, footer links. Global CSS variables live here. Also holds the tab order (`reiter`) used for swiping between tabs on mobile and for the slide animation (native cross-document View Transitions); a new tab must be added there as well as in the nav.
 - `src/pages/index.astro`: landing page with the sticker and links to Art. 1–5 GG.
 - `src/pages/haeufige-fragen.astro`: FAQ page, including who started the initiative; the biography with portrait (`src/assets/klaus-p-wolf.jpg`) is collapsed until the name is clicked (open without JavaScript).
-- `src/pages/unterstuetzer.astro`: supporters page.
+- `src/pages/mitmachen.astro`: "Mitmachen" page (who we are looking for); formerly `/unterstuetzer/`, which redirects here.
 - `src/pages/jobs.astro`: volunteer job postings, kept as the `stellen` array at the top (empty array shows a "nothing open" note); each posting is linkable via `/jobs/#<id>`. Uses "du", unlike the rest of the site ("Sie").
 - `src/pages/sag-es-weiter.astro`: share buttons (WhatsApp, e-mail, copy link, native share).
 - `src/pages/impressum.astro`, `src/pages/datenschutz.astro`: legal pages.

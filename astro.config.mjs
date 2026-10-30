@@ -12,5 +12,6 @@ export default defineConfig({
 	redirects: {
 		'/ueber-uns': '/haeufige-fragen',
 		'/ueber-d-wie-demokratie': '/haeufige-fragen',
+		'/unterstuetzer': '/mitmachen',
 	},
 });
