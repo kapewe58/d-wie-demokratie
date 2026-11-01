@@ -27,6 +27,28 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 			Teilen
 		</button>
 	</div>
+
+	<!-- Anmeldung für Neuigkeiten über CleverReach (Double-Opt-in); öffnet die Bestätigungsseite
+	     von CleverReach in einem neuen Tab, damit die Besucher auf der Seite bleiben -->
+	<form
+		class="neuigkeiten"
+		method="post"
+		action="https://flow.cleverreach.com/fl/22f14217-3d47-4f01-8b0f-ddcaf44718bf/confirm"
+		target="_blank"
+	>
+		<h3>Neuigkeiten per E-Mail</h3>
+		<p>
+			Wir schreiben Ihnen, wenn es Neues von der Initiative gibt. Sie erhalten eine
+			Bestätigungsmail und können sich jederzeit abmelden.
+		</p>
+		<!-- Falle für Spam-Programme, für Menschen unsichtbar -->
+		<input type="text" name="email_confirm" tabindex="-1" autocomplete="off" aria-hidden="true" hidden />
+		<label for="neuigkeiten-email">Ihre E-Mail-Adresse</label>
+		<div class="eingabe">
+			<input id="neuigkeiten-email" type="email" name="email" autocomplete="email" required />
+			<button class="knopf schwarz" data-umami-event="neuigkeiten-anmelden" type="submit">Anmelden</button>
+		</div>
+	</form>
 </section>
 
 <script>
@@ -101,6 +123,47 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 		text-align: center;
 		text-decoration: none;
 		cursor: pointer;
+	}
+
+	/* durch eine Linie vom Teilen abgesetzt */
+	.neuigkeiten {
+		margin-top: 1.75em;
+		padding-top: 1.5em;
+		border-top: 1px solid #dddddd;
+		max-width: 435px;
+	}
+
+	.neuigkeiten h3 {
+		margin: 0 0 0.4em;
+		font-size: 1.4rem;
+	}
+
+	.neuigkeiten label {
+		display: block;
+		margin-bottom: 0.3em;
+		font-weight: bold;
+	}
+
+	.eingabe {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65em;
+	}
+
+	.eingabe input {
+		flex: 1 1 14em;
+		min-width: 0;
+		padding: 0.7em 0.9em;
+		border: 1px solid #999999;
+		border-radius: 6px;
+		background: #ffffff;
+		font: inherit;
+	}
+
+	/* nur so breit wie nötig, der Rest bleibt für die Adresse */
+	.eingabe .knopf {
+		flex: 0 0 auto;
+		padding-inline: 1em;
 	}
 
 	.knopf[hidden] {

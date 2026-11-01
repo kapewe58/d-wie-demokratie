@@ -27,7 +27,7 @@ Push to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`), which b
 - `src/pages/haeufige-fragen.astro`: FAQ page, including who started the initiative; the biography with portrait (`src/assets/klaus-p-wolf.jpg`) is collapsed until the name is clicked (open without JavaScript).
 - `src/pages/unterstuetzer.astro`: supporters page (who we are looking for); was briefly `/mitmachen/`, which redirects here.
 - `src/pages/jobs.astro`: volunteer job postings, kept as the `stellen` array at the top (empty array shows a "nothing open" note); each posting is linkable via `/jobs/#<id>`. Uses "du", unlike the rest of the site ("Sie").
-- `src/components/SagEsWeiter.astro`: share box (WhatsApp, e-mail, copy link, native share) shown at the bottom of every page via `Layout.astro` (turned off with `teilen={false}` on impressum, datenschutz and statistik); the old `/sag-es-weiter/` page redirects to `/#sag-es-weiter`.
+- `src/components/SagEsWeiter.astro`: share box (WhatsApp, e-mail, copy link, native share) shown at the bottom of every page via `Layout.astro` (turned off with `teilen={false}` on impressum, datenschutz and statistik); the old `/sag-es-weiter/` page redirects to `/#sag-es-weiter`. Below the share buttons it holds the sign-up form for "Neuigkeiten per E-Mail" (posts to a CleverReach double-opt-in form; recipient group "Neuigkeiten D wie Demokratie", sender domain authenticated via DKIM selector `crsend`). Section 5 of `datenschutz.astro` describes it.
 - `src/pages/impressum.astro`, `src/pages/datenschutz.astro`: legal pages.
 - `src/pages/statistik.astro`: opt-out toggle for the visitor statistics (`noindex`, excluded from the sitemap).
 - `src/middleware.ts`: wraps every "d-wie-demokratie.de" in visible text in `.nobr` so it never breaks at the hyphens.
@@ -38,7 +38,7 @@ Push to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`), which b
 
 ## Statistics
 
-Umami, self-hosted at https://stats.5-finger.com (same server as 5-finger.com; setup documented in the 5-finger repo under `deploy/umami/`). The script in `Layout.astro` only counts on `d-wie-demokratie.de` (`data-domains`), not on localhost. Opt-out sets `localStorage['umami.disabled'] = '1'` via `/statistik/`. Click events use `data-umami-event` attributes (share buttons in the "Bitte weitersagen" box, support e-mail links, job application e-mail links `email-job`); opening the biography on the FAQ page is counted via `umami.track('lebenslauf-aufklappen')`. If what is collected changes, update section 3 of `datenschutz.astro`.
+Umami, self-hosted at https://stats.5-finger.com (same server as 5-finger.com; setup documented in the 5-finger repo under `deploy/umami/`). The script in `Layout.astro` only counts on `d-wie-demokratie.de` (`data-domains`), not on localhost. Opt-out sets `localStorage['umami.disabled'] = '1'` via `/statistik/`. Click events use `data-umami-event` attributes (share buttons in the "Bitte weitersagen" box, support e-mail links, job application e-mail links `email-job`, newsletter sign-up `neuigkeiten-anmelden`); opening the biography on the FAQ page is counted via `umami.track('lebenslauf-aufklappen')`. If what is collected changes, update section 3 of `datenschutz.astro`.
 
 ## Design conventions
 
