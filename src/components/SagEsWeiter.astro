@@ -1,6 +1,5 @@
 ---
-import Layout from '../layouts/Layout.astro';
-
+// Teilen-Kasten unten auf jeder Seite (über Layout.astro eingebunden)
 // Geteilt wird immer die Startseite, nicht diese Seite selbst
 const seite = new URL('/', Astro.site).href;
 const nachricht =
@@ -10,31 +9,25 @@ const whatsappHref = `https://wa.me/?text=${encodeURIComponent(`${nachricht} ${s
 const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&body=${encodeURIComponent(`${nachricht} ${seite}`)}`;
 ---
 
-<Layout
-	title="Sag’s weiter – D wie Demokratie"
-	description="Empfehlen Sie d-wie-demokratie.de weiter – per WhatsApp, E-Mail oder mit einem Link."
->
-	<h1>Sag’s weiter</h1>
+<section class="teilen" id="sag-es-weiter" aria-labelledby="sag-es-weiter-titel">
+	<h2 id="sag-es-weiter-titel">Sag’s weiter</h2>
+	<p>
+		Kennen Sie jemanden, den d-wie-demokratie.de interessieren könnte? Teilen Sie die Seite
+		mit einem Klick.
+	</p>
 
-	<section class="teilen" aria-label="Seite teilen">
-		<p>
-			Kennen Sie jemanden, den d-wie-demokratie.de interessieren könnte? Teilen Sie die Seite
-			mit einem Klick.
-		</p>
-
-		<!-- Knöpfe in Schwarz, Rot, Gold wie die Flagge; Klicks zählt Umami als Ereignis (data-umami-event) -->
-		<div class="knoepfe">
-			<a class="knopf schwarz" data-umami-event="teilen-whatsapp" href={whatsappHref} target="_blank" rel="noopener">Auf WhatsApp teilen</a>
-			<a class="knopf rot" data-umami-event="teilen-email" href={mailtoHref}>Per E-Mail empfehlen</a>
-			<button class="knopf gold" data-umami-event="link-kopieren" id="kopieren" type="button" data-url={seite}>Link kopieren</button>
-			<!-- nur sichtbar, wenn das Gerät eigenes Teilen anbietet (meist Handys); steht unten,
-			     damit oben die Flaggenfolge erhalten bleibt -->
-			<button class="knopf schwarz" data-umami-event="teilen-geraet" id="teilen" type="button" data-url={seite} data-text={nachricht} hidden>
-				Teilen
-			</button>
-		</div>
-	</section>
-</Layout>
+	<!-- Knöpfe in Schwarz, Rot, Gold wie die Flagge; Klicks zählt Umami als Ereignis (data-umami-event) -->
+	<div class="knoepfe">
+		<a class="knopf schwarz" data-umami-event="teilen-whatsapp" href={whatsappHref} target="_blank" rel="noopener">Auf WhatsApp teilen</a>
+		<a class="knopf rot" data-umami-event="teilen-email" href={mailtoHref}>Per E-Mail empfehlen</a>
+		<button class="knopf gold" data-umami-event="link-kopieren" id="kopieren" type="button" data-url={seite}>Link kopieren</button>
+		<!-- nur sichtbar, wenn das Gerät eigenes Teilen anbietet (meist Handys); steht unten,
+		     damit oben die Flaggenfolge erhalten bleibt -->
+		<button class="knopf schwarz" data-umami-event="teilen-geraet" id="teilen" type="button" data-url={seite} data-text={nachricht} hidden>
+			Teilen
+		</button>
+	</div>
+</section>
 
 <script>
 	const teilen = document.getElementById('teilen') as HTMLButtonElement | null;
@@ -67,12 +60,9 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 </script>
 
 <style>
-	h1 {
-		font-size: clamp(1.85rem, 7.5vw, 2.75rem);
-	}
-
-	/* Kasten wie der Download-Kasten auf der Startseite: Schwarz-Rot-Gold links */
+	/* Kasten mit Schwarz-Rot-Gold links, mit Abstand zum Inhalt der Seite darüber */
 	.teilen {
+		margin-top: 3em;
 		padding: 1.5em;
 		padding-left: calc(1.5em + 12px);
 		background:
@@ -83,6 +73,11 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 				var(--gold) 66.66% 100%
 			) left / 12px 100% no-repeat,
 			#fafafa;
+	}
+
+	.teilen h2 {
+		margin: 0 0 0.4em;
+		font-size: 1.4rem;
 	}
 
 	.teilen p {
