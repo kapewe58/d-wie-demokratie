@@ -27,7 +27,7 @@ Push to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`), which b
 - `src/pages/haeufige-fragen.astro`: FAQ page, including who started the initiative; the biography with portrait (`src/assets/klaus-p-wolf.jpg`) is collapsed until the name is clicked (open without JavaScript).
 - `src/pages/unterstuetzer.astro`: supporters page (who we are looking for); was briefly `/mitmachen/`, which redirects here.
 - `src/pages/jobs.astro`: volunteer job postings, kept as the `stellen` array at the top (empty array shows a "nothing open" note); each posting is linkable via `/jobs/#<id>`. Uses "du", unlike the rest of the site ("Sie").
-- `src/components/SagEsWeiter.astro`: share box (WhatsApp, e-mail, copy link, native share) shown at the bottom of every page via `Layout.astro`; the old `/sag-es-weiter/` page redirects to `/#sag-es-weiter`.
+- `src/components/SagEsWeiter.astro`: share box (WhatsApp, e-mail, copy link, native share) shown at the bottom of every page via `Layout.astro` (turned off with `teilen={false}` on impressum, datenschutz and statistik); the old `/sag-es-weiter/` page redirects to `/#sag-es-weiter`.
 - `src/pages/impressum.astro`, `src/pages/datenschutz.astro`: legal pages.
 - `src/pages/statistik.astro`: opt-out toggle for the visitor statistics (`noindex`, excluded from the sitemap).
 - `src/middleware.ts`: wraps every "d-wie-demokratie.de" in visible text in `.nobr` so it never breaks at the hyphens.

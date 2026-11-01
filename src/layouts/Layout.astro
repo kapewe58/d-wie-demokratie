@@ -9,9 +9,11 @@ interface Props {
 	title: string;
 	description: string;
 	noindex?: boolean;
+	// Kasten „Sag’s weiter“ unten; auf Rechts- und Einstellungsseiten abgeschaltet
+	teilen?: boolean;
 }
 
-const { title, description, noindex = false } = Astro.props;
+const { title, description, noindex = false, teilen = true } = Astro.props;
 const pfad = Astro.url.pathname;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
@@ -135,7 +137,7 @@ const reiter = ['/', '/haeufige-fragen/', '/unterstuetzer/', '/jobs/'];
 
 		<main>
 			<slot />
-			<SagEsWeiter />
+			{teilen && <SagEsWeiter />}
 		</main>
 
 		<footer>
