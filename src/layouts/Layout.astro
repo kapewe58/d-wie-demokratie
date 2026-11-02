@@ -206,8 +206,11 @@ const reiter = ['/', '/haeufige-fragen/', '/unterstuetzen/', '/mitmachen/'];
 	/* Seitenwechsel zwischen den Reitern: der sichtbare Bildschirm gleitet seitlich, die Kopfzeile bleibt stehen.
 	   Bewusst der ganze Bildschirm (root) statt nur <main>: sonst springt der Inhalt beim Wechsel von einer
 	   heruntergescrollten Seite zusätzlich nach oben und ändert seine Höhe, was auf dem Handy wackelt. */
-	@view-transition {
-		navigation: auto;
+	/* nur auf Touch-Geräten (Handy, Tablet), wo man zwischen den Reitern wischt; am Rechner stört die Bewegung */
+	@media (hover: none) and (pointer: coarse) {
+		@view-transition {
+			navigation: auto;
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {

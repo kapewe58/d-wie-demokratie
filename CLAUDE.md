@@ -22,7 +22,7 @@ Push to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`), which b
 
 ## Architecture
 
-- `src/layouts/Layout.astro`: shared `<head>` (meta, Open Graph, Umami script), sticky header with black-red-gold stripe and tab navigation, footer links. Global CSS variables live here. Also holds the tab order (`reiter`) used for swiping between tabs on mobile and for the slide animation (native cross-document View Transitions); a new tab must be added there as well as in the nav.
+- `src/layouts/Layout.astro`: shared `<head>` (meta, Open Graph, Umami script), sticky header with black-red-gold stripe and tab navigation, footer links. Global CSS variables live here. Also holds the tab order (`reiter`) used for swiping between tabs on mobile and for the slide animation (native cross-document View Transitions, only on touch devices); a new tab must be added there as well as in the nav.
 - `src/pages/index.astro`: landing page with an image slider (crossfade every few seconds, dots below stop it; images and alt texts in the `bilder` array at the top, files in `src/assets/slider/`, about 1578 × 996 px; the photos are AI-generated, hence the "Foto KI-generiert" note, shown only while a photo with `foto: true` is visible) and links to Art. 1–5 GG.
 - `src/pages/haeufige-fragen.astro`: FAQ page, including who started the initiative; the biography with portrait (`src/assets/klaus-p-wolf.jpg`) is collapsed until the name is clicked (open without JavaScript).
 - `src/pages/unterstuetzen.astro`: supporters page (who we are looking for); formerly `/unterstuetzer/`, which redirects here.
