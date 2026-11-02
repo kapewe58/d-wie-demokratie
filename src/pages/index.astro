@@ -9,6 +9,7 @@ import Layout from '../layouts/Layout.astro';
 
 // Bilder oben auf der Startseite, wechseln alle paar Sekunden. Neues Bild = nach src/assets/slider/
 // legen (am besten 1578 × 996 Pixel), oben importieren und hier eintragen.
+// „foto: true“ blendet beim Bild den Hinweis „Fotos KI-generiert“ ein.
 const bilder = [
 	{
 		src: aufkleber,
@@ -16,18 +17,22 @@ const bilder = [
 	},
 	{
 		src: laptop,
+		foto: true,
 		alt: 'Fünf lächelnde Menschen unterschiedlichen Alters und unterschiedlicher Herkunft an einem Tisch vor dem Reichstagsgebäude, auf ihren Laptops der Aufkleber „D wie Demokratie“.',
 	},
 	{
 		src: oldtimer,
+		foto: true,
 		alt: 'Eine Familie aus drei Generationen lehnt im Abendlicht an einem schwarzen Oldtimer, auf der Heckscheibe der Aufkleber „D wie Demokratie“.',
 	},
 	{
 		src: tassen,
+		foto: true,
 		alt: 'Fünf lächelnde Menschen, darunter eine Frau mit Kopftuch, halten vor dem Reichstagsgebäude Tassen mit dem Aufdruck „D wie Demokratie“ hoch.',
 	},
 	{
 		src: tshirt,
+		foto: true,
 		alt: 'Eine junge Frau in einem weißen T-Shirt mit dem Aufdruck „D wie Demokratie“, im Hintergrund der Berliner Fernsehturm im Abendlicht.',
 	},
 ];
@@ -47,6 +52,7 @@ const sekunden = 5;
 				src={bild.src}
 				alt={bild.alt}
 				class:list={['folie', { sichtbar: i === 0 }]}
+				data-foto={bild.foto ? '' : undefined}
 				widths={[400, 700, 1371]}
 				sizes="(max-width: 680px) 100vw, 680px"
 				loading={i === 0 ? 'eager' : 'lazy'}
@@ -62,7 +68,7 @@ const sekunden = 5;
 			))}
 		</div>
 		<!-- Kennzeichnung nach Art. 50 KI-Verordnung, die Fotos zeigen u. a. den Reichstag -->
-		<p class="ki-hinweis">Fotos KI-generiert</p>
+		<p class="ki-hinweis" hidden={!bilder[0].foto}>Fotos KI-generiert</p>
 	</div>
 
 	<section class="text">
@@ -103,7 +109,8 @@ const sekunden = 5;
 	const slider = document.querySelector<HTMLElement>('.slider');
 	const punkte = document.querySelector<HTMLElement>('.punkte');
 	if (slider && punkte) {
-		const folien = [...slider.querySelectorAll('.folie')];
+		const folien = [...slider.querySelectorAll<HTMLElement>('.folie')];
+		const hinweis = document.querySelector<HTMLElement>('.ki-hinweis');
 		const knoepfe = [...punkte.querySelectorAll('button')];
 		let aktuell = 0;
 
@@ -112,6 +119,7 @@ const sekunden = 5;
 			knoepfe[aktuell].removeAttribute('aria-current');
 			aktuell = n;
 			folien[aktuell].classList.add('sichtbar');
+			if (hinweis) hinweis.hidden = !('foto' in folien[aktuell].dataset);
 			knoepfe[aktuell].setAttribute('aria-current', 'true');
 		};
 
