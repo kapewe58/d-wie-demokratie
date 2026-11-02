@@ -9,7 +9,7 @@ import Layout from '../layouts/Layout.astro';
 
 // Bilder oben auf der Startseite, wechseln alle paar Sekunden. Neues Bild = nach src/assets/slider/
 // legen (am besten 1578 × 996 Pixel), oben importieren und hier eintragen.
-// „foto: true“ blendet beim Bild den Hinweis „Fotos KI-generiert“ ein.
+// „foto: true“ blendet beim Bild den Hinweis „Foto KI-generiert“ ein.
 const bilder = [
 	{
 		src: aufkleber,
@@ -68,7 +68,7 @@ const sekunden = 5;
 			))}
 		</div>
 		<!-- Kennzeichnung nach Art. 50 KI-Verordnung, die Fotos zeigen u. a. den Reichstag -->
-		<p class="ki-hinweis" hidden={!bilder[0].foto}>Fotos KI-generiert</p>
+		<p class="ki-hinweis" hidden={!bilder[0].foto}>Foto KI-generiert</p>
 	</div>
 
 	<section class="text">
