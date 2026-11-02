@@ -26,7 +26,10 @@ import Layout from '../layouts/Layout.astro';
 	</section>
 
 	<section aria-labelledby="farben">
-		<h2 id="farben">Ist der Aufkleber nicht rechtsradikal?</h2>
+		<h2 id="farben">
+			Ist der Aufkleber nicht rechtsradikal?
+			<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_22.html" target="_blank" rel="noopener">Art.&nbsp;22&nbsp;(2)&nbsp;GG</a>
+		</h2>
 
 		<p>
 			Wir können diesen ersten Eindruck gut nachvollziehen. Rechtsextreme und nationalistische
@@ -291,6 +294,17 @@ import Layout from '../layouts/Layout.astro';
 
 	.lead {
 		font-size: 1.3rem;
+	}
+
+	/* Verweis aufs Grundgesetz wie auf der Startseite (dort .gg in index.astro) */
+	.gg {
+		margin-left: 0.3em;
+		font-size: 0.65em;
+		font-weight: normal;
+		color: var(--grau);
+		text-decoration-color: currentColor;
+		text-decoration-thickness: 1px;
+		white-space: nowrap;
 	}
 
 	/* Hinweis auf eine andere Seite, kleiner, damit der Schlusssatz darüber der Höhepunkt bleibt */
