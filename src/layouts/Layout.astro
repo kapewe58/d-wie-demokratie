@@ -18,7 +18,7 @@ const pfad = Astro.url.pathname;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
 // Reihenfolge der Reiter, für das Wischen auf dem Handy und die Richtung der Animation
-const reiter = ['/', '/haeufige-fragen/', '/unterstuetzer/', '/jobs/'];
+const reiter = ['/', '/haeufige-fragen/', '/unterstuetzen/', '/jobs/'];
 ---
 
 <!doctype html>
@@ -130,7 +130,7 @@ const reiter = ['/', '/haeufige-fragen/', '/unterstuetzer/', '/jobs/'];
 					<Image src={logo} alt="" width={60} densities={[1, 2, 3]} loading="eager" />
 				</a>
 				<a href="/haeufige-fragen/" aria-current={pfad.startsWith('/haeufige-fragen') ? 'page' : undefined}>Fragen</a>
-				<a href="/unterstuetzer/" aria-current={pfad.startsWith('/unterstuetzer') ? 'page' : undefined}>Unterstützer</a>
+				<a href="/unterstuetzen/" aria-current={pfad.startsWith('/unterstuetzen') ? 'page' : undefined}>unterstützen</a>
 				<a href="/jobs/" aria-current={pfad.startsWith('/jobs') ? 'page' : undefined}>Jobs</a>
 			</nav>
 		</header>
