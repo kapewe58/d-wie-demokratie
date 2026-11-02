@@ -23,7 +23,7 @@ Push to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`), which b
 ## Architecture
 
 - `src/layouts/Layout.astro`: shared `<head>` (meta, Open Graph, Umami script), sticky header with black-red-gold stripe and tab navigation, footer links. Global CSS variables live here. Also holds the tab order (`reiter`) used for swiping between tabs on mobile and for the slide animation (native cross-document View Transitions); a new tab must be added there as well as in the nav.
-- `src/pages/index.astro`: landing page with the sticker and links to Art. 1–5 GG.
+- `src/pages/index.astro`: landing page with an image slider (crossfade every few seconds, dots below stop it; images and alt texts in the `bilder` array at the top, files in `src/assets/slider/`, about 1578 × 996 px; the photos are AI-generated, hence the "Fotos KI-generiert" note) and links to Art. 1–5 GG.
 - `src/pages/haeufige-fragen.astro`: FAQ page, including who started the initiative; the biography with portrait (`src/assets/klaus-p-wolf.jpg`) is collapsed until the name is clicked (open without JavaScript).
 - `src/pages/unterstuetzen.astro`: supporters page (who we are looking for); formerly `/unterstuetzer/`, which redirects here.
 - `src/pages/mitmachen.astro`: volunteer job postings (tab „Mitmachen“), kept as the `stellen` array at the top (empty array shows a "nothing open" note); each posting is linkable via `/mitmachen/#<id>`. Formerly `/jobs/`: `src/pages/jobs.astro` is a hand-written redirect that keeps the `#<id>` (Astro's `redirects` would drop it). Uses "du", unlike the rest of the site ("Sie").
@@ -31,7 +31,7 @@ Push to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`), which b
 - `src/pages/impressum.astro`, `src/pages/datenschutz.astro`: legal pages.
 - `src/pages/statistik.astro`: opt-out toggle for the visitor statistics (`noindex`, excluded from the sitemap).
 - `src/middleware.ts`: wraps every "d-wie-demokratie.de" in visible text in `.nobr` so it never breaks at the hyphens.
-- `src/assets/aufkleber.png`: sticker image shown on the page (optimized by Astro).
+- `src/assets/aufkleber.png`: sticker image; only its dimensions are used, for the Open Graph tags in `Layout.astro`.
 - `public/aufkleber-d-wie-demokratie.png`: the same sticker, used as the Open Graph preview image.
 - `src/assets/d-wie-demokratie-logo.png`: logo in the header.
 - `public/manifest.json`, `public/icon-192.png`, `public/icon-512.png`, `public/apple-touch-icon.png`: home-screen web app (name "Demokratie", standalone). The smaller icons are scaled from `icon-512.png`.

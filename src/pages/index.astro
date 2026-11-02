@@ -1,7 +1,37 @@
 ---
 import { Image } from 'astro:assets';
-import aufkleber from '../assets/aufkleber.png';
+import aufkleber from '../assets/slider/01-D-wie-Demokratie.png';
+import laptop from '../assets/slider/02-laptop.png';
+import oldtimer from '../assets/slider/03-oldtimer.png';
+import tassen from '../assets/slider/04-tassen.png';
+import tshirt from '../assets/slider/05-tshirtmaedchen.png';
 import Layout from '../layouts/Layout.astro';
+
+// Bilder oben auf der Startseite, wechseln alle paar Sekunden. Neues Bild = nach src/assets/slider/
+// legen (am besten 1578 × 996 Pixel), oben importieren und hier eintragen.
+const bilder = [
+	{
+		src: aufkleber,
+		alt: 'Aufkleber: ein großes D in Schwarz-Rot-Gold, darunter „wie Demokratie“ und die Adresse d-wie-demokratie.de, rechts ein QR-Code mit „Mehr erfahren:“, in einem Oval wie beim Länderkennzeichen am Auto.',
+	},
+	{
+		src: laptop,
+		alt: 'Fünf lächelnde Menschen unterschiedlichen Alters und unterschiedlicher Herkunft an einem Tisch vor dem Reichstagsgebäude, auf ihren Laptops der Aufkleber „D wie Demokratie“.',
+	},
+	{
+		src: oldtimer,
+		alt: 'Eine Familie aus drei Generationen lehnt im Abendlicht an einem schwarzen Oldtimer, auf der Heckscheibe der Aufkleber „D wie Demokratie“.',
+	},
+	{
+		src: tassen,
+		alt: 'Fünf lächelnde Menschen, darunter eine Frau mit Kopftuch, halten vor dem Reichstagsgebäude Tassen mit dem Aufdruck „D wie Demokratie“ hoch.',
+	},
+	{
+		src: tshirt,
+		alt: 'Eine junge Frau in einem weißen T-Shirt mit dem Aufdruck „D wie Demokratie“, im Hintergrund der Berliner Fernsehturm im Abendlicht.',
+	},
+];
+const sekunden = 5;
 ---
 
 <Layout
@@ -10,18 +40,34 @@ import Layout from '../layouts/Layout.astro';
 >
 	<h1 class="sr-only">D wie Demokratie</h1>
 
-	<Image
-		src={aufkleber}
-		alt="Aufkleber: ein großes D in Schwarz-Rot-Gold, darunter „wie Demokratie“ und die Adresse d-wie-demokratie.de, rechts ein QR-Code mit „Mehr erfahren:“, in einem Oval wie beim Länderkennzeichen am Auto."
-		class="aufkleber"
-		widths={[400, 700, 1371]}
-		sizes="(max-width: 680px) 100vw, 680px"
-		loading="eager"
-	/>
+	<!-- Bilder liegen übereinander und werden nacheinander eingeblendet; ohne JavaScript bleibt das erste stehen -->
+	<div class="slider" data-sekunden={sekunden}>
+		{bilder.map((bild, i) => (
+			<Image
+				src={bild.src}
+				alt={bild.alt}
+				class:list={['folie', { sichtbar: i === 0 }]}
+				widths={[400, 700, 1371]}
+				sizes="(max-width: 680px) 100vw, 680px"
+				loading={i === 0 ? 'eager' : 'lazy'}
+			/>
+		))}
+	</div>
+
+	<div class="unter-slider">
+		<!-- Punkte zum Weiterschalten; ein Klick hält den automatischen Wechsel an -->
+		<div class="punkte" hidden>
+			{bilder.map((_, i) => (
+				<button type="button" aria-label={`Bild ${i + 1} von ${bilder.length}`} aria-current={i === 0 ? 'true' : undefined}></button>
+			))}
+		</div>
+		<!-- Kennzeichnung nach Art. 50 KI-Verordnung, die Fotos zeigen u. a. den Reichstag -->
+		<p class="ki-hinweis">Fotos KI-generiert</p>
+	</div>
 
 	<section class="text">
 		<p class="lead">
-			<strong>Mit unseren Aufklebern zeigen Sie, dass sie unsere Demokratie und die zentralen Werte unseres Grundgesetzes schätzen:</strong> 
+			<strong>So zeigen wir, dass wir unsere Demokratie und die zentralen Werte unseres Grundgesetzes schätzen:</strong> 
 			
 		</p>
 
@@ -48,26 +94,129 @@ import Layout from '../layouts/Layout.astro';
 			</li>
 		</ul>
 
-			<p>
-			Kleben Sie einen Aufkleber auf ihr Auto, ihren Laptop oder ihren Koffer. So zeigen Sie, dass Sie hinter unserer Demokratie und ihren Werten stehen. 
-		</p>
+
 		
 	</section>
 </Layout>
 
+<script>
+	const slider = document.querySelector<HTMLElement>('.slider');
+	const punkte = document.querySelector<HTMLElement>('.punkte');
+	if (slider && punkte) {
+		const folien = [...slider.querySelectorAll('.folie')];
+		const knoepfe = [...punkte.querySelectorAll('button')];
+		let aktuell = 0;
+
+		const zeige = (n: number) => {
+			folien[aktuell].classList.remove('sichtbar');
+			knoepfe[aktuell].removeAttribute('aria-current');
+			aktuell = n;
+			folien[aktuell].classList.add('sichtbar');
+			knoepfe[aktuell].setAttribute('aria-current', 'true');
+		};
+
+		// wer Bewegung abgeschaltet hat, schaltet nur selbst weiter
+		const ruhig = matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const takt = ruhig
+			? undefined
+			: setInterval(() => zeige((aktuell + 1) % folien.length), Number(slider.dataset.sekunden) * 1000);
+
+		knoepfe.forEach((knopf, i) =>
+			knopf.addEventListener('click', () => {
+				clearInterval(takt);
+				zeige(i);
+			})
+		);
+		punkte.hidden = false;
+	}
+</script>
+
 <style>
-	.aufkleber {
-		display: block;
-		width: 100%;
-		height: auto;
+	/* feste Höhe aus dem Seitenverhältnis der Bilder, damit beim Wechsel nichts springt */
+	.slider {
+		position: relative;
+		aspect-ratio: 1578 / 996;
 		/* zusammen mit dem Innenabstand von main (36,8px) genau 40px bis zur Kopfzeile */
-		margin: 3.2px 0 2em;
+		margin-top: 3.2px;
 	}
 
-	/* Auf dem Handy rückt der Aufkleber noch näher an den oberen Rand */
+	/* Auf dem Handy rücken die Bilder noch näher an den oberen Rand */
 	@media (max-width: 680px) {
-		.aufkleber {
+		.slider {
 			margin-top: -0.125em;
+		}
+	}
+
+	.folie {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		opacity: 0;
+		transition: opacity 1s ease;
+	}
+
+	.folie.sichtbar {
+		opacity: 1;
+	}
+
+	/* Zeile unter den Bildern: Punkte in der Mitte, Hinweis rechts; feste Höhe, auch ohne Punkte */
+	.unter-slider {
+		position: relative;
+		min-height: 28px;
+		margin: 0.4em 0 1.4em;
+	}
+
+	.punkte {
+		display: flex;
+		justify-content: center;
+		gap: 0.2em;
+	}
+
+	.ki-hinweis {
+		position: absolute;
+		top: 50%;
+		right: 0;
+		margin: 0;
+		transform: translateY(-50%);
+		font-size: 0.75rem;
+		color: var(--grau);
+	}
+
+	.punkte[hidden] {
+		display: none;
+	}
+
+	/* große Klickfläche, sichtbar ist nur der Punkt in der Mitte */
+	.punkte button {
+		width: 28px;
+		height: 28px;
+		padding: 0;
+		border: 0;
+		background: none;
+		cursor: pointer;
+	}
+
+	.punkte button::before {
+		content: '';
+		display: block;
+		width: 10px;
+		height: 10px;
+		margin: auto;
+		border-radius: 50%;
+		background: #c4c4c4;
+		transition: background 0.3s;
+	}
+
+	.punkte button[aria-current='true']::before {
+		background: var(--schwarz);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.folie,
+		.punkte button::before {
+			transition: none;
 		}
 	}
 
