@@ -166,6 +166,13 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 		padding-inline: 1em;
 	}
 
+	/* auf dem Handy steht der Knopf unter dem Feld, dann so breit wie die anderen Knöpfe */
+	@media (max-width: 540px) {
+		.eingabe .knopf {
+			flex-basis: 100%;
+		}
+	}
+
 	.knopf[hidden] {
 		display: none;
 	}
