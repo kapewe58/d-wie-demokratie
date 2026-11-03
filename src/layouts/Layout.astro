@@ -338,6 +338,13 @@ const reiter = ['/', '/haeufige-fragen/', '/unterstuetzen/', '/flagge-zeigen/'];
 		width: auto;
 	}
 
+	/* „Fragen“ näher ans Logo: vom Abstand zwischen den Reitern (1,8em) bleibt nach dem Logo nur 0,6em */
+	@media (min-width: 561px) {
+		nav .logo {
+			margin-right: -1.2em;
+		}
+	}
+
 	.logo:hover {
 		opacity: 0.8;
 	}
