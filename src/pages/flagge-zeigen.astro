@@ -1,0 +1,170 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Zwei Wege: Motiv kostenlos herunterladen (Dateien in public/download/) oder fertig im Shop bestellen.
+// Der Shop liegt bei Spreadshop (Spreadshirt) und wird nur verlinkt, nicht eingebettet,
+// damit diese Website frei von Cookies und Inhalten Dritter bleibt.
+const shop = 'https://d-wie-demokratie.myspreadshop.de/';
+---
+
+<Layout
+	title="Flagge zeigen – D wie Demokratie"
+	description="Das Motiv „D wie Demokratie“ kostenlos herunterladen und selbst drucken, oder T-Shirts, Tassen und mehr im Shop bestellen – ohne Provision für uns."
+>
+	<h1>Flagge zeigen</h1>
+
+	<p class="lead">
+		<strong>Zeigen Sie unser Motiv in der Öffentlichkeit: als Aufkleber auf ihrem Auto, ihrem Laptop, auf T-Shirts, Tassen, Taschen und vielem mehr.</strong>
+	</p>
+
+	<section class="bereich" id="herunterladen" aria-labelledby="herunterladen-titel">
+		<h2 id="herunterladen-titel">Kostenlos herunterladen und selbst drucken</h2>
+
+		<p>
+			Unser Motiv steht allen kostenlos zur Verfügung. Drucken Sie es selbst oder lassen Sie es von
+			einer Druckerei oder einem Textildrucker Ihrer Wahl drucken.
+		</p>
+
+		<div class="knoepfe">
+			<a class="knopf schwarz" href="/download/d-wie-demokratie-oval.png" download data-umami-event="download-png">PNG herunterladen</a>
+			<span class="hinweis">Zum Drucken zu Hause, im Copyshop oder für Bildschirm und Social Media. Hintergrund transparent.</span>
+			<a class="knopf rot" href="/download/d-wie-demokratie-oval.pdf" download data-umami-event="download-pdf">PDF für Druckereien</a>
+			<span class="hinweis">Druckdatei in CMYK, 16 × 10 cm.</span>
+		</div>
+
+		<p class="bedingungen">
+			Sie dürfen das Motiv kostenlos drucken und verteilen, auch über eigene Dienstleister. Bitte verändern Sie
+			das Motiv nicht und verkaufen Sie es nicht gewinnorientiert.
+		</p>
+	</section>
+
+	<section class="bereich" id="shop" aria-labelledby="shop-titel">
+		<h2 id="shop-titel">Fertig bestellen in unserem Shop</h2>
+
+		<p>
+			Wer nicht selbst drucken lassen möchte, bestellt T-Shirts, Tassen und andere Produkte mit unserem Motiv
+			einfach in unserem Shop.
+		</p>
+
+		<h3>Wir verdienen daran nichts</h3>
+
+		<p>
+			Unser Shop läuft über Spreadshop, einen Dienst von Spreadshirt. Normalerweise erhalten Shop-Betreiber
+			für jeden verkauften Artikel eine Provision. Darauf verzichten wir vollständig. Sie zahlen nur, was
+			Spreadshirt für Produkt, Druck und Versand berechnet. d-wie-demokratie.de erhält von Ihrer Bestellung
+			keinen Cent.
+		</p>
+
+		<h3>Bestellung, Versand und Umtausch</h3>
+
+		<p>
+			Spreadshirt druckt, verschickt und rechnet ab und ist Ihr Vertragspartner. Bei Fragen zu Ihrer
+			Bestellung, zur Lieferung oder zum Umtausch wenden Sie sich bitte direkt an den Kundenservice von
+			Spreadshirt.
+		</p>
+
+		<div class="knoepfe">
+			<a class="knopf gold" href={shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen">Zum Shop</a>
+			<span class="hinweis">Öffnet den Shop bei Spreadshirt in einem neuen Tab.</span>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	h1 {
+		font-size: clamp(1.85rem, 7.5vw, 2.75rem);
+	}
+
+	.lead {
+		font-size: 1.3rem;
+	}
+
+	/* jeder Bereich als Kasten mit Schwarz-Rot-Gold links, wie die Stellen auf „Mitmachen“ */
+	.bereich {
+		margin-top: 2.5em;
+		padding: 0.2em 1.5em 1.5em;
+		padding-left: calc(1.5em + 12px);
+		background:
+			linear-gradient(
+				to right,
+				var(--schwarz) 0 33.33%,
+				var(--rot) 33.33% 66.66%,
+				var(--gold) 66.66% 100%
+			) left / 12px 100% no-repeat,
+			#fafafa;
+	}
+
+	h2 {
+		margin-top: 1em;
+		font-size: 1.4rem;
+	}
+
+	h3 {
+		margin: 1.5em 0 0.3em;
+		font-size: 1.1rem;
+	}
+
+	.knoepfe {
+		display: flex;
+		flex-direction: column;
+		max-width: 435px;
+		margin-top: 1.5em;
+	}
+
+	/* wie die Knöpfe im Kasten „Bitte weitersagen“ */
+	.knopf {
+		display: block;
+		padding: 0.75em 1.4em;
+		border-radius: 6px;
+		color: #ffffff;
+		font-weight: bold;
+		text-align: center;
+		text-decoration: none;
+	}
+
+	.schwarz {
+		background: var(--schwarz);
+	}
+
+	.schwarz:hover {
+		background: #333333;
+		color: #ffffff;
+	}
+
+	.rot {
+		background: var(--rot);
+	}
+
+	.rot:hover {
+		color: #ffffff;
+		filter: brightness(1.15);
+	}
+
+	/* auf Gold ist weiße Schrift kaum lesbar, daher schwarz */
+	.gold {
+		background: var(--gold);
+		color: var(--schwarz);
+	}
+
+	.gold:hover {
+		color: var(--schwarz);
+		filter: brightness(1.15);
+	}
+
+	.hinweis {
+		margin: 0.4em 0 1em;
+		font-size: 0.9rem;
+		color: var(--grau);
+		text-align: center;
+	}
+
+	.hinweis:last-child {
+		margin-bottom: 0;
+	}
+
+	.bedingungen {
+		margin-bottom: 0;
+		font-size: 0.95rem;
+		color: var(--grau);
+	}
+</style>
