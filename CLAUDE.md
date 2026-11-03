@@ -34,7 +34,7 @@ Push to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`), which b
 - `src/middleware.ts`: wraps every "d-wie-demokratie.de" in visible text in `.nobr` so it never breaks at the hyphens.
 - `src/assets/aufkleber.png`: sticker image; only its dimensions are used, for the Open Graph tags in `Layout.astro`.
 - `public/aufkleber-d-wie-demokratie.png`: the same sticker, used as the Open Graph preview image.
-- `src/assets/d-wie-demokratie-logo.png`: logo in the header.
+- `src/assets/menu1.jpeg`: logo in the header (D in black-red-gold with „wie Demokratie“). The previous oval logo `src/assets/d-wie-demokratie-logo.png` is kept but unused.
 - `public/manifest.json`, `public/icon-192.png`, `public/icon-512.png`, `public/apple-touch-icon.png`: home-screen web app (name "Demokratie", standalone). The smaller icons are scaled from `icon-512.png`.
 
 ## Statistics
