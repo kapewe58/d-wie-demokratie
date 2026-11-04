@@ -5,6 +5,7 @@ import Layout from '../layouts/Layout.astro';
 // Ist die Liste leer, zeigt die Seite automatisch den Hinweis „Gerade ist keine Stelle ausgeschrieben“.
 // „id“ ist die Sprungmarke zum Teilen einer einzelnen Stelle: d-wie-demokratie.de/mitmachen/#<id>
 // „kurz“ erscheint in der Übersicht oben auf der Seite.
+// „interesse“ darf einen Link enthalten (HTML).
 // „aufgaben“ ist in Gruppen eingeteilt; „rolle“ ist nur nötig, wenn eine Stelle mehrere Rollen hat.
 type Stelle = {
 	id: string;
@@ -59,6 +60,34 @@ const stellen: Stelle[] = [
 		],
 		interesse: 'Schreib uns, welche Rolle dich reizt.',
 		betreff: 'Ehrenamt: Instagram',
+	},
+	{
+		id: 'design',
+		titel: 'Wir suchen kreative Köpfe, die Spaß daran haben, neue Motive zu entwerfen!',
+		kurz: 'kreative Köpfe, die Spaß daran haben, neue Motive zu entwerfen',
+		eckdaten: ['Ehrenamtlich', 'Bundesweit', 'Ortsunabhängig'],
+		einleitung: [
+			'd-wie-demokratie.de ist eine junge, unabhängige Initiative. Wir möchten möglichst viele Menschen ermutigen, sich sichtbar zu unserer Demokratie und ihren Werten zu bekennen.',
+			'Jeden Tag ein neues Motiv für unsere Demokratie: Dafür suchen wir Menschen, die mit Ideen, Witz und Gespür für Gestaltung Motive in Schwarz-Rot-Gold entwerfen.',
+		],
+		aufgaben: [
+			{
+				punkte: [
+					'Motive entwerfen, die zeigen, dass wir unsere Demokratie und die Werte des Grundgesetzes schätzen',
+					'Ideen für Anlässe entwickeln, zum Beispiel Verfassungstag, Wahlen, Fußball oder Feiertage',
+					'Eingeschickte Entwürfe anderer begutachten und mit verbessern',
+				],
+			},
+		],
+		wichtig: [
+			'Du gestaltest gern, ob mit Grafikprogramm, Tablet oder auf Papier, und stehst aus Überzeugung hinter unserer freiheitlichen Demokratie. Ausbildung oder Berufserfahrung im Design sind keine Voraussetzung.',
+		],
+		bieten: [
+			'Deine Motive auf Aufklebern, T-Shirts und Tassen in ganz Deutschland. Auf unserer Website nennen wir dich bei deinen Motiven und stellen dich auf einer eigenen Profilseite vor.',
+			'Die Tätigkeit ist ehrenamtlich, zeitlich flexibel und vollständig ortsunabhängig.',
+		],
+		interesse: 'Gerne gleich mit einem ersten Entwurf. Bitte beachte dazu unsere <a href="#vorgaben">Vorgaben für Designs</a>.',
+		betreff: 'Ehrenamt: Design',
 	},
 ];
 
@@ -118,11 +147,69 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 			<p>
 				Dann freuen wir uns über eine Nachricht an
 				<a href={mailto(stelle.betreff)} data-umami-event="email-job" data-umami-event-stelle={stelle.id}>info@d-wie-demokratie.de</a>.
-				{stelle.interesse}
+				{stelle.interesse && <Fragment set:html={stelle.interesse} />}
 				Mehr über uns erfährst du unter <a href="/haeufige-fragen/">„Fragen“</a>.
 			</p>
 		</section>
 	))}
+
+	<!-- gilt für alle, die ein Motiv schicken, auch ohne Ausschreibung; verlinkt von „Unterstützen“ -->
+	<section class="stelle" id="vorgaben" aria-labelledby="vorgaben-titel">
+		<h2 id="vorgaben-titel">Vorgaben für Designs</h2>
+		<p class="eckdaten">Für alle, die uns ein Motiv schicken, ob einmalig oder regelmäßig.</p>
+
+		<h3>Das muss drin sein</h3>
+		<ul>
+			<li>
+				<strong>Die Farben Schwarz-Rot-Gold</strong>, genau diese Werte:
+				<span class="farbe"><span style="background: #000000"></span>Schwarz #000000</span>,
+				<span class="farbe"><span style="background: #dd0000"></span>Rot #DD0000</span>,
+				<span class="farbe"><span style="background: #ffce00"></span>Gold #FFCE00</span>
+			</li>
+			<li><strong>Der Schriftzug „d-wie-demokratie.de“ und/oder unser QR-Code</strong></li>
+		</ul>
+
+		<h3>Die Datei</h3>
+		<ul>
+			<li><strong>PNG mit transparentem Hintergrund</strong>, längste Seite <strong>mindestens 4000 Pixel</strong></li>
+			<li><strong>Wenn möglich zusätzlich als Vektordatei</strong> (SVG, PDF oder AI). Daraus erstellen wir die Druckdatei für Druckereien.</li>
+			<li><strong>Schriften:</strong> am besten Helvetica oder Arial wie in unserem Logo, oder Schriften, die frei verwendet werden dürfen, etwa von Google Fonts</li>
+		</ul>
+
+		<h3>Damit es gut druckt</h3>
+		<ul>
+			<li>Das Motiv muss auch klein noch erkennbar sein, etwa als Aufkleber in 10 cm Breite. Also keine haarfeinen Linien und keine winzige Schrift.</li>
+			<li>Möglichst wenige Farben, keine Farbverläufe, keine Fotos</li>
+		</ul>
+
+		<h3>Was nicht ins Motiv gehört</h3>
+		<ul>
+			<li>dein Name, deine Signatur, dein Logo oder deine Webadresse. Dich nennen wir auf unserer Website bei deinen Motiven.</li>
+			<li>Parteilogos und Parteiwerbung, Herabsetzung von Menschen oder Gruppen, Hass in jeder Form</li>
+			<li>fremde Figuren, Marken oder Bilder, an denen du keine Rechte hast</li>
+			<li>Bundesadler und Bundeswappen, denn deren Verwendung ist gesetzlich geschützt</li>
+		</ul>
+
+		<h3>Deine Rechte und unsere</h3>
+		<p>
+			Mit dem Einschicken versicherst du, dass du das Motiv selbst gestaltet hast. Du erlaubst uns, es kostenlos zu
+			veröffentlichen, zum Herunterladen anzubieten und in unserem Shop ohne Gewinn verkaufen zu lassen.
+		</p>
+		<p>
+			Auf unserer Website nennen wir dich bei deinen Motiven und stellen dich auf einer eigenen Profilseite vor, mit allen
+			deinen Motiven und auf Wunsch mit Foto, ein paar Sätzen über dich und einem Link zu deiner Website oder deinem
+			Profil. Schick uns dafür einfach, was dort stehen soll. Wenn du nicht genannt werden möchtest, sag uns Bescheid.
+		</p>
+		<p>Ob und wann wir ein Motiv veröffentlichen, entscheiden wir.</p>
+
+		<h3>So schickst du dein Motiv</h3>
+		<p>
+			Per E-Mail an
+			<a href={mailto('Design-Einreichung')} data-umami-event="email-design">info@d-wie-demokratie.de</a>,
+			Betreff „Design-Einreichung“. Schreib uns dazu, unter welchem Namen wir dich nennen sollen und was auf deiner
+			Profilseite stehen darf. Große Dateien schickst du am besten als Link, etwa über WeTransfer.
+		</p>
+	</section>
 </Layout>
 
 <style>
@@ -170,6 +257,20 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 	h3 {
 		margin: 1.6em 0 0.4em;
 		font-size: 1.1rem;
+	}
+
+	/* Farbfelder in den Vorgaben für Designs */
+	.farbe {
+		white-space: nowrap;
+	}
+
+	.farbe > span {
+		display: inline-block;
+		width: 0.9em;
+		height: 0.9em;
+		margin-right: 0.3em;
+		border: 1px solid #c4c4c4;
+		vertical-align: -0.1em;
 	}
 
 	h3 + p,
