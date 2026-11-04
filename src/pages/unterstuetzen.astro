@@ -8,8 +8,6 @@ import Layout from '../layouts/Layout.astro';
 >
 	<h1>Wir suchen Unterstützer</h1>
 
-	<p class="lead">Wir suchen …</p>
-
 	<ul class="gesucht">
 		<li>Firmen, Vereine, Schulen und Organisationen, die unsere Designs verbreiten: als Aufkleber, Plakate oder T-Shirts für ihre Mitglieder, Mitarbeiter und Kunden,</li>
 		<li>Menschen, die ehrenamtlich unseren Instagram-Auftritt aufbauen: Jeden Tag stellen wir dort ein neues Design vor, das wir selbst entworfen haben oder das uns jemand geschickt hat (siehe <a href="/mitmachen/#instagram">„Mitmachen“</a>),</li>
@@ -34,15 +32,7 @@ import Layout from '../layouts/Layout.astro';
 		font-size: clamp(1.85rem, 7.5vw, 2.75rem);
 	}
 
-	.lead {
-		font-size: 1.3rem;
-	}
-
-	/* Liste direkt unter „Wir suchen …“, mit etwas Luft zwischen den Punkten */
-	.gesucht {
-		margin-top: -0.5em;
-	}
-
+	/* etwas Luft zwischen den Punkten */
 	.gesucht li + li {
 		margin-top: 0.4em;
 	}

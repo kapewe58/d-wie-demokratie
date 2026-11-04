@@ -301,6 +301,11 @@ import Layout from '../layouts/Layout.astro';
 		font-size: 1.4rem;
 	}
 
+	/* erste Frage direkt unter der Überschrift: nur der Abstand der Überschrift zählt, wie auf den anderen Seiten */
+	h1 + section > h2 {
+		margin-top: 0;
+	}
+
 	.lead {
 		font-size: 1.3rem;
 	}
