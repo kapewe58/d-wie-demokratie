@@ -4,55 +4,60 @@ import Layout from '../layouts/Layout.astro';
 // Offene Stellen. Neue Ausschreibung = neuer Eintrag, erledigte Stelle = Eintrag löschen.
 // Ist die Liste leer, zeigt die Seite automatisch den Hinweis „Gerade ist keine Stelle ausgeschrieben“.
 // „id“ ist die Sprungmarke zum Teilen einer einzelnen Stelle: d-wie-demokratie.de/mitmachen/#<id>
-const stellen = [
-	{
-		id: 'vertrieb',
-		titel: 'Wir suchen ein Vertriebsgenie und Organisationstalent!',
-		eckdaten: ['Ehrenamtlich', 'Bundesweit', 'Ortsunabhängig'],
-		einleitung: [
-			'd-wie-demokratie.de ist eine junge, unabhängige Initiative. Wir möchten möglichst viele Menschen ermutigen, sich sichtbar zu unserer Demokratie und ihren Werten zu bekennen.',
-			'Dafür suchen wir jemanden, der hilft, die Initiative bekannt zu machen und weiterzuentwickeln.',
-		],
-		aufgaben: [
-			'Unternehmen, Medien und Organisationen als Unterstützer gewinnen',
-			'Neue Wege zur Verbreitung unserer Demokratie-Aufkleber entwickeln',
-			'Kontakte und Kooperationen aufbauen',
-			'Die organisatorische Weiterentwicklung unserer Initiative mitgestalten',
-			'Eigene Ideen einbringen und selbstständig umsetzen',
-		],
-		wichtig: [
-			'Du kannst Menschen begeistern, denkst unternehmerisch, organisierst gerne und stehst aus Überzeugung hinter unserer freiheitlichen Demokratie.',
-			'Berufserfahrung in Vertrieb, Marketing, Kommunikation oder Projektmanagement wäre hilfreich, ist aber keine Voraussetzung.',
-		],
-		bieten: [
-			'Die Möglichkeit, eine Initiative von Anfang an mitzugestalten, eigene Ideen zu verwirklichen und gesellschaftlich etwas zu bewegen.',
-			'Die Tätigkeit ist ehrenamtlich, zeitlich flexibel und vollständig ortsunabhängig.',
-		],
-		betreff: 'Ehrenamt: Vertrieb und Organisation',
-	},
+// „kurz“ erscheint in der Übersicht oben auf der Seite.
+// „aufgaben“ ist in Gruppen eingeteilt; „rolle“ ist nur nötig, wenn eine Stelle mehrere Rollen hat.
+type Stelle = {
+	id: string;
+	titel: string;
+	kurz: string;
+	eckdaten: string[];
+	einleitung: string[];
+	aufgaben: { rolle?: string; punkte: string[] }[];
+	wichtig: string[];
+	bieten: string[];
+	interesse?: string;
+	betreff: string;
+};
+
+const stellen: Stelle[] = [
 	{
 		id: 'instagram',
-		titel: 'Wir suchen einen Content Creator / Content Manager für Instagram!',
+		titel: 'Wir suchen ein Team für Instagram: Content Creator und Content Manager!',
+		kurz: 'ein Team für Instagram: Content Creator und Content Manager',
 		eckdaten: ['Ehrenamtlich', 'Bundesweit', 'Ortsunabhängig'],
 		einleitung: [
 			'd-wie-demokratie.de ist eine junge, unabhängige Initiative. Wir möchten möglichst viele Menschen ermutigen, sich sichtbar zu unserer Demokratie und ihren Werten zu bekennen.',
-			'Auf Instagram sind wir noch gar nicht vertreten. Dafür suchen wir jemanden, der unseren Auftritt dort von Grund auf aufbaut und mit Leben füllt.',
+			'Auf Instagram sind wir noch gar nicht vertreten. Dort wollen wir jeden Tag ein neues Design vorstellen, das wir selbst entworfen haben oder das uns jemand geschickt hat. Dafür suchen wir ein Team, das unseren Auftritt von Grund auf aufbaut und mit Leben füllt.',
 		],
 		aufgaben: [
-			'Unseren Instagram-Auftritt von Anfang an aufbauen und gestalten',
-			'Beiträge, Stories und Reels entwickeln, die zum Mitmachen einladen',
-			'Fotos und Geschichten von Menschen sammeln, die unseren Aufkleber zeigen',
-			'Mit Followern, Unterstützern und anderen demokratischen Initiativen in Kontakt treten',
-			'Eigene Ideen einbringen und selbstständig umsetzen',
+			{
+				rolle: 'Als Content Creator',
+				punkte: [
+					'Beiträge, Stories und Reels rund um unsere Designs gestalten',
+					'Eigene Designs entwerfen',
+					'Zum Mitmachen und zum Einschicken eigener Designs einladen',
+				],
+			},
+			{
+				rolle: 'Als Content Manager',
+				punkte: [
+					'Unseren Instagram-Auftritt von Anfang an aufbauen',
+					'Eingeschickte Designs sichten und mit uns auswählen',
+					'Den Redaktionsplan führen, damit jeden Tag ein Beitrag erscheint',
+					'Mit Followern, Gestaltern und anderen demokratischen Initiativen in Kontakt treten',
+				],
+			},
 		],
 		wichtig: [
 			'Du kennst dich mit Instagram aus, hast ein Gespür für Bilder und Sprache und stehst aus Überzeugung hinter unserer freiheitlichen Demokratie.',
 			'Erfahrung mit Social Media, Fotografie, Video oder Grafik wäre hilfreich, ist aber keine Voraussetzung.',
+			'Du kannst eine Rolle übernehmen oder beide, ganz wie es zu dir passt.',
 		],
 		bieten: [
 			'Die seltene Chance, einen Social-Media-Auftritt ganz neu aufzubauen und ihm deine eigene Handschrift zu geben.',
-			'Die Tätigkeit ist ehrenamtlich, zeitlich flexibel und vollständig ortsunabhängig.',
+			'Die Tätigkeit ist ehrenamtlich, zeitlich flexibel und vollständig ortsunabhängig. Die täglichen Beiträge teilen wir im Team auf, du bestimmst selbst, wie viel Zeit du einbringst.',
 		],
+		interesse: 'Schreib uns, welche Rolle dich reizt.',
 		betreff: 'Ehrenamt: Instagram',
 	},
 ];
@@ -70,6 +75,15 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 		Wir suchen Menschen, die ehrenamtlich mitmachen. Alle Aufgaben sind zeitlich flexibel und ortsunabhängig.
 	</p>
 
+	{stellen.length > 0 && (
+		<>
+			<p class="uebersicht-titel">Im Moment suchen wir:</p>
+			<ul class="uebersicht">
+				{stellen.map((stelle) => <li><a href={`#${stelle.id}`}>{stelle.kurz}</a></li>)}
+			</ul>
+		</>
+	)}
+
 	{stellen.length === 0 && (
 		<p>
 			Gerade ist keine Stelle ausgeschrieben. Wenn du mitmachen möchtest, schreib uns trotzdem gerne an
@@ -85,9 +99,14 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 			{stelle.einleitung.map((absatz) => <p>{absatz}</p>)}
 
 			<h3>Deine möglichen Aufgaben</h3>
-			<ul>
-				{stelle.aufgaben.map((aufgabe) => <li>{aufgabe}</li>)}
-			</ul>
+			{stelle.aufgaben.map((gruppe) => (
+				<>
+					{gruppe.rolle && <h4>{gruppe.rolle}</h4>}
+					<ul>
+						{gruppe.punkte.map((punkt) => <li>{punkt}</li>)}
+					</ul>
+				</>
+			))}
 
 			<h3>Was uns wichtig ist</h3>
 			{stelle.wichtig.map((absatz) => <p>{absatz}</p>)}
@@ -99,6 +118,7 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 			<p>
 				Dann freuen wir uns über eine Nachricht an
 				<a href={mailto(stelle.betreff)} data-umami-event="email-job" data-umami-event-stelle={stelle.id}>info@d-wie-demokratie.de</a>.
+				{stelle.interesse}
 				Mehr über uns erfährst du unter <a href="/haeufige-fragen/">„Fragen“</a>.
 			</p>
 		</section>
@@ -153,7 +173,32 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 	}
 
 	h3 + p,
-	h3 + ul {
+	h3 + ul,
+	h4 + ul {
 		margin-top: 0;
+	}
+
+	/* Rollen innerhalb einer Stelle, z. B. „Als Content Creator“ */
+	h4 {
+		margin: 0.8em 0 0.2em;
+		font-size: 1rem;
+	}
+
+	h3 + h4 {
+		margin-top: 0;
+	}
+
+	/* Übersicht oben, direkt unter „Im Moment suchen wir:“ */
+	.uebersicht-titel {
+		margin-bottom: 0;
+		font-weight: bold;
+	}
+
+	.uebersicht {
+		margin-top: 0.3em;
+	}
+
+	.uebersicht li + li {
+		margin-top: 0.3em;
 	}
 </style>

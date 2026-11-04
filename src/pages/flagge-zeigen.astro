@@ -1,7 +1,37 @@
 ---
+import { existsSync } from 'node:fs';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import Layout from '../layouts/Layout.astro';
 
-// Zwei Wege: Motiv kostenlos herunterladen (Dateien in public/download/) oder fertig im Shop bestellen.
+// Unsere Motive, durchnummeriert, untereinander mit Links zu PNG, PDF und Shop. Neues Motiv = zwei Dateien ablegen
+// und hier einen Eintrag ergänzen:
+//   PNG (4000 px breit, transparent): src/assets/motive/motiv-<nr>.png  (Vorschaubild und Download)
+//   PDF (CMYK, Druckgröße):           public/download/d-wie-demokratie-motiv-<nr>.pdf
+// Ein Motiv erscheint erst, wenn sein PNG da ist; fehlen PDF oder Shop-Link, wird nur dieser Link weggelassen.
+// Jedes Motiv ist verlinkbar: /flagge-zeigen/#motiv-<nr>
+const liste = [
+	{
+		nr: 1,
+		name: 'D wie Demokratie',
+		alt: 'Ein großes D in Schwarz-Rot-Gold, darunter „wie Demokratie“ und die Adresse d-wie-demokratie.de, rechts ein QR-Code, in einem Oval wie beim Länderkennzeichen am Auto.',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?searchTerm=D%20wie%20Demokratie%20Logo',
+	},
+	{
+		nr: 2,
+		name: 'Drei Entchen für die Demokratie',
+		alt: 'Drei Badeenten nebeneinander, gezeichnet in Schwarz, Rot und Gold, darunter die Adresse d-wie-demokratie.de.',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?searchTerm=Drei%20Entchen%20f%C3%BCr%20die%20Demokratie%20%E2%80%93%20Motiv%20%232',
+	},
+];
+
+const pngs = import.meta.glob<{ default: ImageMetadata }>('../assets/motive/motiv-*.png', { eager: true });
+const motive = liste
+	.map((motiv) => ({ ...motiv, bild: pngs[`../assets/motive/motiv-${motiv.nr}.png`]?.default }))
+	.filter((motiv) => motiv.bild);
+const pdfLink = (nr: number) =>
+	existsSync(`public/download/d-wie-demokratie-motiv-${nr}.pdf`) ? `/download/d-wie-demokratie-motiv-${nr}.pdf` : '';
+
 // Der Shop liegt bei Spreadshop (Spreadshirt) und wird nur verlinkt, nicht eingebettet,
 // damit diese Website frei von Cookies und Inhalten Dritter bleibt.
 const shop = 'https://d-wie-demokratie.myspreadshop.de/';
@@ -9,66 +39,97 @@ const shop = 'https://d-wie-demokratie.myspreadshop.de/';
 
 <Layout
 	title="Flagge zeigen – D wie Demokratie"
-	description="Das Motiv „D wie Demokratie“ kostenlos herunterladen und selbst drucken, oder T-Shirts, Tassen und mehr im Shop bestellen – ohne Provision für uns."
+	description="Unsere Motive kostenlos herunterladen und selbst drucken, oder T-Shirts, Tassen und mehr im Shop bestellen – ohne Provision für uns."
 >
 	<h1>Flagge zeigen</h1>
 
 	<p class="lead">
-		<strong>Zeigen Sie unser Motiv in der Öffentlichkeit: als Aufkleber auf ihrem Auto, ihrem Laptop, auf T-Shirts, Tassen, Taschen und vielem mehr.</strong>
+		<strong>Zeigen Sie unsere Motive in der Öffentlichkeit: als Aufkleber auf ihrem Auto, ihrem Laptop, auf T-Shirts, Tassen, Taschen und vielem mehr.</strong>
 	</p>
 
-	<section class="bereich" id="herunterladen" aria-labelledby="herunterladen-titel">
-		<h2 id="herunterladen-titel">Kostenlos herunterladen und selbst drucken</h2>
+	<div class="fragen">
+		<details id="herunterladen">
+			<summary>Kann ich die Motive herunterladen und selbst drucken?</summary>
+			<p>
+				Ja. Alle unsere Motive stehen Ihnen kostenlos zur Verfügung. Drucken Sie sie selbst oder lassen Sie sie
+				von einer Druckerei oder einem Textildrucker Ihrer Wahl drucken. Unten finden Sie zu jedem Motiv zwei Dateien:
+			</p>
+			<ul>
+				<li><strong>PNG:</strong> zum Drucken zu Hause, im Copyshop oder für Bildschirm und Social Media, Hintergrund transparent</li>
+				<li><strong>PDF:</strong> Druckdatei in CMYK für Druckereien</li>
+			</ul>
+			<p>
+				Sie dürfen die Motive kostenlos drucken und verteilen, auch über eigene Dienstleister. Bitte verändern Sie
+				die Motive nicht und verkaufen Sie sie nicht gewinnorientiert.
+			</p>
+		</details>
 
-		<p>
-			Unser Motiv steht allen kostenlos zur Verfügung. Drucken Sie es selbst oder lassen Sie es von
-			einer Druckerei oder einem Textildrucker Ihrer Wahl drucken.
-		</p>
+		<details id="shop">
+			<summary>Kann ich fertige Produkte mit den Motiven kaufen?</summary>
+			<p>
+				Ja. In unserem Shop gibt es T-Shirts, Tassen, Taschen und vieles mehr mit unseren Motiven. Unten führt zu
+				jedem Motiv ein eigener Link direkt zu den passenden Produkten.
+			</p>
+			<p>
+				<strong>Wir verdienen daran nichts.</strong> Normalerweise erhalten Shop-Betreiber für jeden verkauften
+				Artikel eine Provision. Darauf verzichten wir vollständig. Sie zahlen nur, was Spreadshirt für Produkt,
+				Druck und Versand berechnet.
+			</p>
+			<p>
+				Unser Shop läuft über Spreadshop, einen Dienst von Spreadshirt. Spreadshirt druckt, verschickt und rechnet
+				ab und ist Ihr Vertragspartner. Bei Fragen zu Bestellung, Lieferung oder Umtausch wenden Sie sich bitte
+				direkt an den Kundenservice von Spreadshirt.
+			</p>
+			<p>
+				<a class="knopf" href={shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen">Zum Shop</a>
+			</p>
+		</details>
+	</div>
 
-		<div class="knoepfe">
-			<a class="knopf schwarz" href="/download/d-wie-demokratie-oval.png" download data-umami-event="download-png">PNG herunterladen</a>
-			<span class="hinweis">Zum Drucken zu Hause, im Copyshop oder für Bildschirm und Social Media. Hintergrund transparent.</span>
-			<a class="knopf rot" href="/download/d-wie-demokratie-oval.pdf" download data-umami-event="download-pdf">PDF für Druckereien</a>
-			<span class="hinweis">Druckdatei in CMYK, 16 × 10 cm.</span>
-		</div>
+	<h2>Unsere Motive</h2>
 
-		<p class="bedingungen">
-			Sie dürfen das Motiv kostenlos drucken und verteilen, auch über eigene Dienstleister. Bitte verändern Sie
-			das Motiv nicht und verkaufen Sie es nicht gewinnorientiert.
-		</p>
-	</section>
-
-	<section class="bereich" id="shop" aria-labelledby="shop-titel">
-		<h2 id="shop-titel">Fertig bestellen in unserem Shop</h2>
-
-		<p>
-			Wer nicht selbst drucken lassen möchte, bestellt T-Shirts, Tassen und andere Produkte mit unserem Motiv
-			einfach in unserem Shop.
-		</p>
-
-		<h3>Wir verdienen daran nichts</h3>
-
-		<p>
-			Unser Shop läuft über Spreadshop, einen Dienst von Spreadshirt. Normalerweise erhalten Shop-Betreiber
-			für jeden verkauften Artikel eine Provision. Darauf verzichten wir vollständig. Sie zahlen nur, was
-			Spreadshirt für Produkt, Druck und Versand berechnet. d-wie-demokratie.de erhält von Ihrer Bestellung
-			keinen Cent.
-		</p>
-
-		<h3>Bestellung, Versand und Umtausch</h3>
-
-		<p>
-			Spreadshirt druckt, verschickt und rechnet ab und ist Ihr Vertragspartner. Bei Fragen zu Ihrer
-			Bestellung, zur Lieferung oder zum Umtausch wenden Sie sich bitte direkt an den Kundenservice von
-			Spreadshirt.
-		</p>
-
-		<div class="knoepfe">
-			<a class="knopf gold" href={shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen">Zum Shop</a>
-			<span class="hinweis">Öffnet den Shop bei Spreadshirt in einem neuen Tab.</span>
-		</div>
-	</section>
+	<ul class="motive">
+		{motive.map((motiv) => (
+			<li id={`motiv-${motiv.nr}`}>
+				<Image src={motiv.bild!} alt={motiv.alt} width={240} widths={[240, 480]} sizes="200px" />
+				<div>
+					<h3>Motiv {motiv.nr}: {motiv.name}</h3>
+					<ul class="links">
+						<li>
+							<a href={motiv.bild!.src} download={`d-wie-demokratie-motiv-${motiv.nr}.png`} data-umami-event="download-png" data-umami-event-motiv={motiv.nr}>
+								Motiv {motiv.nr} als PNG herunterladen
+							</a>
+						</li>
+						{pdfLink(motiv.nr) && (
+							<li>
+								<a href={pdfLink(motiv.nr)} download data-umami-event="download-pdf" data-umami-event-motiv={motiv.nr}>
+									Motiv {motiv.nr} als PDF für Druckereien
+								</a>
+							</li>
+						)}
+						{motiv.shop && (
+							<li>
+								<a href={motiv.shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv={motiv.nr}>
+									Motiv {motiv.nr} im Shop
+								</a>
+							</li>
+						)}
+					</ul>
+				</div>
+			</li>
+		))}
+	</ul>
 </Layout>
+
+<script>
+	// Links wie /flagge-zeigen/#herunterladen oder #shop klappen die passende Frage gleich auf.
+	function aufklappen() {
+		const ziel = location.hash && document.querySelector(location.hash);
+		if (ziel instanceof HTMLDetailsElement) ziel.open = true;
+	}
+	addEventListener('hashchange', aufklappen);
+	aufklappen();
+</script>
 
 <style>
 	h1 {
@@ -79,11 +140,14 @@ const shop = 'https://d-wie-demokratie.myspreadshop.de/';
 		font-size: 1.3rem;
 	}
 
-	/* jeder Bereich als Kasten mit Schwarz-Rot-Gold links, wie die Stellen auf „Mitmachen“ */
-	.bereich {
-		margin-top: 2.5em;
-		padding: 0.2em 1.5em 1.5em;
-		padding-left: calc(1.5em + 12px);
+	/* Ziehharmonika: Fragen zum Aufklappen, mit Schwarz-Rot-Gold links wie die Kästen auf „Mitmachen“ */
+	.fragen {
+		margin-top: 2em;
+	}
+
+	details {
+		margin-top: 0.8em;
+		padding-left: 12px;
 		background:
 			linear-gradient(
 				to right,
@@ -94,77 +158,110 @@ const shop = 'https://d-wie-demokratie.myspreadshop.de/';
 			#fafafa;
 	}
 
-	h2 {
-		margin-top: 1em;
-		font-size: 1.4rem;
-	}
-
-	h3 {
-		margin: 1.5em 0 0.3em;
-		font-size: 1.1rem;
-	}
-
-	.knoepfe {
+	summary {
 		display: flex;
-		flex-direction: column;
-		max-width: 435px;
-		margin-top: 1.5em;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1em;
+		padding: 1em 1.2em;
+		font-size: 1.1rem;
+		font-weight: bold;
+		cursor: pointer;
+		list-style: none;
 	}
 
-	/* wie die Knöpfe im Kasten „Bitte weitersagen“ */
+	summary::-webkit-details-marker {
+		display: none;
+	}
+
+	summary::after {
+		content: '+';
+		flex-shrink: 0;
+		font-size: 1.5rem;
+		line-height: 1;
+	}
+
+	details[open] summary::after {
+		content: '–';
+	}
+
+	details > :not(summary) {
+		margin-right: 1.2em;
+		margin-left: 1.2em;
+	}
+
+	details > :last-child {
+		margin-bottom: 0;
+		padding-bottom: 1.2em;
+	}
+
+	/* wie die Knöpfe im Kasten „Bitte weitersagen“; auf Gold ist weiße Schrift kaum lesbar, daher schwarz */
 	.knopf {
-		display: block;
+		display: inline-block;
 		padding: 0.75em 1.4em;
 		border-radius: 6px;
-		color: #ffffff;
+		background: var(--gold);
+		color: var(--schwarz);
 		font-weight: bold;
-		text-align: center;
 		text-decoration: none;
 	}
 
-	.schwarz {
-		background: var(--schwarz);
-	}
-
-	.schwarz:hover {
-		background: #333333;
-		color: #ffffff;
-	}
-
-	.rot {
-		background: var(--rot);
-	}
-
-	.rot:hover {
-		color: #ffffff;
-		filter: brightness(1.15);
-	}
-
-	/* auf Gold ist weiße Schrift kaum lesbar, daher schwarz */
-	.gold {
-		background: var(--gold);
-		color: var(--schwarz);
-	}
-
-	.gold:hover {
+	.knopf:hover {
 		color: var(--schwarz);
 		filter: brightness(1.15);
 	}
 
-	.hinweis {
-		margin: 0.4em 0 1em;
-		font-size: 0.9rem;
-		color: var(--grau);
-		text-align: center;
+	/* Motive untereinander: Bild links, Links rechts; auf dem Handy Bild oben */
+	h2 {
+		margin-top: 2em;
+		font-size: 1.4rem;
 	}
 
-	.hinweis:last-child {
-		margin-bottom: 0;
+	.motive {
+		margin: 0;
+		padding: 0;
+		list-style: none;
 	}
 
-	.bedingungen {
-		margin-bottom: 0;
-		font-size: 0.95rem;
-		color: var(--grau);
+	.motive > li {
+		display: flex;
+		align-items: center;
+		gap: 1.5em;
+		padding: 1.2em 0;
+		border-top: 1px solid #e5e5e5;
+	}
+
+	.motive img {
+		flex-shrink: 0;
+		width: 200px;
+		height: auto;
+	}
+
+	h3 {
+		margin: 0 0 0.4em;
+		font-size: 1.1rem;
+	}
+
+	.links {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.links li + li {
+		margin-top: 0.3em;
+	}
+
+	@media (max-width: 540px) {
+		.motive > li {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.8em;
+		}
+
+		.motive img {
+			width: 100%;
+			max-width: 320px;
+		}
 	}
 </style>
