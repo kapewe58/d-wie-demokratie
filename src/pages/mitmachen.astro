@@ -6,14 +6,14 @@ import Layout from '../layouts/Layout.astro';
 // „id“ ist die Sprungmarke zum Teilen einer einzelnen Stelle: d-wie-demokratie.de/mitmachen/#<id>
 // „kurz“ erscheint in der Übersicht oben auf der Seite.
 // „interesse“ darf einen Link enthalten (HTML).
-// „aufgaben“ ist in Gruppen eingeteilt; „rolle“ ist nur nötig, wenn eine Stelle mehrere Rollen hat.
+// „aufgaben“ ist in Gruppen eingeteilt; „rolle“ ist nur nötig, wenn eine Stelle mehrere Rollen hat. Ohne „aufgaben“ entfällt der Abschnitt.
 type Stelle = {
 	id: string;
 	titel: string;
 	kurz: string;
 	eckdaten: string[];
 	einleitung: string[];
-	aufgaben: { rolle?: string; punkte: string[] }[];
+	aufgaben?: { rolle?: string; punkte: string[] }[];
 	wichtig: string[];
 	bieten: string[];
 	interesse?: string;
@@ -21,6 +21,25 @@ type Stelle = {
 };
 
 const stellen: Stelle[] = [
+	{
+		id: 'design',
+		titel: 'Wir suchen kreative Köpfe, die Spaß daran haben, neue Motive zu entwerfen!',
+		kurz: 'kreative Köpfe, die Spaß daran haben, neue Motive zu entwerfen',
+		eckdaten: ['Ehrenamtlich', 'Bundesweit', 'Ortsunabhängig'],
+		einleitung: [
+			'd-wie-demokratie.de ist eine junge, unabhängige Initiative. Wir möchten möglichst viele Menschen ermutigen, sich sichtbar zu unserer Demokratie und ihren Werten zu bekennen.',
+			'Jeden Tag ein neues Motiv für unsere Demokratie: Dafür suchen wir Menschen, die mit Ideen, Witz und Gespür für Gestaltung Motive in Schwarz-Rot-Gold entwerfen.',
+		],
+		wichtig: [
+			'Du gestaltest gern, ob mit Grafikprogramm, Tablet oder auf Papier, und stehst aus Überzeugung hinter unserer freiheitlichen Demokratie. Ausbildung oder Berufserfahrung im Design sind keine Voraussetzung.',
+		],
+		bieten: [
+			'Deine Motive auf Aufklebern, T-Shirts und Tassen in ganz Deutschland. Auf unserer Website nennen wir dich bei deinen Motiven und stellen dich auf einer eigenen Profilseite vor.',
+			'Die Tätigkeit ist ehrenamtlich, zeitlich flexibel und vollständig ortsunabhängig.',
+		],
+		interesse: 'Gerne gleich mit einem ersten Entwurf. Bitte beachte dazu unsere <a href="#vorgaben">Vorgaben für Designs</a>.',
+		betreff: 'Ehrenamt: Design',
+	},
 	{
 		id: 'instagram',
 		titel: 'Wir suchen ein Team für Instagram: Content Creator und Content Manager!',
@@ -61,34 +80,6 @@ const stellen: Stelle[] = [
 		interesse: 'Schreib uns, welche Rolle dich reizt.',
 		betreff: 'Ehrenamt: Instagram',
 	},
-	{
-		id: 'design',
-		titel: 'Wir suchen kreative Köpfe, die Spaß daran haben, neue Motive zu entwerfen!',
-		kurz: 'kreative Köpfe, die Spaß daran haben, neue Motive zu entwerfen',
-		eckdaten: ['Ehrenamtlich', 'Bundesweit', 'Ortsunabhängig'],
-		einleitung: [
-			'd-wie-demokratie.de ist eine junge, unabhängige Initiative. Wir möchten möglichst viele Menschen ermutigen, sich sichtbar zu unserer Demokratie und ihren Werten zu bekennen.',
-			'Jeden Tag ein neues Motiv für unsere Demokratie: Dafür suchen wir Menschen, die mit Ideen, Witz und Gespür für Gestaltung Motive in Schwarz-Rot-Gold entwerfen.',
-		],
-		aufgaben: [
-			{
-				punkte: [
-					'Motive entwerfen, die zeigen, dass wir unsere Demokratie und die Werte des Grundgesetzes schätzen',
-					'Ideen für Anlässe entwickeln, zum Beispiel Verfassungstag, Wahlen, Fußball oder Feiertage',
-					'Eingeschickte Entwürfe anderer begutachten und mit verbessern',
-				],
-			},
-		],
-		wichtig: [
-			'Du gestaltest gern, ob mit Grafikprogramm, Tablet oder auf Papier, und stehst aus Überzeugung hinter unserer freiheitlichen Demokratie. Ausbildung oder Berufserfahrung im Design sind keine Voraussetzung.',
-		],
-		bieten: [
-			'Deine Motive auf Aufklebern, T-Shirts und Tassen in ganz Deutschland. Auf unserer Website nennen wir dich bei deinen Motiven und stellen dich auf einer eigenen Profilseite vor.',
-			'Die Tätigkeit ist ehrenamtlich, zeitlich flexibel und vollständig ortsunabhängig.',
-		],
-		interesse: 'Gerne gleich mit einem ersten Entwurf. Bitte beachte dazu unsere <a href="#vorgaben">Vorgaben für Designs</a>.',
-		betreff: 'Ehrenamt: Design',
-	},
 ];
 
 const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${encodeURIComponent(betreff)}`;
@@ -127,8 +118,8 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 
 			{stelle.einleitung.map((absatz) => <p>{absatz}</p>)}
 
-			<h3>Deine möglichen Aufgaben</h3>
-			{stelle.aufgaben.map((gruppe) => (
+			{stelle.aufgaben && <h3>Deine möglichen Aufgaben</h3>}
+			{stelle.aufgaben?.map((gruppe) => (
 				<>
 					{gruppe.rolle && <h4>{gruppe.rolle}</h4>}
 					<ul>
