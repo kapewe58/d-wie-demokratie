@@ -1,67 +1,94 @@
 ---
+import { existsSync } from 'node:fs';
 import { Image } from 'astro:assets';
-import aufkleber from '../assets/slider/01-D-wie-Demokratie.png';
-import badeenten from '../assets/slider/06-badeenten.png';
+import type { ImageMetadata } from 'astro';
+import Layout from '../layouts/Layout.astro';
 import laptop from '../assets/slider/02-laptop.png';
 import oldtimer from '../assets/slider/03-oldtimer.png';
 import tassen from '../assets/slider/04-tassen.png';
 import tshirt from '../assets/slider/05-tshirtmaedchen.png';
-import Layout from '../layouts/Layout.astro';
 
-// Bilder oben auf der Startseite, wechseln alle paar Sekunden. Neues Bild = nach src/assets/slider/
-// legen (am besten 1578 × 996 Pixel), oben importieren und hier eintragen.
+// Startseite: Fotos, Werte aus dem Grundgesetz, zwei Fragen zum Aufklappen (Herunterladen, Shop) und unsere Motive.
+//
+// Unsere Motive, durchnummeriert, untereinander mit Links zu PNG, PDF und Shop. Neues Motiv = zwei Dateien ablegen
+// und hier einen Eintrag ergänzen:
+//   PNG (4000 px breit, transparent): src/assets/motive/motiv-<nr>.png  (Vorschaubild und Download)
+//   PDF (CMYK, Druckgröße):           public/download/d-wie-demokratie-motiv-<nr>.pdf
+// Ein Motiv erscheint erst, wenn sein PNG da ist; fehlen PDF oder Shop-Link, wird nur dieser Link weggelassen.
+// Jedes Motiv ist verlinkbar: /flagge-zeigen/#motiv-<nr>
+const liste = [
+	{
+		nr: 1,
+		name: 'D wie Demokratie',
+		alt: 'Ein großes D in Schwarz-Rot-Gold, darunter „wie Demokratie“ und die Adresse d-wie-demokratie.de, rechts ein QR-Code, in einem Oval wie beim Länderkennzeichen am Auto.',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?searchTerm=D%20wie%20Demokratie%20Logo',
+	},
+	{
+		nr: 2,
+		name: 'Drei Entchen für die Demokratie',
+		alt: 'Drei Badeenten nebeneinander, gezeichnet in Schwarz, Rot und Gold, darunter die Adresse d-wie-demokratie.de.',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?searchTerm=Drei%20Entchen%20f%C3%BCr%20die%20Demokratie%20%E2%80%93%20Motiv%20%232',
+	},
+];
+
+// Fotos oben, wechseln alle paar Sekunden; ein Klick springt zum gezeigten Motiv. Neues Foto = nach
+// src/assets/slider/ legen (1800 × 1200 Pixel, JPEG), oben importieren und hier eintragen.
 // „foto: true“ blendet beim Bild den Hinweis „Foto KI-generiert“ ein.
 const bilder = [
 	{
-		src: aufkleber,
-		alt: 'Aufkleber: ein großes D in Schwarz-Rot-Gold, darunter „wie Demokratie“ und die Adresse d-wie-demokratie.de, rechts ein QR-Code mit „Mehr erfahren:“, in einem Oval wie beim Länderkennzeichen am Auto.',
-	},
-	{
-		src: badeenten,
-		alt: 'Drei Badeenten nebeneinander, gezeichnet in Schwarz, Rot und Gold, darunter die Adresse d-wie-demokratie.de.',
-	},
-	{
 		src: laptop,
+		motiv: 1,
 		foto: true,
 		alt: 'Fünf lächelnde Menschen unterschiedlichen Alters und unterschiedlicher Herkunft an einem Tisch vor dem Reichstagsgebäude, auf ihren Laptops der Aufkleber „D wie Demokratie“.',
 	},
 	{
 		src: oldtimer,
+		motiv: 1,
 		foto: true,
 		alt: 'Eine Familie aus drei Generationen lehnt im Abendlicht an einem schwarzen Oldtimer, auf der Heckscheibe der Aufkleber „D wie Demokratie“.',
 	},
 	{
 		src: tassen,
+		motiv: 1,
 		foto: true,
 		alt: 'Fünf lächelnde Menschen, darunter eine Frau mit Kopftuch, halten vor dem Reichstagsgebäude Tassen mit dem Aufdruck „D wie Demokratie“ hoch.',
 	},
 	{
 		src: tshirt,
+		motiv: 1,
 		foto: true,
 		alt: 'Eine junge Frau in einem weißen T-Shirt mit dem Aufdruck „D wie Demokratie“, im Hintergrund der Berliner Fernsehturm im Abendlicht.',
 	},
 ];
 const sekunden = 5;
+
+const pngs = import.meta.glob<{ default: ImageMetadata }>('../assets/motive/motiv-*.png', { eager: true });
+const motive = liste
+	.map((motiv) => ({ ...motiv, bild: pngs[`../assets/motive/motiv-${motiv.nr}.png`]?.default }))
+	.filter((motiv) => motiv.bild);
+const pdfLink = (nr: number) =>
+	existsSync(`public/download/d-wie-demokratie-motiv-${nr}.pdf`) ? `/download/d-wie-demokratie-motiv-${nr}.pdf` : '';
+
+// Der Shop liegt bei Spreadshop (Spreadshirt) und wird nur verlinkt (pro Motiv), nicht eingebettet,
+// damit diese Website frei von Cookies und Inhalten Dritter bleibt.
 ---
 
 <Layout
 	title="D wie Demokratie"
-	description="Eine Initiative für alle, die zeigen wollen, dass sie unsere Demokratie schätzen."
+	description="Wir zeigen Flagge für unsere Demokratie und das Grundgesetz: Motive kostenlos herunterladen oder im Shop bestellen."
 >
-	<h1 class="sr-only">D wie Demokratie</h1>
-
-	<!-- Bilder liegen übereinander und werden nacheinander eingeblendet; ohne JavaScript bleibt das erste stehen -->
+	<!-- Fotos liegen übereinander und werden nacheinander eingeblendet; ohne JavaScript bleibt das erste stehen -->
 	<div class="slider" data-sekunden={sekunden}>
 		{bilder.map((bild, i) => (
-			<Image
-				src={bild.src}
-				alt={bild.alt}
-				class:list={['folie', { sichtbar: i === 0 }]}
-				data-foto={bild.foto ? '' : undefined}
-				widths={[400, 700, 1371]}
-				sizes="(max-width: 680px) 100vw, 680px"
-				loading={i === 0 ? 'eager' : 'lazy'}
-			/>
+			<a href={`#motiv-${bild.motiv}`} class:list={['folie', { sichtbar: i === 0 }]} data-foto={bild.foto ? '' : undefined} tabindex={i === 0 ? undefined : -1}>
+				<Image
+					src={bild.src}
+					alt={bild.alt}
+					widths={[400, 700, 1360]}
+					sizes="(max-width: 680px) 100vw, 680px"
+					loading={i === 0 ? 'eager' : 'lazy'}
+				/>
+			</a>
 		))}
 	</div>
 
@@ -72,42 +99,112 @@ const sekunden = 5;
 				<button type="button" aria-label={`Bild ${i + 1} von ${bilder.length}`} aria-current={i === 0 ? 'true' : undefined}></button>
 			))}
 		</div>
-		<!-- Kennzeichnung nach Art. 50 KI-Verordnung, die Fotos zeigen u. a. den Reichstag -->
+		<!-- Kennzeichnung nach Art. 50 KI-Verordnung -->
 		<p class="ki-hinweis" hidden={!bilder[0].foto}>Foto KI-generiert</p>
 	</div>
 
-	<section class="text">
-		<p class="lead">
-			<strong>Wir zeigen, dass wir unsere Demokratie und die zentralen Werte unseres Grundgesetzes schätzen:</strong> 
-			
-		</p>
+	<h1>Wir zeigen Flagge</h1>
 
-		<ul class="lead werte">
-			<li>
-				die Menschenwürde
-				<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_1.html" target="_blank" rel="noopener">Art.&nbsp;1&nbsp;GG</a>
-			</li>
-			<li>
-				die freie Entfaltung der Persönlichkeit
-				<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_2.html" target="_blank" rel="noopener">Art.&nbsp;2&nbsp;GG</a>
-			</li>
-			<li>
-				die Gleichheit vor dem Gesetz unabhängig der Herkunft
-				<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_3.html" target="_blank" rel="noopener">Art.&nbsp;3&nbsp;GG</a>
-			</li>
-			<li>
-				die Glaubens- und Gewissensfreiheit
-				<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_4.html" target="_blank" rel="noopener">Art.&nbsp;4&nbsp;GG</a>
-			</li>
-			<li>
-				die Meinungsfreiheit und die Freiheit von Kunst und Wissenschaft 
-				<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_5.html" target="_blank" rel="noopener">Art.&nbsp;5&nbsp;GG</a>
-			</li>
-		</ul>
+	<p class="lead">
+		<strong>Wir zeigen, dass wir unsere Demokratie und die zentralen Werte unseres Grundgesetzes schätzen:</strong>
+	</p>
 
+	<ul class="lead werte">
+		<li>
+			die Menschenwürde
+			<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_1.html" target="_blank" rel="noopener">Art.&nbsp;1&nbsp;GG</a>
+		</li>
+		<li>
+			die freie Entfaltung der Persönlichkeit
+			<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_2.html" target="_blank" rel="noopener">Art.&nbsp;2&nbsp;GG</a>
+		</li>
+		<li>
+			die Gleichheit vor dem Gesetz unabhängig der Herkunft
+			<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_3.html" target="_blank" rel="noopener">Art.&nbsp;3&nbsp;GG</a>
+		</li>
+		<li>
+			die Glaubens- und Gewissensfreiheit
+			<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_4.html" target="_blank" rel="noopener">Art.&nbsp;4&nbsp;GG</a>
+		</li>
+		<li>
+			die Meinungsfreiheit und die Freiheit von Kunst und Wissenschaft 
+			<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_5.html" target="_blank" rel="noopener">Art.&nbsp;5&nbsp;GG</a>
+		</li>
+	</ul>
 
-		
-	</section>
+	<p class="lead">
+		<strong>Wir zeigen die Motive in der Öffentlichkeit: als Aufkleber auf unseren Autos, unseren Laptops, auf T-Shirts, Tassen, Taschen und vielem mehr.</strong>
+	</p>
+
+	<div class="fragen">
+		<details id="herunterladen">
+			<summary>Kann ich die Motive herunterladen und selbst drucken?</summary>
+			<p>
+				Ja. Alle unsere Motive stehen Ihnen kostenlos zur Verfügung. Drucken Sie sie selbst oder lassen Sie sie
+				von einer Druckerei oder einem Textildrucker Ihrer Wahl drucken. Unten finden Sie zu jedem Motiv zwei Dateien:
+			</p>
+			<ul>
+				<li><strong>PNG:</strong> zum Drucken zu Hause, im Copyshop oder für Bildschirm und Social Media, Hintergrund transparent</li>
+				<li><strong>PDF:</strong> Druckdatei in CMYK für Druckereien</li>
+			</ul>
+			<p>
+				Sie dürfen die Motive kostenlos drucken und verteilen, auch über eigene Dienstleister. Bitte verändern Sie
+				die Motive nicht und verkaufen Sie sie nicht gewinnorientiert.
+			</p>
+		</details>
+
+		<details id="shop">
+			<summary>Kann ich fertige Produkte mit den Motiven kaufen?</summary>
+			<p>
+				Ja. In unserem Shop gibt es T-Shirts, Tassen, Taschen und vieles mehr mit unseren Motiven. Unten führt zu
+				jedem Motiv ein eigener Link direkt zu den passenden Produkten.
+			</p>
+			<p>
+				<strong>Wir verdienen daran nichts.</strong> Normalerweise erhalten Shop-Betreiber für jeden verkauften
+				Artikel eine Provision. Darauf verzichten wir vollständig. Sie zahlen nur, was Spreadshirt für Produkt,
+				Druck und Versand berechnet.
+			</p>
+			<p>
+				Unser Shop läuft über Spreadshop, einen Dienst von Spreadshirt. Spreadshirt druckt, verschickt und rechnet
+				ab und ist Ihr Vertragspartner. Bei Fragen zu Bestellung, Lieferung oder Umtausch wenden Sie sich bitte
+				direkt an den Kundenservice von Spreadshirt.
+			</p>
+		</details>
+	</div>
+
+	<h2>Unsere Motive</h2>
+
+	<ul class="motive">
+		{motive.map((motiv) => (
+			<li id={`motiv-${motiv.nr}`}>
+				<Image src={motiv.bild!} alt={motiv.alt} width={240} widths={[240, 480]} sizes="200px" />
+				<div>
+					<h3>Motiv {motiv.nr}: {motiv.name}</h3>
+					<ul class="links">
+						<li>
+							<a href={motiv.bild!.src} download={`d-wie-demokratie-motiv-${motiv.nr}.png`} data-umami-event="download-png" data-umami-event-motiv={motiv.nr}>
+								Motiv {motiv.nr} als PNG herunterladen
+							</a>
+						</li>
+						{pdfLink(motiv.nr) && (
+							<li>
+								<a href={pdfLink(motiv.nr)} download data-umami-event="download-pdf" data-umami-event-motiv={motiv.nr}>
+									Motiv {motiv.nr} als PDF für Druckereien
+								</a>
+							</li>
+						)}
+						{motiv.shop && (
+							<li>
+								<a href={motiv.shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv={motiv.nr}>
+									Motiv {motiv.nr} im Shop
+								</a>
+							</li>
+						)}
+					</ul>
+				</div>
+			</li>
+		))}
+	</ul>
 </Layout>
 
 <script>
@@ -121,9 +218,11 @@ const sekunden = 5;
 
 		const zeige = (n: number) => {
 			folien[aktuell].classList.remove('sichtbar');
+			folien[aktuell].tabIndex = -1;
 			knoepfe[aktuell].removeAttribute('aria-current');
 			aktuell = n;
 			folien[aktuell].classList.add('sichtbar');
+			folien[aktuell].removeAttribute('tabindex');
 			if (hinweis) hinweis.hidden = !('foto' in folien[aktuell].dataset);
 			knoepfe[aktuell].setAttribute('aria-current', 'true');
 		};
@@ -142,13 +241,21 @@ const sekunden = 5;
 		);
 		punkte.hidden = false;
 	}
+
+	// Links wie /#herunterladen oder /#shop klappen die passende Frage gleich auf.
+	function aufklappen() {
+		const ziel = location.hash && document.querySelector(location.hash);
+		if (ziel instanceof HTMLDetailsElement) ziel.open = true;
+	}
+	addEventListener('hashchange', aufklappen);
+	aufklappen();
 </script>
 
 <style>
 	/* feste Höhe aus dem Seitenverhältnis der Bilder, damit beim Wechsel nichts springt */
 	.slider {
 		position: relative;
-		aspect-ratio: 1578 / 996;
+		aspect-ratio: 3 / 2;
 		/* zusammen mit dem Innenabstand von main (36,8px) genau 40px bis zur Kopfzeile */
 		margin-top: 3.2px;
 	}
@@ -160,18 +267,26 @@ const sekunden = 5;
 		}
 	}
 
+	/* nur das sichtbare Foto ist anklickbar */
 	.folie {
 		position: absolute;
 		inset: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
 		opacity: 0;
+		pointer-events: none;
 		transition: opacity 1s ease;
 	}
 
 	.folie.sichtbar {
 		opacity: 1;
+		pointer-events: auto;
+	}
+
+	/* Fotos füllen die Fläche; Bilder in anderem Seitenverhältnis werden am Rand beschnitten */
+	.folie img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 	}
 
 	/* Zeile unter den Bildern: Punkte in der Mitte, Hinweis rechts; feste Höhe, auch ohne Punkte */
@@ -233,6 +348,10 @@ const sekunden = 5;
 		}
 	}
 
+	h1 {
+		font-size: clamp(1.85rem, 7.5vw, 2.75rem);
+	}
+
 	.lead {
 		font-size: 1.3rem;
 	}
@@ -251,12 +370,14 @@ const sekunden = 5;
 		white-space: nowrap;
 	}
 
-	.download {
-		margin-top: 2.5em;
-		padding: 1.5em;
-		/* Platz für den 12px breiten Streifen links */
-		padding-left: calc(1.5em + 12px);
-		/* Schwarz-Rot-Gold nebeneinander, wie der Streifen am oberen Rand, nur um 90° gedreht */
+	/* Ziehharmonika: Fragen zum Aufklappen, mit Schwarz-Rot-Gold links wie die Kästen auf „Mitmachen“ */
+	.fragen {
+		margin-top: 2em;
+	}
+
+	details {
+		margin-top: 0.8em;
+		padding-left: 12px;
 		background:
 			linear-gradient(
 				to right,
@@ -267,24 +388,94 @@ const sekunden = 5;
 			#fafafa;
 	}
 
-	.download h2 {
-		margin-top: 0;
+	summary {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1em;
+		padding: 1em 1.2em;
+		font-size: 1.1rem;
+		font-weight: bold;
+		cursor: pointer;
+		list-style: none;
+	}
+
+	summary::-webkit-details-marker {
+		display: none;
+	}
+
+	summary::after {
+		content: '+';
+		flex-shrink: 0;
+		font-size: 1.5rem;
+		line-height: 1;
+	}
+
+	details[open] summary::after {
+		content: '–';
+	}
+
+	details > :not(summary) {
+		margin-right: 1.2em;
+		margin-left: 1.2em;
+	}
+
+	details > :last-child {
+		margin-bottom: 0;
+		padding-bottom: 1.2em;
+	}
+
+	/* Motive untereinander: Bild links, Links rechts; auf dem Handy Bild oben */
+	h2 {
+		margin-top: 2em;
 		font-size: 1.4rem;
 	}
 
-	.button {
-		display: inline-block;
-		margin-top: 0.5em;
-		padding: 0.75em 1.4em;
-		border-radius: 6px;
-		background: var(--schwarz);
-		color: #ffffff;
-		font-weight: bold;
-		text-decoration: none;
+	.motive {
+		margin: 0;
+		padding: 0;
+		list-style: none;
 	}
 
-	.button:hover {
-		background: var(--rot);
-		color: #ffffff;
+	.motive > li {
+		display: flex;
+		align-items: center;
+		gap: 1.5em;
+		padding: 1.2em 0;
+		border-top: 1px solid #e5e5e5;
+	}
+
+	.motive img {
+		flex-shrink: 0;
+		width: 200px;
+		height: auto;
+	}
+
+	h3 {
+		margin: 0 0 0.4em;
+		font-size: 1.1rem;
+	}
+
+	.links {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.links li + li {
+		margin-top: 0.3em;
+	}
+
+	@media (max-width: 540px) {
+		.motive > li {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.8em;
+		}
+
+		.motive img {
+			width: 100%;
+			max-width: 320px;
+		}
 	}
 </style>
