@@ -212,6 +212,10 @@ const pdfLink = (nr: number) =>
 			</li>
 		))}
 	</ul>
+
+	<p class="mehr-motive">
+		Weitere Motive kommen bald. <a href="#neuigkeiten">Wir informieren Sie gerne.</a>
+	</p>
 </Layout>
 
 <script>
@@ -442,6 +446,13 @@ const pdfLink = (nr: number) =>
 		margin: 0;
 		padding: 0;
 		list-style: none;
+	}
+
+	/* Hinweis unter dem letzten Motiv, mit derselben Trennlinie wie zwischen den Motiven */
+	.mehr-motive {
+		margin: 0;
+		padding-top: 1.2em;
+		border-top: 1px solid #e5e5e5;
 	}
 
 	.motive > li {

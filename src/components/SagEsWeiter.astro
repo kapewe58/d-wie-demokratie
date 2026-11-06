@@ -31,6 +31,7 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 	<!-- Anmeldung für Neuigkeiten über CleverReach (Double-Opt-in); öffnet die Bestätigungsseite
 	     von CleverReach in einem neuen Tab, damit die Besucher auf der Seite bleiben -->
 	<form
+		id="neuigkeiten"
 		class="neuigkeiten"
 		method="post"
 		action="https://flow.cleverreach.com/fl/22f14217-3d47-4f01-8b0f-ddcaf44718bf/confirm"
@@ -38,7 +39,7 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 	>
 		<h3>Neuigkeiten per E-Mail</h3>
 		<p>
-			Wir schreiben Ihnen, wenn es Neues von der Initiative gibt. Sie erhalten eine
+			Von Zeit zu Zeit stellen wir Ihnen neue Motive vor und teilen Ihnen Neuigkeiten von unserer Initiative mit. Sie erhalten eine
 			Bestätigungsmail und können sich jederzeit abmelden.
 		</p>
 		<!-- Falle für Spam-Programme, für Menschen unsichtbar -->
