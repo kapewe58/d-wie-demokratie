@@ -6,19 +6,20 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout
 	title="Häufige Fragen – D wie Demokratie"
-	description="Häufige Fragen zu d-wie-demokratie.de: wer hinter der Initiative steht und warum es unsere Motive gibt."
+	description="Häufige Fragen zu d-wie-demokratie.de: wer hinter der Initiative steckt und warum es unsere Motive gibt."
 >
 	<h1>Wir geben Antworten</h1>
 
-		<section aria-labelledby="warum">
-		<h2 id="warum">Was ist d-wie-demokratie.de?</h2>
+	<div class="fragen">
+		<details id="warum" open>
+			<summary><h2>Was ist d-wie-demokratie.de?</h2></summary>
 
 		<p>d-wie-demokratie.de ist eine überparteiliche und unabhängige Initiative, die Mitbürgern die Möglichkeit gibt, auf abwechslungsreiche und auch humorvolle Weise zu zeigen, dass sie hinter unserer Demokratie und ihren Werten stehen. Wir beabsichtigen, regelmäßig neue Motive mit unseren Nationalfarben online zu stellen und in den sozialen Medien vorzustellen.
 		</p>
-	</section>
+		</details>
 
-	<section aria-labelledby="farben">
-		<h2 id="farben">Sind Schwarz-Rot-Gold nicht die Farben der Rechtsextremen?</h2>
+		<details id="farben">
+			<summary><h2>Sind Schwarz-Rot-Gold nicht die Farben der Rechtsextremen?</h2></summary>
 
 		<p>
 			Rechtsextreme und nationalistische
@@ -55,10 +56,10 @@ import Layout from '../layouts/Layout.astro';
 		<p class="lesetipp">
 			<a href="https://www.demokratiegeschichten.de/flaggenkampf-in-der-weimarer-republik/" target="_blank" rel="noopener">Schon einmal wurde um Schwarz-Rot-Gold gekämpft: der Flaggenkampf in der Weimarer Republik</a>
 		</p>
-	</section>
+		</details>
 
-			<section aria-labelledby="wichtig">
-		<h2 id="wichtig">Warum ist es so wichtig, dass sich viele Menschen sichtbar zu unserer Demokratie bekennen?</h2>
+		<details id="wichtig">
+			<summary><h2>Warum ist es so wichtig, dass sich viele Menschen sichtbar zu unserer Demokratie bekennen?</h2></summary>
 
 		<ul class="gruende">
 			<li><label><input type="checkbox" /> Die schweigende Mehrheit bekommt eine Stimme.</label></li>
@@ -67,19 +68,19 @@ import Layout from '../layouts/Layout.astro';
 			<li><label><input type="checkbox" /> Es stärkt alle, die sich für unsere Demokratie einsetzen.</label></li>
 			<li><label><input type="checkbox" /> Unsere Grundrechte bleiben uns nur, wenn wir für sie einstehen.</label></li>
 		</ul>
-	</section>
+		</details>
 
-		<section aria-labelledby="seit-wann">
-		<h2 id="seit-wann">Seit wann gibt es d-wie-demokratie.de?</h2>
+		<details id="seit-wann">
+			<summary><h2>Seit wann gibt es d-wie-demokratie.de?</h2></summary>
 
 		<p>
 			Seit Oktober 2026. Die Initiative steckt also noch
 			 in den Kinderschuhen. Helfen Sie mit, dass sie laufen lernt!
 		</p>
-	</section>
+		</details>
 
-	<section aria-labelledby="wer">
-		<h2 id="wer">Wer steht hinter d-wie-demokratie.de?</h2>
+		<details id="wer">
+			<summary><h2>Wer steckt hinter d-wie-demokratie.de?</h2></summary>
 
 		<p>
 			d-wie-demokratie.de ist bisher eine private Initiative von
@@ -144,10 +145,10 @@ import Layout from '../layouts/Layout.astro';
 				innen.addEventListener('beforematch', oeffnen);
 			})();
 		</script>
-	</section>
+		</details>
 
-	<section aria-labelledby="kommerziell">
-		<h2 id="kommerziell">Hat d-wie-demokratie.de ein kommerzielles Ziel?</h2>
+		<details id="kommerziell">
+			<summary><h2>Hat d-wie-demokratie.de ein kommerzielles Ziel?</h2></summary>
 
 		<p>
 			Nein. d-wie-demokratie.de verfolgt ausschließlich ideelle Ziele. Es besteht keine
@@ -158,10 +159,10 @@ import Layout from '../layouts/Layout.astro';
 			Wir nehmen keine Spenden an und auch an unserem Shop verdienen wir nichts, weil wir  dort
 			vollständig auf eine Provision verzichten.
 		</p>
-	</section>
+		</details>
 
-	<section aria-labelledby="umwelt">
-		<h2 id="umwelt">Wie umweltfreundlich sind die Produkte mit Ihren Motiven?</h2>
+		<details id="umwelt">
+			<summary><h2>Wie umweltfreundlich sind die Produkte mit Ihren Motiven?</h2></summary>
 
 		<p>
 			Am umweltfreundlichsten ist, was nicht hergestellt wird. Aber natürlich möchten wir, dass unsere Motive möglichst viele Menschen erreichen. Deshalb haben wir uns entschieden, einen Shop einzurichten, in dem Sie Produkte mit unseren Motiven bestellen können. Wir haben uns für Spreadshirt entschieden, weil das Unternehmen in Deutschland sitzt, ein Angebot für Non-Profit-Organisationen bietet und nach eigenen Angaben umweltfreundlich produziert.
@@ -185,7 +186,18 @@ import Layout from '../layouts/Layout.astro';
 			Wir verdienen am Shop nichts und haben keinen Einfluss auf die Produktion. Mehr dazu finden Sie auf der
 			<a href="https://www.spreadgroup.com/de/sustainability/" target="_blank" rel="noopener">Nachhaltigkeitsseite der Spread Group</a>.
 		</p>
-	</section>
+		</details>
+	</div>
+
+	<script>
+		// #warum, #umwelt usw. in der Adresse klappen die passende Frage auf
+		function aufklappen() {
+			const ziel = location.hash && document.querySelector(location.hash);
+			if (ziel instanceof HTMLDetailsElement) ziel.open = true;
+		}
+		addEventListener('hashchange', aufklappen);
+		aufklappen();
+	</script>
 
 	
 </Layout>
@@ -278,19 +290,64 @@ import Layout from '../layouts/Layout.astro';
 		}
 	}
 
-	/* damit das Porträt nicht in die nächste Frage hineinragt */
-	section {
+	/* Fragen zum Aufklappen, gleiche Optik wie auf der Startseite (details in index.astro) */
+	details {
+		/* damit das Porträt nicht in die nächste Frage hineinragt */
 		display: flow-root;
+		margin-top: 0.8em;
+		padding-left: 12px;
+		background:
+			linear-gradient(
+				to right,
+				var(--schwarz) 0 33.33%,
+				var(--rot) 33.33% 66.66%,
+				var(--gold) 66.66% 100%
+			) left / 12px 100% no-repeat,
+			#fafafa;
 	}
 
-	h2 {
-		margin-top: 2em;
-		font-size: 1.4rem;
-	}
-
-	/* erste Frage direkt unter der Überschrift: nur der Abstand der Überschrift zählt, wie auf den anderen Seiten */
-	h1 + section > h2 {
+	details:first-child {
 		margin-top: 0;
+	}
+
+	details[open] {
+		padding-bottom: 0.2em;
+	}
+
+	summary {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1em;
+		padding: 1em 1.2em;
+		cursor: pointer;
+		list-style: none;
+	}
+
+	summary::-webkit-details-marker {
+		display: none;
+	}
+
+	summary::after {
+		content: '+';
+		flex-shrink: 0;
+		font-size: 1.5rem;
+		line-height: 1;
+	}
+
+	details[open] summary::after {
+		content: '–';
+	}
+
+	/* Überschrift bleibt für Suchmaschinen und Screenreader, sieht aber aus wie auf der Startseite */
+	summary h2 {
+		margin: 0;
+		font-size: 1.1rem;
+	}
+
+	details > :not(summary) {
+		margin-right: 1.2em;
+		margin-left: 1.2em;
 	}
 
 	.lead {
