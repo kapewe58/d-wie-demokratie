@@ -42,41 +42,44 @@ const stellen: Stelle[] = [
 	},
 	{
 		id: 'instagram',
-		titel: 'Wir suchen ein Team für Instagram: Content Creator und Content Manager!',
-		kurz: 'ein Team für Instagram: Content Creator und Content Manager',
-		eckdaten: ['Ehrenamtlich', 'Bundesweit', 'Ortsunabhängig'],
+		titel: 'Wir suchen ein Social-Media-Team für Instagram, TikTok und YouTube!',
+		kurz: 'ein Social-Media-Team für Instagram, TikTok und YouTube',
+		eckdaten: ['Content Creator und Social-Media-Manager', 'Ehrenamtlich', 'Bundesweit', 'Ortsunabhängig'],
 		einleitung: [
 			'd-wie-demokratie.de ist eine junge, unabhängige Initiative. Wir möchten möglichst viele Menschen ermutigen, sich sichtbar zu unserer Demokratie und ihren Werten zu bekennen.',
-			'Auf Instagram sind wir noch gar nicht vertreten. Dort wollen wir regelmäßig unsere neuen Motive vorstellen. Dafür suchen wir ein Team, das unseren Auftritt von Grund auf aufbaut und mit Leben füllt.',
+			'Auf Instagram, TikTok und YouTube sind wir noch gar nicht vertreten. Das wollen wir ändern! Mit kreativen Ideen, witzigen Motiven und kurzen Videos möchten wir besonders auch junge Menschen erreichen und zum Mitmachen begeistern.',
+			'Dafür suchen wir ein Team, das unseren Social-Media-Auftritt von Grund auf aufbaut und mit Leben füllt.',
 		],
 		aufgaben: [
 			{
 				rolle: 'Als Content Creator',
 				punkte: [
-					'Beiträge, Stories und Reels rund um unsere Designs gestalten',
-					'Eigene Designs entwerfen',
-					'Zum Mitmachen und zum Einschicken eigener Designs einladen',
+					'Kreative Beiträge, Stories, Reels und Shorts gestalten',
+					'Unsere Motive in originellen Kurzvideos präsentieren',
+					'Eigene Ideen und Designs entwickeln',
+					'Andere zum Mitmachen und zum Einschicken eigener Designs motivieren',
 				],
 			},
 			{
-				rolle: 'Als Content Manager',
+				rolle: 'Als Social-Media-Manager',
 				punkte: [
-					'Unseren Instagram-Auftritt von Anfang an aufbauen',
-					'Eingeschickte Designs sichten und mit uns auswählen',
-					'Den Redaktionsplan führen, damit regelmäßig Beiträge erscheinen',
-					'Mit Followern, Gestaltern und anderen demokratischen Initiativen in Kontakt treten',
+					'Unsere Auftritte auf Instagram, TikTok und YouTube aufbauen und betreuen',
+					'Eingeschickte Designs sichten und gemeinsam mit uns auswählen',
+					'Die Veröffentlichungen planen und koordinieren',
+					'Mit Followern, kreativen Menschen und anderen demokratischen Initiativen in Kontakt treten',
 				],
 			},
 		],
 		wichtig: [
-			'Du kennst dich mit Instagram aus, hast ein Gespür für Bilder und Sprache und stehst aus Überzeugung hinter unserer freiheitlichen Demokratie.',
+			'Du kennst dich mit mindestens einer der Plattformen aus, hast Spaß an kreativen Ideen und stehst aus Überzeugung hinter unserer freiheitlichen Demokratie.',
+			'Eine Ausbildung oder Berufserfahrung im Social-Media-Bereich brauchst du nicht. Begeisterung, Eigeninitiative und ein Gespür dafür, was Menschen anspricht, sind uns wichtiger.',
 		],
 		bieten: [
-			'Die seltene Chance, einen Social-Media-Auftritt ganz neu aufzubauen und ihm deine eigene Handschrift zu geben.',
-			'Die Tätigkeit ist ehrenamtlich, zeitlich flexibel und vollständig ortsunabhängig. Die regelmäßigen Beiträge teilen wir im Team auf, du bestimmst selbst, wie viel Zeit du einbringst.',
+			'Die seltene Chance, einen Social-Media-Auftritt ganz neu aufzubauen, eigene Ideen zu verwirklichen und gemeinsam mit anderen etwas für unsere Demokratie zu bewegen.',
+			'Die Tätigkeit ist ehrenamtlich, zeitlich flexibel und vollständig ortsunabhängig. Du musst nicht alle drei Plattformen beherrschen. Wir teilen die Aufgaben im Team auf, und du bestimmst selbst, wie viel Zeit du einbringst.',
 		],
-		interesse: 'Schreib uns, welche Rolle dich reizt.',
-		betreff: 'Ehrenamt: Instagram',
+		interesse: 'Schreib uns, welche Aufgaben und Plattformen dich besonders interessieren.',
+		betreff: 'Ehrenamt: Social Media',
 	},
 	{
 		id: 'vertrieb',
@@ -161,6 +164,10 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 
 			<h3>Was wir bieten</h3>
 			{stelle.bieten.map((absatz) => <p>{absatz}</p>)}
+			<p>
+				Unsere Zusammenarbeit organisieren wir über ein gemeinsames Intranet. Dort tauschen wir Ideen aus, stimmen uns
+				ab und koordinieren unsere Aufgaben, egal wann und wo du Zeit hast.
+			</p>
 
 			<h3>Interesse?</h3>
 			<p>
