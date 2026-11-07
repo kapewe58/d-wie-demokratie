@@ -62,12 +62,10 @@ import Layout from '../layouts/Layout.astro';
 		<details id="wichtig">
 			<summary><h2>Warum ist es so wichtig, dass sich viele Menschen sichtbar zu unserer Demokratie bekennen?</h2></summary>
 
-		<ul class="gruende">
-			<li><label><input type="checkbox" /> Die schweigende Mehrheit bekommt eine Stimme.</label></li>
-			<li><label><input type="checkbox" /> Betont wird das Verbindende, nicht das Trennende.</label></li>
-			<li><label><input type="checkbox" /> Wer sieht, dass andere ähnlich denken, zeigt eher selbst Haltung.</label></li>
-			<li><label><input type="checkbox" /> Es stärkt alle, die sich für unsere Demokratie einsetzen.</label></li>
-			<li><label><input type="checkbox" /> Unsere Grundrechte bleiben uns nur, wenn wir für sie einstehen.</label></li>
+		<ul>
+			<li>Wir zeigen, dass wir hinter unserer Demokratie stehen und bereit sind, uns für sie einzusetzen.</li>
+			<li>Wir zeigen, was uns verbindet.</li>
+			<li>Wir zeigen anderen, dass sie mit ihrer demokratischen Haltung nicht allein sind.</li>
 		</ul>
 		</details>
 
@@ -380,32 +378,5 @@ import Layout from '../layouts/Layout.astro';
 	/* Hinweis auf eine andere Seite, kleiner, damit der Schlusssatz darüber der Höhepunkt bleibt */
 	.lesetipp {
 		font-size: 1rem;
-	}
-
-	/* Gründe zum Ankreuzen: Kästchen statt Aufzählungspunkten, ganze Zeile anklickbar */
-	.gruende {
-		padding: 0;
-		list-style: none;
-	}
-
-	.gruende li + li {
-		margin-top: 0.4em;
-	}
-
-	.gruende label {
-		display: flex;
-		gap: 0.6em;
-		align-items: baseline;
-		/* auch lange Wörter umbrechen, sonst wird die Seite auf dem Handy breiter als der Bildschirm */
-		overflow-wrap: anywhere;
-		cursor: pointer;
-	}
-
-	.gruende input {
-		flex-shrink: 0;
-		width: 1.1em;
-		height: 1.1em;
-		accent-color: var(--rot);
-		cursor: pointer;
 	}
 </style>
