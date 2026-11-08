@@ -326,6 +326,37 @@ export const vertiefung: Record<string, Baustein[]> = {
 			text: 'Daran knüpfen wir an: Schwarz-Rot-Gold verbindet. Die Farben stehen für Freiheit, Einheit und Demokratie, für alle, die hier leben.',
 		},
 	],
+	'2026': [
+		{ art: 'titel', text: 'Warum die Fahne zurückgeholt werden muss' },
+		{
+			art: 'absatz',
+			text: 'Wer heute Schwarz-Rot-Gold zeigt, wird oft schief angesehen. Denn auf Kundgebungen gegen Demokratie und Zuwanderung wehen neben der Bundesflagge auch Fahnen, die sich gegen die Republik richten: Schwarz-Weiß-Rot, die Farben des Kaiserreichs, oder die Kreuzfahne des Widerstandskämpfers Josef Wirmer, der für ein freies Deutschland gestorben ist. So entsteht der Eindruck, die Farben unserer Demokratie gehörten denen, die sie ablehnen.',
+		},
+		{
+			art: 'absatz',
+			text: 'Dabei ist es genau umgekehrt. Wie diese Geschichte zeigt, waren Schwarz-Rot-Gold immer die Farben derer, die für Freiheit, Einheit und Mitbestimmung eingetreten sind. Ihre Gegner haben sie bekämpft, verhöhnt und verbrannt.',
+		},
+		{ art: 'titel', text: 'Was Klopp gesagt hat' },
+		{
+			art: 'zitat',
+			text: 'Ich würde mir oder uns gerne die Fahne zurückholen. Ich möchte, dass, wenn man sie schwingt, niemand denkt: Was ist mit dir nicht in Ordnung?',
+			herkunft: 'Jürgen Klopp bei seiner ersten Kaderbekanntgabe als Bundestrainer, 17. September 2026',
+		},
+		{
+			art: 'absatz',
+			text: 'Dazu sagt er: „Positiver Patriotismus? Gerne!“ Gemeint ist ein Stolz, der niemanden ausschließt, auf ein Land, in dem Menschen unterschiedlicher Herkunft, Religion und Überzeugung frei zusammenleben. Seine Kappe sagt es in vier Worten: „Einer von 83 Millionen“.',
+		},
+		{ art: 'titel', text: 'Vorsicht vor Fälschungen' },
+		{
+			art: 'absatz',
+			text: 'Kurz nach der Pressekonferenz verbreitete sich in den sozialen Medien ein Video, nach dem Politiker Klopps Rücktritt gefordert hätten. Die Rechercheplattform Correctiv hat es geprüft: Diese Forderungen sind erfunden. Auch das gehört zum Streit um die Fahne. Wer Klopps Worte weitergibt, nimmt am besten die Originalaufnahme.',
+		},
+		{ art: 'titel', text: 'Und jetzt Sie' },
+		{
+			art: 'absatz',
+			text: 'Die Fahne zurückholen heißt, sie zu zeigen: fröhlich, selbstverständlich und als Zeichen für unsere Demokratie. Genau dafür gibt es d-wie-demokratie.de. Mit unseren Motiven zeigen Sie auf Ihrem Auto, Ihrem Laptop oder Ihrem T-Shirt, wofür Schwarz-Rot-Gold steht: für Menschenwürde, Freiheit, Gleichheit und Vielfalt, für alle 83 Millionen.',
+		},
+	],
 };
 
 // alle Bilder und Flaggen der Vertiefungen, für die Bildnachweise

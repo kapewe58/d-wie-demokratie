@@ -10,6 +10,7 @@ import reichsbanner from '../assets/flagge/1929-reichsbanner.jpg';
 import reichsbannerfahne from '../assets/flagge/1919-reichsbannerfahne.jpg';
 import grundgesetz from '../assets/flagge/1949-grundgesetz.jpg';
 import reichstag from '../assets/flagge/1990-reichstag.jpg';
+import fanmeile from '../assets/flagge/2006-fanmeile.jpg';
 
 // Bilder von Wikimedia Commons, lokal abgelegt (keine Anfragen an Dritte).
 // Jede Lizenz verlangt die Angaben in „nachweis“; die vollständigen Angaben stehen unten unter „Bildnachweise“.
@@ -465,11 +466,50 @@ const stationen: Station[] = [
 			},
 		],
 	},
+	{
+		jahr: '2026',
+		titel: 'Wir holen uns die Fahne zurück',
+		text: 'Immer wieder versuchen Rechtsextreme, Schwarz-Rot-Gold für sich zu vereinnahmen. Doch immer mehr Menschen halten dagegen. Am 17. September 2026 sagt der neue Bundestrainer Jürgen Klopp bei seiner ersten Kaderbekanntgabe: „Ich würde mir oder uns gerne die Fahne zurückholen.“',
+		mehr: [
+			'Klopp trägt dabei eine Kappe in Schwarz-Rot-Gold mit der Aufschrift „Einer von 83 Millionen“. Gefragt nach ihrer Botschaft, sagt er: „Ich möchte, dass, wenn man sie schwingt, niemand denkt: Was ist mit dir nicht in Ordnung?“ Und: „Ich möchte Nationalstolz nicht den falschen Leuten überlassen.“',
+			'Seine Worte werden im ganzen Land diskutiert. Viele stimmen ihm zu, über Parteigrenzen hinweg. Manche fragen, ob sich ein Bundestrainer so politisch äußern sollte. Sicher ist: Ein Satz aus dem Fußball erreicht Millionen Menschen, die nie ein Geschichtsbuch über Schwarz-Rot-Gold lesen würden.',
+		],
+		bild: {
+			src: fanmeile,
+			alt: 'Farbfoto: Eine Menschenmenge jubelt mit erhobenen Armen, über den Köpfen viele schwarz-rot-goldene Fahnen.',
+			unterschrift: 'So kann es aussehen: Fans auf der Berliner Fanmeile bei der Fußball-Weltmeisterschaft 2006',
+			nachweis: 'Foto: Will Collins',
+			lizenz: lizenz.ccBySa30,
+			quelle: 'https://commons.wikimedia.org/wiki/File:Worldcup_2006_Berlin.jpg',
+		},
+		erleben: [
+			{
+				art: 'Video',
+				titel: 'Die Pressekonferenz im Original',
+				text: 'Die ganze Kaderbekanntgabe vom 17. September 2026 mit Klopps Worten zur Fahne, auf dem YouTube-Kanal von phoenix, dem Ereignis- und Dokumentationskanal von ARD und ZDF.',
+				links: [{ text: 'Auf YouTube ansehen', url: 'https://www.youtube.com/watch?v=_jfi8T6pU0I' }],
+			},
+			{
+				art: 'Faktencheck',
+				titel: 'Was Klopp wirklich gesagt hat',
+				text: 'Nach der Pressekonferenz verbreitete sich ein gefälschtes Video, nach dem Politiker Klopps Rücktritt gefordert hätten. Die Rechercheplattform Correctiv hat es geprüft und zitiert seine tatsächlichen Worte.',
+				links: [{ text: 'Faktencheck bei Correctiv', url: 'https://correctiv.org/faktencheck/2026/09/28/nach-aussage-zu-deutschland-fahne-weder-gruene-noch-cdu-forderten-klopps-ruecktritt/' }],
+			},
+			{
+				art: 'Mitmachen',
+				titel: 'Zeigen Sie Flagge',
+				text: 'Holen Sie sich die Fahne mit uns zurück: Laden Sie unsere Motive in Schwarz-Rot-Gold kostenlos herunter oder bestellen Sie sie im Shop, als Aufkleber für Ihr Auto oder Ihren Laptop, auf T-Shirts, Tassen und vielem mehr.',
+				links: [{ text: 'Zu unseren Motiven', url: '/#motive' }],
+			},
+		],
+	},
 ];
 
 // „vor … Jahren“: beim Bauen der Seite berechnet und im Browser mit dem aktuellen Jahr nachgeführt,
 // damit es auch stimmt, wenn die Seite länger nicht neu veröffentlicht wurde. Bei „1933–1935“ zählt das erste Jahr.
 const vorJahren = (jahr: string) => new Date().getFullYear() - parseInt(jahr, 10);
+// „in diesem Jahr“, „vor einem Jahr“, „vor 211 Jahren“
+const vorText = (n: number) => (n <= 0 ? '– in diesem Jahr' : n === 1 ? '– vor einem Jahr' : `– vor ${n} Jahren`);
 
 const alleBilder = [
 	...stationen.flatMap((s) => [s.bild, s.bildMehr].filter((b): b is Bild => Boolean(b))),
@@ -479,7 +519,7 @@ const alleBilder = [
 
 <Layout
 	title="Kleine Geschichte unserer Flagge – D wie Demokratie"
-	description="Von der Freiheitsbewegung bis zum Grundgesetz: die Geschichte von Schwarz-Rot-Gold in sieben Stationen."
+	description="Von der Freiheitsbewegung bis zum Grundgesetz: die Geschichte von Schwarz-Rot-Gold in acht Stationen, bis heute."
 >
 	<h1>Kleine Geschichte unserer Flagge</h1>
 
@@ -494,10 +534,19 @@ const alleBilder = [
 		ins 19. Jahrhundert zurück. Entdecken Sie die wichtigsten Stationen.
 	</p>
 
+	<!-- Sprungleiste: bleibt beim Scrollen unter der Kopfzeile stehen, die sichtbare Station ist hervorgehoben -->
+	<nav class="jahre" aria-label="Stationen der Geschichte">
+		<ul>
+			{stationen.map((s) => (
+				<li><a href={`#${s.jahr.slice(0, 4)}`} title={s.titel}>{s.jahr.slice(0, 4)}</a></li>
+			))}
+		</ul>
+	</nav>
+
 	<ol class="zeitstrahl">
 		{stationen.map((s) => (
-			<li class="station">
-				<p class="jahr">{s.jahr} <span class="vor" data-jahr={parseInt(s.jahr, 10)}>– vor {vorJahren(s.jahr)} Jahren</span></p>
+			<li class="station" id={s.jahr.slice(0, 4)}>
+				<p class="jahr">{s.jahr} <span class="vor" data-jahr={parseInt(s.jahr, 10)}>{vorText(vorJahren(s.jahr))}</span></p>
 				<h2>{s.titel}</h2>
 				<p>{s.text}</p>
 				{s.bild && (
@@ -560,7 +609,7 @@ const alleBilder = [
 										<p>{t.text}</p>
 										{t.links.length > 0 && (
 											<p class="tipp-links">
-												{t.links.map((l) => <a href={l.url} target="_blank" rel="noopener">{l.text}</a>)}
+												{t.links.map((l) => (l.url.startsWith('/') ? <a href={l.url}>{l.text}</a> : <a href={l.url} target="_blank" rel="noopener">{l.text}</a>))}
 											</p>
 										)}
 									</li>
@@ -609,8 +658,60 @@ const alleBilder = [
 <script>
 	const jetzt = new Date().getFullYear();
 	for (const el of document.querySelectorAll<HTMLElement>('.vor')) {
-		el.textContent = `– vor ${jetzt - Number(el.dataset.jahr)} Jahren`;
+		const n = jetzt - Number(el.dataset.jahr);
+		el.textContent = n <= 0 ? '– in diesem Jahr' : n === 1 ? '– vor einem Jahr' : `– vor ${n} Jahren`;
 	}
+	// Sprungleiste: Höhe der Kopfzeile messen (die Leiste klebt darunter) und die sichtbare Station hervorheben
+	const kopf = document.querySelector<HTMLElement>('.kopf');
+	const leiste = document.querySelector<HTMLElement>('.jahre');
+	const stationen = [...document.querySelectorAll<HTMLElement>('.station')];
+	const links = [...document.querySelectorAll<HTMLAnchorElement>('.jahre a')];
+
+	function hoehenSetzen() {
+		document.documentElement.style.setProperty('--kopf-hoehe', `${kopf?.offsetHeight ?? 0}px`);
+		document.documentElement.style.setProperty('--leiste-hoehe', `${leiste?.offsetHeight ?? 0}px`);
+	}
+
+	let aktiv = -1;
+	function aktuelleStation() {
+		const grenze = (kopf?.offsetHeight ?? 0) + (leiste?.offsetHeight ?? 0) + 40;
+		let index = -1;
+		stationen.forEach((station, i) => {
+			if (station.getBoundingClientRect().top <= grenze) index = i;
+		});
+		if (index === aktiv) return;
+		aktiv = index;
+		links.forEach((link, i) => {
+			if (i === index) link.setAttribute('aria-current', 'true');
+			else link.removeAttribute('aria-current');
+		});
+		// auf dem Handy die aktuelle Jahreszahl in der Leiste sichtbar halten
+		const link = links[index];
+		if (link && leiste) {
+			const ziel = link.offsetLeft - (leiste.clientWidth - link.offsetWidth) / 2;
+			leiste.scrollTo({ left: ziel, behavior: 'smooth' });
+		}
+	}
+
+	let geplant = false;
+	addEventListener(
+		'scroll',
+		() => {
+			if (geplant) return;
+			geplant = true;
+			requestAnimationFrame(() => {
+				geplant = false;
+				aktuelleStation();
+			});
+		},
+		{ passive: true }
+	);
+	addEventListener('resize', () => {
+		hoehenSetzen();
+		aktuelleStation();
+	});
+	hoehenSetzen();
+	aktuelleStation();
 </script>
 
 <style>
@@ -623,6 +724,72 @@ const alleBilder = [
 	}
 
 	/* Zeitstrahl: senkrechter Streifen in Schwarz-Rot-Gold, jede Station ein Punkt darauf */
+	/* Sprungleiste mit den Jahreszahlen, klebt unter der Kopfzeile (Höhe per Skript in --kopf-hoehe) */
+	.jahre {
+		position: sticky;
+		top: var(--kopf-hoehe, 0);
+		z-index: 5;
+		margin: 1.5em -1em 0;
+		padding: 0 1em;
+		overflow-x: auto;
+		scrollbar-width: none;
+		background: #ffffff;
+		box-shadow: inset 0 -1px 0 #e5e5e5;
+	}
+
+	.jahre::-webkit-scrollbar {
+		display: none;
+	}
+
+	.jahre ul {
+		display: flex;
+		gap: 1.3em;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		white-space: nowrap;
+	}
+
+	.jahre a {
+		display: flex;
+		align-items: center;
+		gap: 0.35em;
+		padding: 0.6em 0;
+		color: var(--grau);
+		font-size: 0.95rem;
+		font-weight: bold;
+		text-decoration: none;
+	}
+
+	/* aktuelle Station: schwarz mit goldenem Punkt, wie die Punkte im Zeitstrahl */
+	.jahre a::before {
+		content: '';
+		width: 9px;
+		height: 9px;
+		border-radius: 50%;
+		background: transparent;
+	}
+
+	.jahre a[aria-current] {
+		color: var(--text);
+	}
+
+	.jahre a[aria-current]::before {
+		background: var(--gold);
+		box-shadow: 0 0 0 1px #c4c4c4;
+	}
+
+	@media (hover: hover) {
+		.jahre a:hover {
+			color: var(--rot);
+		}
+	}
+
+	/* Sprungziel nicht unter der Leiste verstecken (die Kopfzeile deckt schon scroll-padding-top in Layout.astro ab) */
+	.station {
+		scroll-margin-top: var(--leiste-hoehe, 45px);
+	}
+
 	.zeitstrahl {
 		position: relative;
 		margin: 2.5em 0 0;
@@ -765,7 +932,7 @@ const alleBilder = [
 		margin-top: 0.4em !important;
 	}
 
-	.tipp-links a::after {
+	.tipp-links a[target]::after {
 		content: ' ↗';
 	}
 
