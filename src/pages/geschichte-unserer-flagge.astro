@@ -1,0 +1,599 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import { lizenz, vertiefung, vertiefungsBilder, type Bild } from '../data/flagge-vertiefung';
+import urburschenschaft from '../assets/flagge/1815-urburschenschaft.jpg';
+import hambach from '../assets/flagge/1832-hambach.jpg';
+import paulskirche from '../assets/flagge/1848-paulskirche.jpg';
+import germania from '../assets/flagge/1848-germania.jpg';
+import reichsbanner from '../assets/flagge/1929-reichsbanner.jpg';
+import reichsbannerfahne from '../assets/flagge/1919-reichsbannerfahne.jpg';
+import grundgesetz from '../assets/flagge/1949-grundgesetz.jpg';
+import reichstag from '../assets/flagge/1990-reichstag.jpg';
+
+// Bilder von Wikimedia Commons, lokal abgelegt (keine Anfragen an Dritte).
+// Jede Lizenz verlangt die Angaben in „nachweis“; die vollständigen Angaben stehen unten unter „Bildnachweise“.
+// Die ausführlichen Texte für „Noch mehr erfahren“ stehen in src/data/flagge-vertiefung.ts.
+
+// ein Tipp unter „Wo kann ich das erleben?“; art ist die kleine graue Überschrift (Ort, Für Schulen, Lied …)
+type Erlebnis = {
+	art: string;
+	titel: string;
+	text: string;
+	links: { text: string; url: string }[];
+};
+
+type Station = {
+	jahr: string;
+	titel: string;
+	text: string;
+	mehr: string[];
+	bild?: Bild;
+	bildMehr?: Bild;
+	// „Wo kann ich das erleben?“: Orte, Lieder, Bücher, Filme zur Station
+	erleben?: Erlebnis[];
+};
+
+const stationen: Station[] = [
+	{
+		jahr: '1815',
+		titel: 'Die frühen Wurzeln',
+		text: 'Nach den Befreiungskriegen gegen Napoleon entstehen studentische Bewegungen, die sich für nationale Einheit und politische Freiheiten einsetzen. Schwarz, Rot und Gold werden zu ihren Erkennungsfarben.',
+		mehr: [
+			'Die 1815 in Jena gegründete Urburschenschaft führte eine Fahne in Rot und Schwarz mit goldenem Eichenzweig und goldenen Fransen. Aus diesen Farben entwickelte sich die Farbfolge Schwarz-Rot-Gold.',
+			'Woher die Farben genau stammen, wird unterschiedlich erklärt. Oft wird auf das Lützowsche Freikorps verwiesen, in dem viele Studenten gekämpft hatten: schwarze Uniformen mit roten Aufschlägen und goldfarbenen Knöpfen.',
+		],
+		bild: {
+			src: urburschenschaft,
+			alt: 'Eine Fahne mit breiten roten Streifen links und rechts und einem schwarzen Streifen in der Mitte, darauf ein goldener Eichenzweig, unten goldene Fransen.',
+			unterschrift: 'Die Fahne der Jenaer Urburschenschaft von 1816',
+			nachweis: 'Foto: Waschl87',
+			lizenz: lizenz.ccBySa30,
+			quelle: 'https://commons.wikimedia.org/wiki/File:Fahne_der_Urburschenschaft.JPG',
+		},
+	},
+	{
+		jahr: '1832',
+		titel: 'Das Hambacher Fest',
+		text: 'Zehntausende ziehen auf das Hambacher Schloss in der Pfalz und fordern Freiheit, Bürgerrechte und nationale Einheit. Schwarz-Rot-Gold wird weithin sichtbar zum Symbol dieser Forderungen.',
+		mehr: [
+			'Das Hambacher Fest gilt als Meilenstein der deutschen Demokratiegeschichte. Auch Frauen nahmen teil, zu einer Zeit, in der politische Mitbestimmung für sie kaum möglich war.',
+		],
+		bild: {
+			src: hambach,
+			alt: 'Eine große Menschenmenge zieht mit schwarz-rot-goldenen Fahnen einen bewaldeten Hügel hinauf zur Ruine des Hambacher Schlosses, auf deren Turm ebenfalls eine Fahne weht.',
+			unterschrift: '„Zug auf das Schloss Hambach am 27. May 1832“, zeitgenössische Darstellung',
+			nachweis: 'Unbekannter Künstler, 1832',
+			lizenz: lizenz.gemeinfrei,
+			quelle: 'https://commons.wikimedia.org/wiki/File:Zug_auf_das_Schloss_Hambach_1832_Deutschland.png',
+		},
+		erleben: [
+			{
+				art: 'Ort',
+				titel: 'Hambacher Schloss in Neustadt an der Weinstraße',
+				text: 'Hier oben fand das Fest statt. Das Schloss gilt als Wiege der deutschen Demokratie. Die Ausstellung „Hinauf, hinauf zum Schloss!“ erzählt das Fest von 1832 und zeigt die originale Hauptfahne mit der Aufschrift „Deutschlands Wiedergeburt“, die beim Zug auf das Schloss vorangetragen wurde. Der zweite Teil „Farbe bekennen!“ schlägt mit Mitmachstationen den Bogen zu heute: Meinungsfreiheit, Pressefreiheit, Schwarz-Rot-Gold und Europa. Das Schloss ist das ganze Jahr geöffnet. Für die Ausstellung sollte man 60 bis 90 Minuten einplanen, dazu etwa eine halbe Stunde für den Park mit weitem Blick über die Rheinebene. Vom Hauptbahnhof Neustadt fährt alle halbe Stunde der Bus 502 bis kurz unter das Schloss.',
+				links: [
+					{ text: 'Die Ausstellung', url: 'https://hambacher-schloss.de/besuchen/ausstellung/' },
+					{ text: 'Öffnungszeiten, Preise und Anfahrt', url: 'https://hambacher-schloss.de/besuchen/ihr-besuch/' },
+				],
+			},
+			{
+				art: 'Für Schulen',
+				titel: 'Führungen und Workshops für Schulklassen',
+				text: 'Das Hambacher Schloss bietet Führungen und Workshops für Schulklassen an, die Bildungsangebote für Schulen sind kostenfrei.',
+				links: [{ text: 'Angebote für Schulen', url: 'https://hambacher-schloss.de/besuchen/fuehrungen-und-workshops/schulen/' }],
+			},
+			{
+				art: 'Lied',
+				titel: '„Hinauf, Patrioten! zum Schloss, zum Schloss!“',
+				text: 'Philipp Jakob Siebenpfeiffer, einer der beiden Einlader, schrieb für das Fest das Lied „Der Deutschen Mai“. Seine erste Zeile gab der heutigen Ausstellung ihren Namen.',
+				links: [],
+			},
+			{
+				art: 'Film',
+				titel: '„Deutschlands Wiedergeburt“: Das Hambacher Fest',
+				text: 'Rund zehn Minuten, kurz und verständlich erklärt, aus der Reihe „MrWissen2go Geschichte“ von Terra X (ZDF). Gut geeignet als Einstieg, auch für Schulklassen.',
+				links: [{ text: 'Auf YouTube ansehen', url: 'https://www.youtube.com/watch?v=EDfWXZR3J2Y' }],
+			},
+			{
+				art: 'Mehr dazu',
+				titel: 'Orte der deutschen Demokratiegeschichte',
+				text: 'Die Stiftung Orte der deutschen Demokratiegeschichte stellt das Hambacher Schloss mit einem eigenen Eintrag vor.',
+				links: [{ text: 'Eintrag Hambacher Schloss', url: 'https://www.demokratie-geschichte.de/karte/2334/' }],
+			},
+		],
+	},
+	{
+		jahr: '1848',
+		titel: 'Revolution und Nationalversammlung',
+		text: 'Die Revolution von 1848/49 fordert Grundrechte und eine gesamtdeutsche Verfassung. Die Frankfurter Nationalversammlung tagt unter Schwarz-Rot-Gold.',
+		mehr: [
+			'Am 9. März 1848 erklärt der Bundestag des Deutschen Bundes Schwarz-Rot-Gold zu den Bundesfarben. Die Nationalversammlung in der Frankfurter Paulskirche versucht anschließend, einen demokratisch verfassten deutschen Nationalstaat zu schaffen.',
+			'Über dem Präsidium hing das Gemälde „Germania“ mit einer schwarz-rot-goldenen Fahne. Die Revolution scheitert politisch, aber ihre Ideen und ihre Grundrechte wirken weiter, bis in unser Grundgesetz.',
+		],
+		bild: {
+			src: paulskirche,
+			alt: 'Blick in den runden Saal der Paulskirche: Abgeordnete in Sitzreihen, Zuschauer auf der Galerie, überall schwarz-rot-goldene Fahnen und Girlanden, über dem Rednerpult ein großes Gemälde der Germania.',
+			unterschrift: 'Die Nationalversammlung in der Frankfurter Paulskirche',
+			nachweis: 'Lithografie nach einer zeitgenössischen Zeichnung, 1848',
+			lizenz: lizenz.gemeinfrei,
+			quelle: 'https://commons.wikimedia.org/wiki/File:Zeitgen%C3%B6ssige_Lithografie_der_Nationalversammlung_in_der_Paulskirche.jpg',
+		},
+		bildMehr: {
+			src: germania,
+			alt: 'Gemälde einer Frauengestalt mit Eichenlaubkranz, in der linken Hand eine schwarz-rot-goldene Fahne, in der rechten ein Schwert, zu ihren Füßen eine gesprengte Kette.',
+			unterschrift: '„Germania“, das Gemälde aus der Paulskirche',
+			nachweis: 'Philipp Veit (zugeschrieben), 1848, Germanisches Nationalmuseum Nürnberg',
+			lizenz: lizenz.gemeinfrei,
+			quelle: 'https://commons.wikimedia.org/wiki/File:Image_Germania_(painting).jpg',
+			hoch: true,
+		},
+	},
+	{
+		jahr: '1919',
+		titel: 'Die Weimarer Republik',
+		text: 'Nach dem Ende des Kaiserreichs wird Schwarz-Rot-Gold zur Flagge der ersten parlamentarischen Demokratie Deutschlands.',
+		mehr: [
+			'Artikel 3 der Weimarer Reichsverfassung bestimmt Schwarz-Rot-Gold zu den Reichsfarben. Die Flagge ist politisch umkämpft: Anhänger der Republik verteidigen sie, antidemokratische Kräfte lehnen sie ab und verspotten sie.',
+			'Zum Schutz der Republik gründet sich 1924 das „Reichsbanner Schwarz-Rot-Gold“, ein Verband von Demokraten aus mehreren Parteien.',
+			'Das Reichsbanner gibt es bis heute: 1953 wurde es als eingetragener Verein „Reichsbanner Schwarz-Rot-Gold, Bund aktiver Demokraten“ neu gegründet und setzt sich für politische Bildung und die Verteidigung der Demokratie ein. Im Mai 2026 hat es Verteidigungsminister Boris Pistorius zum Ehrenmitglied ernannt.',
+		],
+		bild: {
+			src: reichsbanner,
+			alt: 'Schwarz-Weiß-Foto: Lange Reihen von Männern in Uniform marschieren auf einer Straße vor dem Brandenburger Tor, an den Seiten Zuschauer und hohe Fahnenmasten.',
+			unterschrift: 'Das Reichsbanner Schwarz-Rot-Gold am Verfassungstag, 11. August 1929, vor dem Brandenburger Tor',
+			nachweis: 'Bundesarchiv, Bild 102-08216, Fotograf unbekannt',
+			lizenz: lizenz.ccBySa30De,
+			quelle: 'https://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_102-08216,_Berlin,_Reichsbanner_vor_dem_Brandenburger_Tor.jpg',
+		},
+		bildMehr: {
+			src: reichsbannerfahne,
+			alt: 'Rote Fahne mit schwarzem Rand, darauf in goldener Schrift „Reichsbanner Schwarz-Rot-Gold, Ortsgruppe Schiltach i/Schwarzwald“ und ein Stadtwappen.',
+			unterschrift: 'Fahne der Reichsbanner-Ortsgruppe Schiltach im Schwarzwald, heute im Museum am Markt in Schiltach',
+			nachweis: 'Foto: Mancipio2',
+			lizenz: lizenz.ccBySa30De,
+			quelle: 'https://commons.wikimedia.org/wiki/File:Museum_am_Markt_Schiltach_Reichsbannerfahne.jpg',
+		},
+	},
+	{
+		jahr: '1933–1935',
+		titel: 'Die Nationalsozialisten verdrängen die Republikflagge',
+		text: 'Nach ihrer Machtübernahme beseitigen die Nationalsozialisten Schwarz-Rot-Gold als staatliches Symbol. Die Hakenkreuzflagge wird schließlich zur alleinigen Nationalflagge.',
+		mehr: [
+			'Bereits im März 1933 ordnet das NS-Regime die gemeinsame Beflaggung mit Schwarz-Weiß-Rot und der Hakenkreuzflagge an. 1935 wird die Hakenkreuzflagge durch das Reichsflaggengesetz zur Reichs- und Nationalflagge erklärt.',
+			'Schwarz-Rot-Gold steht für die Republik, die die Nationalsozialisten bekämpft und zerstört haben.',
+		],
+	},
+	{
+		jahr: '1949',
+		titel: 'Die Flagge im Grundgesetz',
+		text: 'Mit der Gründung der Bundesrepublik kehrt Schwarz-Rot-Gold zurück. Das Grundgesetz legt die Bundesflagge ausdrücklich fest.',
+		mehr: [
+			'Heute steht in Artikel 22 Absatz 2 des Grundgesetzes: „Die Bundesflagge ist schwarz-rot-gold.“ 1949 war es noch Artikel 22 allein; der Satz über Berlin als Hauptstadt kam 2006 als Absatz 1 hinzu.',
+			'Auch die DDR verwendet ab 1949 Schwarz-Rot-Gold, ergänzt ihre Flagge aber 1959 um das Staatswappen.',
+		],
+		bild: {
+			src: grundgesetz,
+			alt: 'Handschriftlicher Text in Schönschrift: die Feststellung, dass das Grundgesetz angenommen und verkündet ist, datiert Bonn am Rhein, den 23. Mai 1949.',
+			unterschrift: 'Die Verkündungsformel des Grundgesetzes vom 23. Mai 1949',
+			nachweis: 'Parlamentarischer Rat, 1949',
+			lizenz: lizenz.gemeinfrei,
+			quelle: 'https://commons.wikimedia.org/wiki/File:Grundgesetz_Verk%C3%BCndungsformel.jpg',
+		},
+	},
+	{
+		jahr: '1990',
+		titel: 'Die Flagge des vereinten Deutschlands',
+		text: 'Mit der deutschen Wiedervereinigung wird Schwarz-Rot-Gold zur gemeinsamen Flagge des vereinten Deutschlands.',
+		mehr: [
+			'Seit dem 3. Oktober 1990 ist die schwarz-rot-goldene Bundesflagge das gemeinsame staatliche Symbol aller Bundesländer. Sie steht für unsere freiheitliche und demokratische Verfassungsordnung.',
+		],
+		bild: {
+			src: reichstag,
+			alt: 'Farbfoto: Viele Menschen vor dem Reichstagsgebäude in Berlin, davor Fahnenmasten mit der Bundesflagge und den Flaggen der Bundesländer.',
+			unterschrift: 'Flaggen vor dem Reichstag am 3. Oktober 1990',
+			nachweis: 'Bundesarchiv, Bild 183-1990-1003-417, Foto: Thomas Uhlemann',
+			lizenz: lizenz.ccBySa30De,
+			quelle: 'https://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_183-1990-1003-417,_Berlin,_Flaggen_vor_dem_Reichstag.jpg',
+		},
+	},
+];
+
+// „vor … Jahren“: beim Bauen der Seite berechnet und im Browser mit dem aktuellen Jahr nachgeführt,
+// damit es auch stimmt, wenn die Seite länger nicht neu veröffentlicht wurde. Bei „1933–1935“ zählt das erste Jahr.
+const vorJahren = (jahr: string) => new Date().getFullYear() - parseInt(jahr, 10);
+
+const alleBilder = [
+	...stationen.flatMap((s) => [s.bild, s.bildMehr].filter((b): b is Bild => Boolean(b))),
+	...vertiefungsBilder,
+];
+---
+
+<Layout
+	title="Kleine Geschichte unserer Flagge – D wie Demokratie"
+	description="Von der Freiheitsbewegung bis zum Grundgesetz: die Geschichte von Schwarz-Rot-Gold in sieben Stationen."
+>
+	<h1>Kleine Geschichte unserer Flagge</h1>
+
+	<p class="lead">
+		Unsere Farben Schwarz-Rot-Gold erzählen von Menschen, die für die Einheit Deutschlands, für ihre und auch unsere
+		Freiheit, Gleichberechtigung und demokratische Mitbestimmung gekämpft haben. Viele von ihnen haben dafür mit ihrem
+		Leben bezahlt.
+	</p>
+
+	<p>
+		Unsere Nationalfarben haben eine wechselvolle Geschichte. Ihre Bedeutung als Symbol der Demokratie reicht weit
+		ins 19. Jahrhundert zurück. Entdecken Sie die wichtigsten Stationen.
+	</p>
+
+	<ol class="zeitstrahl">
+		{stationen.map((s) => (
+			<li class="station">
+				<p class="jahr">{s.jahr} <span class="vor" data-jahr={parseInt(s.jahr, 10)}>– vor {vorJahren(s.jahr)} Jahren</span></p>
+				<h2>{s.titel}</h2>
+				<p>{s.text}</p>
+				{s.bild && (
+					<figure>
+						<Image src={s.bild.src} alt={s.bild.alt} widths={[600, 1200]} sizes="(max-width: 680px) 100vw, 600px" />
+						<figcaption>{s.bild.unterschrift}. <span class="nachweis">{s.bild.nachweis}, {s.bild.lizenz.text}</span></figcaption>
+					</figure>
+				)}
+				<details>
+					<summary>Mehr erfahren</summary>
+					{s.mehr.map((absatz) => <p>{absatz}</p>)}
+					{s.bildMehr && (
+						<figure>
+							<Image src={s.bildMehr.src} alt={s.bildMehr.alt} widths={[400, 800]} sizes="(max-width: 680px) 100vw, 600px" class={s.bildMehr.hoch ? 'hoch' : undefined} />
+							<figcaption>{s.bildMehr.unterschrift}. <span class="nachweis">{s.bildMehr.nachweis}, {s.bildMehr.lizenz.text}</span></figcaption>
+						</figure>
+					)}
+					{vertiefung[s.jahr] && (
+						<details class="vertiefung">
+							<summary>Noch mehr erfahren</summary>
+							<div class="vertiefung-inhalt">
+								{vertiefung[s.jahr].map((b) => (
+									b.art === 'titel' ? <h3>{b.text}</h3>
+									: b.art === 'absatz' ? <p>{b.text}</p>
+									: b.art === 'zitat' ? (
+										<blockquote>
+											<p>„{b.text}“</p>
+											<footer>{b.herkunft}</footer>
+										</blockquote>
+									)
+									: b.art === 'bild' ? (
+										<figure>
+											<Image src={b.bild.src} alt={b.bild.alt} widths={[600, 1200]} sizes="(max-width: 680px) 100vw, 600px" />
+											<figcaption>{b.bild.unterschrift}. <span class="nachweis">{b.bild.nachweis}, {b.bild.lizenz.text}</span></figcaption>
+										</figure>
+									)
+									: (
+										<div class="flaggen">
+											{b.flaggen.map((f) => (
+												<figure>
+													<Image src={f.src} alt={f.alt} widths={[240, 480]} sizes="200px" />
+													<figcaption><strong>{f.name}</strong><br />{f.zeit}</figcaption>
+												</figure>
+											))}
+										</div>
+									)
+								))}
+								<p class="zuklappen-hinweis">Quellen der Bilder unten unter „Bildnachweise“.</p>
+							</div>
+						</details>
+					)}
+					{s.erleben && (
+						<details class="erleben">
+							<summary>Wo kann ich das erleben?</summary>
+							<ul class="tipps">
+								{s.erleben.map((t) => (
+									<li>
+										<p class="tipp-art">{t.art}</p>
+										<h3>{t.titel}</h3>
+										<p>{t.text}</p>
+										{t.links.length > 0 && (
+											<p class="tipp-links">
+												{t.links.map((l) => <a href={l.url} target="_blank" rel="noopener">{l.text}</a>)}
+											</p>
+										)}
+									</li>
+								))}
+							</ul>
+						</details>
+					)}
+				</details>
+			</li>
+		))}
+	</ol>
+
+	<section class="schluss">
+		<h2>Unsere Flagge gehört uns allen.</h2>
+		<p>
+			Schwarz-Rot-Gold ist ein Teil unserer Demokratiegeschichte. Wir überlassen diese Farben nicht denen, die
+			Freiheit und Demokratie infrage stellen. Wir zeigen Flagge für unsere Demokratie.
+		</p>
+		<p><a href="/#motive">Zu unseren Motiven</a></p>
+	</section>
+
+	<section class="nachweise">
+		<h2>Quellen und weiterführende Informationen</h2>
+		<p>Die Darstellung ist bewusst kurz gehalten. Zum Weiterlesen:</p>
+		<ul>
+			<li><a href="https://de.wikipedia.org/wiki/Schwarz-Rot-Gold" target="_blank" rel="noopener">Wikipedia: Schwarz-Rot-Gold</a></li>
+			<li><a href="https://de.wikipedia.org/wiki/Flagge_Deutschlands" target="_blank" rel="noopener">Wikipedia: Flagge Deutschlands</a></li>
+			<li><a href="https://www.gesetze-im-internet.de/gg/art_22.html" target="_blank" rel="noopener">Grundgesetz, Artikel 22</a></li>
+			<li><a href="https://www.demokratiegeschichten.de/flaggenkampf-in-der-weimarer-republik/" target="_blank" rel="noopener">Der Flaggenkampf in der Weimarer Republik</a></li>
+			<li><a href="https://www.reichsbanner.de/" target="_blank" rel="noopener">Reichsbanner Schwarz-Rot-Gold, Bund aktiver Demokraten e.V.</a></li>
+		</ul>
+
+		<h2>Bildnachweise</h2>
+		<p>Alle Bilder stammen von Wikimedia Commons.</p>
+		<ul>
+			{alleBilder.map((b) => (
+				<li>
+					{b.unterschrift}: {b.nachweis}, {b.lizenz.url ? <a href={b.lizenz.url} target="_blank" rel="noopener">{b.lizenz.text}</a> : b.lizenz.text},
+					{' '}<a href={b.quelle} target="_blank" rel="noopener">Quelle</a>
+				</li>
+			))}
+		</ul>
+	</section>
+</Layout>
+
+<script>
+	const jetzt = new Date().getFullYear();
+	for (const el of document.querySelectorAll<HTMLElement>('.vor')) {
+		el.textContent = `– vor ${jetzt - Number(el.dataset.jahr)} Jahren`;
+	}
+</script>
+
+<style>
+	h1 {
+		font-size: clamp(1.85rem, 7.5vw, 2.75rem);
+	}
+
+	.lead {
+		font-size: 1.3rem;
+	}
+
+	/* Zeitstrahl: senkrechter Streifen in Schwarz-Rot-Gold, jede Station ein Punkt darauf */
+	.zeitstrahl {
+		position: relative;
+		margin: 2.5em 0 0;
+		padding: 0 0 0 52px;
+		list-style: none;
+	}
+
+	.zeitstrahl::before {
+		content: '';
+		position: absolute;
+		top: 0.4em;
+		bottom: 0.4em;
+		left: 16px;
+		width: 4px;
+		background: linear-gradient(
+			to bottom,
+			var(--schwarz) 0 33.33%,
+			var(--rot) 33.33% 66.66%,
+			var(--gold) 66.66% 100%
+		);
+	}
+
+	.station {
+		position: relative;
+		margin-bottom: 3em;
+	}
+
+	/* Stationspunkt: goldener Kreis mit weißem Rand, Mitte genau auf dem Streifen (16px + 2px) */
+	.station::before {
+		content: '';
+		position: absolute;
+		top: 0.1em;
+		left: calc(-52px + 18px - 18px);
+		width: 28px;
+		height: 28px;
+		border: 4px solid #ffffff;
+		border-radius: 50%;
+		background: var(--gold);
+		box-shadow: 0 0 0 1px #c4c4c4;
+	}
+
+	.jahr {
+		margin: 0;
+		color: var(--rot);
+		font-weight: bold;
+		letter-spacing: 0.05em;
+	}
+
+	.vor {
+		color: var(--grau);
+		font-weight: normal;
+		letter-spacing: 0;
+	}
+
+	h2 {
+		margin: 0.1em 0 0.4em;
+		font-size: 1.4rem;
+	}
+
+	figure {
+		margin: 1em 0;
+	}
+
+	figure img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	/* Hochformat (Germania) nicht über die ganze Breite */
+	figure img.hoch {
+		max-width: 320px;
+	}
+
+	figcaption {
+		margin-top: 0.4em;
+		color: var(--grau);
+		font-size: 0.9rem;
+		line-height: 1.4;
+	}
+
+	.nachweis {
+		font-size: 0.8rem;
+	}
+
+	details {
+		margin-top: 0.6em;
+		padding-top: 0.6em;
+		border-top: 1px solid #e5e5e5;
+	}
+
+	summary {
+		font-weight: bold;
+		cursor: pointer;
+	}
+
+	@media (hover: hover) {
+		summary:hover {
+			color: var(--rot);
+		}
+	}
+
+	/* „Wo kann ich das erleben?“: direkt unter „Noch mehr erfahren“, gleich zurückhaltend */
+	.erleben {
+		margin-top: 0;
+	}
+
+	.tipps {
+		margin: 0.8em 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.tipps li + li {
+		margin-top: 1.2em;
+	}
+
+	.tipp-art {
+		margin: 0;
+		color: var(--grau);
+		font-size: 0.8rem;
+		font-weight: bold;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	.tipps h3 {
+		margin: 0.1em 0 0.3em;
+		font-size: 1.1rem;
+	}
+
+	.tipps p {
+		margin: 0;
+	}
+
+	.tipp-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.2em 1.2em;
+		margin-top: 0.4em !important;
+	}
+
+	.tipp-links a::after {
+		content: ' ↗';
+	}
+
+	/* „Noch mehr erfahren“: sieht aus wie „Mehr erfahren“ (Linie darüber, fette Zeile) */
+	.vertiefung {
+		margin-top: 1em;
+	}
+
+	.vertiefung h3 {
+		margin: 1.4em 0 0.3em;
+		font-size: 1.1rem;
+	}
+
+	.vertiefung h3:first-child {
+		margin-top: 0.8em;
+	}
+
+	.vertiefung h3 + p {
+		margin-top: 0;
+	}
+
+	blockquote {
+		margin: 1.2em 0;
+		padding: 0.2em 0 0.2em 1em;
+		border-left: 3px solid var(--rot);
+		font-size: 1.15rem;
+		font-style: italic;
+	}
+
+	blockquote p {
+		margin: 0;
+	}
+
+	blockquote footer {
+		margin-top: 0.3em;
+		color: var(--grau);
+		font-size: 0.85rem;
+		font-style: normal;
+	}
+
+	/* mehrere Flaggen nebeneinander, auf dem Handy umbrechend */
+	.flaggen {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1em 1.5em;
+		margin: 1em 0;
+	}
+
+	.flaggen figure {
+		width: 150px;
+		margin: 0;
+	}
+
+	.flaggen img {
+		border: 1px solid #d0d0d0;
+	}
+
+	.flaggen figcaption {
+		font-size: 0.85rem;
+	}
+
+	.zuklappen-hinweis {
+		color: var(--grau);
+		font-size: 0.8rem;
+	}
+
+	.schluss {
+		margin-top: 1em;
+		padding: 1.5em;
+		background: var(--schwarz);
+		color: #ffffff;
+	}
+
+	.schluss h2 {
+		color: var(--gold);
+	}
+
+	.schluss a {
+		color: #ffffff;
+	}
+
+	.schluss a:hover {
+		color: var(--gold);
+	}
+
+	.nachweise {
+		margin-top: 2.5em;
+		font-size: 0.95rem;
+	}
+
+	.nachweise h2 {
+		margin-top: 1.5em;
+		font-size: 1.2rem;
+	}
+
+	.nachweise li + li {
+		margin-top: 0.3em;
+	}
+</style>
