@@ -252,6 +252,10 @@ export const vertiefung: Record<string, Baustein[]> = {
 		},
 		{
 			art: 'absatz',
+			text: 'Vielerorts verbrennen Nationalsozialisten die schwarz-rot-goldenen Fahnen öffentlich, als Zeichen dafür, dass die Republik am Ende ist. So etwa am 13. März 1933 in Bornhöved in Schleswig-Holstein, worüber am nächsten Tag die Lokalzeitung berichtet.',
+		},
+		{
+			art: 'absatz',
 			text: 'Am 15. September 1935 beschließt der Reichstag auf dem Parteitag in Nürnberg das Reichsflaggengesetz, am selben Tag wie die antisemitischen „Nürnberger Gesetze“. Die Hakenkreuzflagge wird alleinige Reichs- und Nationalflagge.',
 		},
 		{ art: 'titel', text: 'Im Verborgenen' },
