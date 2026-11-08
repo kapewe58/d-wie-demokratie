@@ -164,6 +164,14 @@ import Layout from '../layouts/Layout.astro';
 				});
 
 				innen.addEventListener('beforematch', oeffnen);
+
+				// …/haeufige-fragen/#wer und #lebenslauf öffnen den Lebenslauf gleich mit
+				function perAdresse() {
+					if (['#wer', '#lebenslauf'].includes(location.hash) &&knopf.getAttribute('aria-expanded') !== 'true') oeffnen();
+				}
+				addEventListener('hashchange', perAdresse);
+				addEventListener('pageshow', perAdresse);
+				perAdresse();
 			})();
 		</script>
 		</details>
@@ -205,11 +213,13 @@ import Layout from '../layouts/Layout.astro';
 	</div>
 
 	<script>
-		// #warum, #umwelt usw. in der Adresse klappen die passende Frage auf
+		// #warum, #umwelt usw. in der Adresse klappen die passende Frage auf,
+		// eine Sprungmarke innerhalb einer Frage (#lebenslauf) die Frage, in der sie steht
 		function aufklappen() {
 			const ziel = location.hash && document.querySelector(location.hash);
-			if (ziel instanceof HTMLDetailsElement && !ziel.open) {
-				ziel.open = true;
+			const frage = ziel && ziel.closest('details');
+			if (frage && !frage.open) {
+				frage.open = true;
 				ziel.scrollIntoView();
 			}
 		}
