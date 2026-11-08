@@ -131,7 +131,7 @@ export const vertiefung: Record<string, Baustein[]> = {
 		},
 		{
 			art: 'absatz',
-			text: 'Das Fest hat auch eine dunkle Seite: Am Abend verbrennen einige Teilnehmer Bücher, die sie für rückschrittlich halten, darunter eine Schrift des jüdischen Autors Saul Ascher, der vor übersteigertem Nationalismus gewarnt hatte. Freiheitsbegeisterung und Ausgrenzung lagen damals nah beieinander.',
+			text: 'Das Fest hat auch eine dunkle Seite: Am Abend verbrennen einige Teilnehmer Papierbündel, beschriftet mit den Titeln von Büchern, die sie für rückschrittlich halten, darunter eine Schrift des jüdischen Autors Saul Ascher, der vor übersteigertem Nationalismus gewarnt hatte. Freiheitsbegeisterung und Ausgrenzung lagen damals nah beieinander.',
 		},
 		{ art: 'titel', text: 'Verboten' },
 		{
