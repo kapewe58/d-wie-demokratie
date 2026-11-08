@@ -127,16 +127,12 @@ export const vertiefung: Record<string, Baustein[]> = {
 		{ art: 'titel', text: 'Das Wartburgfest' },
 		{
 			art: 'absatz',
-			text: 'Am 18. Oktober 1817 treffen sich rund 500 Studenten auf der Wartburg bei Eisenach. Sie feiern 300 Jahre Reformation und den vierten Jahrestag der Völkerschlacht bei Leipzig und fordern Einheit und Verfassung.',
-		},
-		{
-			art: 'absatz',
-			text: 'Das Fest hat auch eine dunkle Seite: Am Abend verbrennen einige Teilnehmer Papierbündel, beschriftet mit den Titeln von Büchern, die sie für rückschrittlich halten, darunter eine Schrift des jüdischen Autors Saul Ascher, der vor übersteigertem Nationalismus gewarnt hatte. Freiheitsbegeisterung und Ausgrenzung lagen damals nah beieinander.',
+			text: 'Am 18. Oktober 1817 treffen sich rund 500 Studenten auf der Wartburg bei Eisenach. Sie feiern 300 Jahre Reformation und den vierten Jahrestag der Völkerschlacht bei Leipzig, bei der Preußen, Österreich, Russland und Schweden im Oktober 1813 Napoleon entscheidend besiegten. Viele der Studenten hatten selbst in den Befreiungskriegen gegen ihn gekämpft. Sie fordern Einheit und Verfassung.',
 		},
 		{ art: 'titel', text: 'Verboten' },
 		{
 			art: 'absatz',
-			text: '1819 ermordet der Burschenschafter Karl Ludwig Sand den Schriftsteller August von Kotzebue. Der österreichische Staatskanzler Metternich nutzt die Tat: Mit den Karlsbader Beschlüssen werden die Burschenschaften verboten, Zeitungen zensiert und die Universitäten überwacht. Schwarz-Rot-Gold wird zum Zeichen der Opposition, das man oft nur heimlich trägt.',
+			text: '1819 ermordet der Burschenschafter Karl Ludwig Sand den Schriftsteller August von Kotzebue. Kotzebue hatte die Burschenschaften verspottet und berichtete dem russischen Zaren über die Lage in Deutschland. Für Sand ist er deshalb ein Verräter. Der österreichische Staatskanzler Metternich nutzt die Tat: Mit den Karlsbader Beschlüssen werden die Burschenschaften verboten, Zeitungen zensiert und die Universitäten überwacht. Schwarz-Rot-Gold wird zum Zeichen der Opposition, das man oft nur heimlich trägt.',
 		},
 		{
 			art: 'zitat',
