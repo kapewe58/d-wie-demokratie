@@ -314,7 +314,7 @@ export const vertiefung: Record<string, Baustein[]> = {
 		},
 		{
 			art: 'absatz',
-			text: 'Am 9. November 1989 fällt die Mauer. Ein Jahr später ist Deutschland wiedervereinigt: In der Nacht zum 3. Oktober 1990 wird um Mitternacht vor dem Reichstag in Berlin eine große Bundesflagge gehisst, die „Fahne der Einheit“. Seitdem ist der 3. Oktober unser Nationalfeiertag.',
+			text: 'Am 9. November 1989 fällt die Mauer. Ein Jahr später ist Deutschland wiedervereinigt: In der Nacht zum 3. Oktober 1990 wird um Mitternacht vor dem Reichstag in Berlin eine große Bundesflagge gehisst, die „Flagge der Einheit“. Seitdem ist der 3. Oktober unser Nationalfeiertag.',
 		},
 		{ art: 'titel', text: 'Fröhlich Flagge zeigen' },
 		{
