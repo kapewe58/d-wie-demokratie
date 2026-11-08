@@ -105,7 +105,7 @@ import Layout from '../layouts/Layout.astro';
 
 		<p>
 			d-wie-demokratie.de ist bisher eine private Initiative von
-			<button type="button" class="name" aria-expanded="false" aria-controls="lebenslauf" hidden>Klaus P. Wolf</button><span class="name-text">Klaus P. Wolf</span>. Mitmacher sind willkommen.
+			<button type="button" class="name" aria-expanded="false" aria-controls="lebenslauf" hidden>Klaus P. Wolf</button><span class="name-text">Klaus P. Wolf</span>. Mitmacher <a href="/mitmachen/">werden gesucht</a>!
 		</p>
 
 		<!-- Lebenslauf mit Porträt: ohne JavaScript offen, sonst eingeklappt bis zum Klick auf den Namen -->
@@ -208,9 +208,14 @@ import Layout from '../layouts/Layout.astro';
 		// #warum, #umwelt usw. in der Adresse klappen die passende Frage auf
 		function aufklappen() {
 			const ziel = location.hash && document.querySelector(location.hash);
-			if (ziel instanceof HTMLDetailsElement) ziel.open = true;
+			if (ziel instanceof HTMLDetailsElement && !ziel.open) {
+				ziel.open = true;
+				ziel.scrollIntoView();
+			}
 		}
 		addEventListener('hashchange', aufklappen);
+		// Safari holt Seiten beim Zurückgehen aus dem Speicher, ohne das Skript neu auszuführen
+		addEventListener('pageshow', aufklappen);
 		aufklappen();
 	</script>
 
