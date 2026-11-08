@@ -32,6 +32,8 @@ const menueKlein = [
 	{ href: '/impressum/', text: 'Impressum' },
 	{ href: '/datenschutz/', text: 'Datenschutz' },
 ];
+// Seite ohne eigenen Reiter: dann trägt das Menü ☰ den roten Balken
+const ohneReiter = !reiter.some((r) => (r === '/' ? pfad === '/' : pfad.startsWith(r)));
 ---
 
 <!doctype html>
@@ -149,7 +151,7 @@ const menueKlein = [
 				</nav>
 
 				<!-- Menü mit allen Seiten; <details> klappt auch ohne JavaScript auf -->
-				<details class="menue">
+				<details class:list={['menue', { hier: ohneReiter }]}>
 					<summary aria-label="Menü">
 						<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
 							<path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
@@ -430,9 +432,17 @@ const menueKlein = [
 		display: flex;
 		align-items: center;
 		padding: 0 0.2em;
+		/* oben und unten gleich dick, damit die Striche mittig bleiben; unten wie bei den Reitern rot, wenn die Seite nur im Menü steht */
+		border-top: 3px solid transparent;
+		border-bottom: 3px solid transparent;
 		color: var(--grau);
 		cursor: pointer;
 		list-style: none;
+	}
+
+	.menue.hier summary {
+		border-bottom-color: var(--rot);
+		color: var(--text);
 	}
 
 	.menue summary::-webkit-details-marker {
