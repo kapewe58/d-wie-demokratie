@@ -322,12 +322,6 @@ export const vertiefung: Record<string, Baustein[]> = {
 			text: 'Daran knüpfen wir an: Schwarz-Rot-Gold verbindet. Die Farben stehen für Freiheit, Einheit und Demokratie, für alle, die hier leben.',
 		},
 	],
-	'2026': [
-		{
-			art: 'absatz',
-			text: 'Klopp sagt dazu auch: „Positiver Patriotismus? Gerne!“ Gemeint ist ein Stolz, der niemanden ausschließt, auf ein Land, in dem Menschen unterschiedlicher Herkunft, Religion und Überzeugung frei zusammenleben.',
-		},
-	],
 };
 
 // alle Bilder und Flaggen der Vertiefungen, für die Bildnachweise

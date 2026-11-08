@@ -18,9 +18,9 @@ import fanmeile from '../assets/flagge/2006-fanmeile.jpg';
 
 // ein Tipp unter „Wo kann ich das erleben?“; art ist die kleine graue Überschrift (Ort, Für Schulen, Lied …)
 type Erlebnis = {
-	art: string;
-	titel: string;
-	text: string;
+	art?: string;
+	titel?: string;
+	text?: string;
 	links: { text: string; url: string }[];
 };
 
@@ -34,6 +34,8 @@ type Station = {
 	bildMehr?: Bild;
 	// „Wo kann ich das erleben?“: Orte, Lieder, Bücher, Filme zur Station
 	erleben?: Erlebnis[];
+	// true: „Mehr erfahren“, „Noch mehr erfahren“ und „Wo kann ich das erleben?“ stehen offen da, ohne Ausklapplink
+	offen?: boolean;
 };
 
 const stationen: Station[] = [
@@ -480,12 +482,13 @@ const stationen: Station[] = [
 	{
 		jahr: '2026',
 		titel: 'Wir holen uns die Fahne zurück',
-		text: 'Immer wieder versuchen Rechtsextreme, Schwarz-Rot-Gold für sich zu vereinnahmen. Doch immer mehr Menschen halten dagegen. Am 17. September 2026 sagt der neue Bundestrainer Jürgen Klopp bei seiner ersten Kaderbekanntgabe: „Ich würde mir oder uns gerne die Fahne zurückholen.“',
+		offen: true,
+		text: 'Immer wieder versuchen Rechtsextreme, Schwarz-Rot-Gold für sich zu vereinnahmen. Doch immer mehr Menschen halten dagegen. Am 17. September 2026 setzt der neue Bundestrainer Jürgen Klopp bei seiner ersten Kaderbekanntgabe ein Zeichen.',
 		mehr: [
-			'Klopp trägt dabei eine Kappe in Schwarz-Rot-Gold mit der Aufschrift „Einer von 83 Millionen“. Gefragt nach ihrer Botschaft, sagt er:',
+			'Er trägt eine Kappe mit einem Emblem in Schwarz-Rot-Gold und sagt:',
 			{
 				zitat: 'Ich würde mir oder uns gerne die Fahne zurückholen. Ich möchte, dass, wenn man sie schwingt, niemand denkt: Was ist mit dir nicht in Ordnung?',
-				herkunft: 'Jürgen Klopp bei seiner ersten Kaderbekanntgabe als Bundestrainer, 17. September 2026',
+				herkunft: 'Jürgen Klopp, Bundestrainer',
 			},
 		],
 		bild: {
@@ -498,16 +501,8 @@ const stationen: Station[] = [
 		},
 		erleben: [
 			{
-				art: 'Video',
 				titel: 'Die Pressekonferenz im Original',
-				text: 'Die ganze Kaderbekanntgabe vom 17. September 2026 auf dem YouTube-Kanal von phoenix, dem Ereignis- und Dokumentationskanal von ARD und ZDF. Klopps Worte zur Fahne kommen ab Minute 17:32, der Link springt direkt dorthin.',
 				links: [{ text: 'Auf YouTube ansehen (ab 17:32)', url: 'https://www.youtube.com/watch?v=_jfi8T6pU0I&t=1052s' }],
-			},
-			{
-				art: 'Mitmachen',
-				titel: 'Zeigen Sie Flagge',
-				text: 'Holen Sie sich die Fahne mit uns zurück: Laden Sie unsere Motive in Schwarz-Rot-Gold kostenlos herunter oder bestellen Sie sie im Shop, als Aufkleber für Ihr Auto oder Ihren Laptop, auf T-Shirts, Tassen und vielem mehr.',
-				links: [{ text: 'Zu unseren Motiven', url: '/#motive' }],
 			},
 		],
 	},
@@ -552,7 +547,9 @@ const alleBilder = [
 	</nav>
 
 	<ol class="zeitstrahl">
-		{stationen.map((s) => (
+		{stationen.map((s) => {
+			const Mehr = s.offen ? 'div' : 'details';
+			return (
 			<li class="station" id={s.jahr.slice(0, 4)}>
 				<p class="jahr">{s.jahr} <span class="vor" data-jahr={parseInt(s.jahr, 10)}>{vorText(vorJahren(s.jahr))}</span></p>
 				<h2>{s.titel}</h2>
@@ -563,8 +560,8 @@ const alleBilder = [
 						<figcaption>{s.bild.unterschrift}. <span class="nachweis">{s.bild.nachweis}, {s.bild.lizenz.text}</span></figcaption>
 					</figure>
 				)}
-				<details>
-					<summary>Mehr erfahren</summary>
+				<Mehr class="mehr">
+					{!s.offen && <summary>Mehr erfahren</summary>}
 					{s.mehr.map((absatz) =>
 						typeof absatz === 'string' ? <p>{absatz}</p> : (
 							<blockquote>
@@ -580,8 +577,8 @@ const alleBilder = [
 						</figure>
 					)}
 					{vertiefung[s.jahr] && (
-						<details class="vertiefung">
-							<summary>Noch mehr erfahren</summary>
+						<Mehr class="vertiefung">
+							{!s.offen && <summary>Noch mehr erfahren</summary>}
 							<div class="vertiefung-inhalt">
 								{vertiefung[s.jahr].map((b) => (
 									b.art === 'titel' ? <h3>{b.text}</h3>
@@ -609,19 +606,21 @@ const alleBilder = [
 										</div>
 									)
 								))}
-								<p class="zuklappen-hinweis">Quellen der Bilder unten unter „Bildnachweise“.</p>
+								{vertiefung[s.jahr].some((b) => b.art === 'bild' || b.art === 'flaggen') && (
+									<p class="zuklappen-hinweis">Quellen der Bilder unten unter „Bildnachweise“.</p>
+								)}
 							</div>
-						</details>
+						</Mehr>
 					)}
 					{s.erleben && (
-						<details class="erleben">
-							<summary>Wo kann ich das erleben?</summary>
+						<Mehr class="erleben">
+							{!s.offen && <summary>Wo kann ich das erleben?</summary>}
 							<ul class="tipps">
 								{s.erleben.map((t) => (
 									<li>
-										<p class="tipp-art">{t.art}</p>
-										<h3>{t.titel}</h3>
-										<p>{t.text}</p>
+										{t.art && <p class="tipp-art">{t.art}</p>}
+										{t.titel && <h3>{t.titel}</h3>}
+										{t.text && <p>{t.text}</p>}
 										{t.links.length > 0 && (
 											<p class="tipp-links">
 												{t.links.map((l) => (l.url.startsWith('/') ? <a href={l.url}>{l.text}</a> : <a href={l.url} target="_blank" rel="noopener">{l.text}</a>))}
@@ -630,18 +629,19 @@ const alleBilder = [
 									</li>
 								))}
 							</ul>
-						</details>
+						</Mehr>
 					)}
-				</details>
+				</Mehr>
 			</li>
-		))}
+			);
+		})}
 	</ol>
 
 	<section class="schluss">
-		<h2>Unsere Flagge gehört uns allen.</h2>
+		<h2>Holen wir uns die Fahne zurück</h2>
 		<p>
-			Schwarz-Rot-Gold ist ein Teil unserer Demokratiegeschichte. Wir überlassen diese Farben nicht denen, die
-			Freiheit und Demokratie infrage stellen. Wir zeigen Flagge für unsere Demokratie.
+			Laden Sie unsere Motive in Schwarz-Rot-Gold kostenlos herunter oder bestellen Sie sie im Shop, als Aufkleber
+			für Ihr Auto oder Ihren Laptop, auf T-Shirts, Tassen und vielem mehr.
 		</p>
 		<p><a href="/#motive">Zu unseren Motiven</a></p>
 	</section>
