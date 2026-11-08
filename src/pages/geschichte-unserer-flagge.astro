@@ -28,7 +28,8 @@ type Station = {
 	jahr: string;
 	titel: string;
 	text: string;
-	mehr: string[];
+	// Absätze für „Mehr erfahren“; ein Zitat wird wie unter „Noch mehr erfahren“ als Zitatblock gesetzt
+	mehr: (string | { zitat: string; herkunft: string })[];
 	bild?: Bild;
 	bildMehr?: Bild;
 	// „Wo kann ich das erleben?“: Orte, Lieder, Bücher, Filme zur Station
@@ -481,8 +482,11 @@ const stationen: Station[] = [
 		titel: 'Wir holen uns die Fahne zurück',
 		text: 'Immer wieder versuchen Rechtsextreme, Schwarz-Rot-Gold für sich zu vereinnahmen. Doch immer mehr Menschen halten dagegen. Am 17. September 2026 sagt der neue Bundestrainer Jürgen Klopp bei seiner ersten Kaderbekanntgabe: „Ich würde mir oder uns gerne die Fahne zurückholen.“',
 		mehr: [
-			'Klopp trägt dabei eine Kappe in Schwarz-Rot-Gold mit der Aufschrift „Einer von 83 Millionen“. Gefragt nach ihrer Botschaft, sagt er: „Ich möchte, dass, wenn man sie schwingt, niemand denkt: Was ist mit dir nicht in Ordnung?“ Und: „Ich möchte Nationalstolz nicht den falschen Leuten überlassen.“',
-			'Seine Worte werden im ganzen Land diskutiert. Viele stimmen ihm zu, über Parteigrenzen hinweg. Manche fragen, ob sich ein Bundestrainer so politisch äußern sollte. Sicher ist: Ein Satz aus dem Fußball erreicht Millionen Menschen, die nie ein Geschichtsbuch über Schwarz-Rot-Gold lesen würden.',
+			'Klopp trägt dabei eine Kappe in Schwarz-Rot-Gold mit der Aufschrift „Einer von 83 Millionen“. Gefragt nach ihrer Botschaft, sagt er:',
+			{
+				zitat: 'Ich würde mir oder uns gerne die Fahne zurückholen. Ich möchte, dass, wenn man sie schwingt, niemand denkt: Was ist mit dir nicht in Ordnung?',
+				herkunft: 'Jürgen Klopp bei seiner ersten Kaderbekanntgabe als Bundestrainer, 17. September 2026',
+			},
 		],
 		bild: {
 			src: fanmeile,
@@ -498,12 +502,6 @@ const stationen: Station[] = [
 				titel: 'Die Pressekonferenz im Original',
 				text: 'Die ganze Kaderbekanntgabe vom 17. September 2026 auf dem YouTube-Kanal von phoenix, dem Ereignis- und Dokumentationskanal von ARD und ZDF. Klopps Worte zur Fahne kommen ab Minute 17:32, der Link springt direkt dorthin.',
 				links: [{ text: 'Auf YouTube ansehen (ab 17:32)', url: 'https://www.youtube.com/watch?v=_jfi8T6pU0I&t=1052s' }],
-			},
-			{
-				art: 'Faktencheck',
-				titel: 'Was Klopp wirklich gesagt hat',
-				text: 'Nach der Pressekonferenz verbreitete sich ein gefälschtes Video, nach dem Politiker Klopps Rücktritt gefordert hätten. Die Rechercheplattform Correctiv hat es geprüft und zitiert seine tatsächlichen Worte.',
-				links: [{ text: 'Faktencheck bei Correctiv', url: 'https://correctiv.org/faktencheck/2026/09/28/nach-aussage-zu-deutschland-fahne-weder-gruene-noch-cdu-forderten-klopps-ruecktritt/' }],
 			},
 			{
 				art: 'Mitmachen',
@@ -567,7 +565,14 @@ const alleBilder = [
 				)}
 				<details>
 					<summary>Mehr erfahren</summary>
-					{s.mehr.map((absatz) => <p>{absatz}</p>)}
+					{s.mehr.map((absatz) =>
+						typeof absatz === 'string' ? <p>{absatz}</p> : (
+							<blockquote>
+								<p>„{absatz.zitat}“</p>
+								<footer>{absatz.herkunft}</footer>
+							</blockquote>
+						)
+					)}
 					{s.bildMehr && (
 						<figure>
 							<Image src={s.bildMehr.src} alt={s.bildMehr.alt} widths={[400, 800]} sizes="(max-width: 680px) 100vw, 600px" class={s.bildMehr.hoch ? 'hoch' : undefined} />
