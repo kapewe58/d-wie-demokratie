@@ -637,13 +637,20 @@ const alleBilder = [
 		})}
 	</ol>
 
+	<!-- Schlusskasten als Flagge, wie der Klopp-Kasten auf der Startseite -->
 	<section class="schluss">
-		<h2>Holen wir uns die Fahne zurück</h2>
-		<p>
-			Laden Sie unsere Motive in Schwarz-Rot-Gold kostenlos herunter oder bestellen Sie sie im Shop, als Aufkleber
-			für Ihr Auto oder Ihren Laptop, auf T-Shirts, Tassen und vielem mehr.
-		</p>
-		<p><a href="/#motive">Zu unseren Motiven</a></p>
+		<div class="streifen schwarz">
+			<h2>Holen wir uns die Fahne zurück</h2>
+		</div>
+		<div class="streifen rot">
+			<p>
+				Laden Sie unsere Motive in Schwarz-Rot-Gold kostenlos herunter oder bestellen Sie sie im Shop, als Aufkleber
+				für Ihr Auto oder Ihren Laptop, auf T-Shirts, Tassen und vielem mehr.
+			</p>
+		</div>
+		<div class="streifen gold">
+			<a class="knopf-schwarz" href="/#motive">Zu unseren Motiven</a>
+		</div>
 	</section>
 
 	<section class="nachweise">
@@ -1014,27 +1021,57 @@ const alleBilder = [
 		font-size: 0.8rem;
 	}
 
-	/* Schlusskasten: wie der Klopp-Kasten auf der Startseite (Gold, rote Überschrift, schwarze Schrift) */
+	/* Schlusskasten als Flagge: drei gleich hohe Streifen Schwarz-Rot-Gold, wie der Klopp-Kasten auf der Startseite */
 	.schluss {
+		display: grid;
+		grid-template-rows: 1fr 1fr 1fr;
 		margin-top: 1em;
-		padding: 1.5em;
-		background: var(--gold);
-		color: var(--schwarz);
 	}
 
-	.schluss h2 {
-		margin-top: 0;
-		color: var(--rot);
+	.streifen {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.6em 1.5em;
+		padding: 1em 1.5em;
+	}
+
+	.streifen h2,
+	.streifen p {
+		margin: 0;
+	}
+
+	.streifen.schwarz {
+		background: var(--schwarz);
+	}
+
+	.streifen.schwarz h2 {
+		color: var(--gold);
 		font-size: 1.5rem;
 		line-height: 1.3;
 	}
 
-	.schluss a {
-		color: var(--schwarz);
+	.streifen.rot {
+		background: var(--rot);
+		color: #ffffff;
 	}
 
-	.schluss a:hover {
-		color: var(--rot);
+	.streifen.gold {
+		background: var(--gold);
+	}
+
+	.knopf-schwarz {
+		padding: 0.6em 1.2em;
+		background: var(--schwarz);
+		color: var(--gold);
+		font-weight: bold;
+		text-decoration: none;
+		border-radius: 4px;
+	}
+
+	.knopf-schwarz:hover {
+		background: var(--rot);
+		color: #ffffff;
 	}
 
 	.nachweise {
