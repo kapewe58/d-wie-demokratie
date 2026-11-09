@@ -143,6 +143,14 @@ const pdfLink = (nr: number) =>
 		</div>
 	</aside>
 
+	<blockquote class="klopp-zitat">
+		<p>
+			Jürgen Klopp: „… ich möchte, dass, wenn man sie schwingt, … man einfach nur das Gefühl hat, … du bist happy und
+			verstehst, … dass du Glück hattest, dass du in diesem wundervollen Land geboren, aufgewachsen, zugezogen …
+			wie auch immer, dass du hier lebst … Ich möchte den Nationalstolz nicht den falschen Leuten überlassen …“
+		</p>
+	</blockquote>
+
 	<div class="fragen">
 		<details id="herunterladen">
 			<summary>Kann ich die Motive herunterladen und selbst drucken (lassen)?</summary>
@@ -453,6 +461,26 @@ const pdfLink = (nr: number) =>
 
 	.nebenlink:hover {
 		color: var(--rot);
+	}
+
+	/* weiteres Klopp-Zitat direkt unter dem Flaggen-Kasten */
+	/* links die dreifarbige Linie wie bei den Fragen zum Aufklappen */
+	.klopp-zitat {
+		margin: 0.8em 0 0;
+		padding: 1em 1.2em 1em calc(12px + 1.2em);
+		background:
+			linear-gradient(
+				to right,
+				var(--schwarz) 0 33.33%,
+				var(--rot) 33.33% 66.66%,
+				var(--gold) 66.66% 100%
+			) left / 12px 100% no-repeat,
+			#fafafa;
+		font-style: italic;
+	}
+
+	.klopp-zitat p {
+		margin: 0;
 	}
 
 	/* Ziehharmonika: Fragen zum Aufklappen, mit Schwarz-Rot-Gold links wie die Kästen auf „Mitmachen“ */
