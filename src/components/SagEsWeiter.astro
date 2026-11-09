@@ -1,5 +1,10 @@
 ---
 // Teilen-Kasten unten auf jeder Seite (über Layout.astro eingebunden)
+import { getImage } from 'astro:assets';
+import reichstag from '../assets/flagge/1990-reichstag.jpg';
+
+// Reichstag-Foto als Wasserzeichen hinter den drei Flaggen-Knöpfen (Nachweis unter dem goldenen Knopf)
+const wasserzeichen = await getImage({ src: reichstag, width: 1000, format: 'webp' });
 // Geteilt wird immer die Startseite, nicht diese Seite selbst
 const seite = new URL('/', Astro.site).href;
 const nachricht =
@@ -17,10 +22,19 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 	</p>
 
 	<!-- Knöpfe in Schwarz, Rot, Gold wie die Flagge; Klicks zählt Umami als Ereignis (data-umami-event) -->
-	<div class="knoepfe">
-		<a class="knopf schwarz" data-umami-event="teilen-whatsapp" href={whatsappHref} target="_blank" rel="noopener">Auf WhatsApp teilen</a>
-		<a class="knopf rot" data-umami-event="teilen-email" href={mailtoHref}>Per E-Mail empfehlen</a>
-		<button class="knopf gold" data-umami-event="link-kopieren" id="kopieren" type="button" data-url={seite}>Link kopieren</button>
+	<div class="knoepfe" style={`--wz-url: url(${wasserzeichen.src})`} data-wz-breite={reichstag.width} data-wz-hoehe={reichstag.height}>
+		<a class="knopf schwarz flaggenknopf" data-umami-event="teilen-whatsapp" href={whatsappHref} target="_blank" rel="noopener">Auf WhatsApp teilen</a>
+		<a class="knopf rot flaggenknopf" data-umami-event="teilen-email" href={mailtoHref}>Per E-Mail empfehlen</a>
+		<button class="knopf gold flaggenknopf" data-umami-event="link-kopieren" id="kopieren" type="button" data-url={seite}>Link kopieren</button>
+		<!-- Bildnachweis zum Wasserzeichen: nur „Foto“, ein Klick zeigt die Angaben (ohne JavaScript stehen sie gleich da) -->
+		<p class="foto-nachweis">
+			<button type="button" class="foto-knopf" aria-expanded="false" aria-controls="teilen-foto-lizenz" hidden>Foto</button><span id="teilen-foto-lizenz"><span class="foto-ohne-js">Foto</span>:
+				<a href="/geschichte-unserer-flagge/#1990">Flaggen vor dem Reichstag am 3. Oktober 1990</a>.
+				Bundesarchiv, Bild 183-1990-1003-417, Foto: Thomas Uhlemann,
+				<a href="https://creativecommons.org/licenses/by-sa/3.0/de/deed.de" target="_blank" rel="noopener">CC BY-SA 3.0 DE</a>,
+				<a href="https://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_183-1990-1003-417,_Berlin,_Flaggen_vor_dem_Reichstag.jpg" target="_blank" rel="noopener">Quelle</a>
+			</span>
+		</p>
 		<!-- nur sichtbar, wenn das Gerät eigenes Teilen anbietet (meist Handys); steht unten,
 		     damit oben die Flaggenfolge erhalten bleibt -->
 		<button class="knopf schwarz" data-umami-event="teilen-geraet" id="teilen" type="button" data-url={seite} data-text={nachricht} hidden>
@@ -53,6 +67,44 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 </section>
 
 <script>
+	// Wasserzeichen: ein durchgehendes Foto über die drei Flaggen-Knöpfe. Jeder Knopf zeigt den Ausschnitt,
+	// der an seiner Stelle liegt; die Lücken dazwischen bleiben frei. Ohne JavaScript gibt es kein Wasserzeichen.
+	const knoepfeBox = document.querySelector<HTMLElement>('.knoepfe');
+	const flaggenknoepfe = [...document.querySelectorAll<HTMLElement>('.flaggenknopf')];
+	function wasserzeichenSetzen() {
+		if (!knoepfeBox || flaggenknoepfe.length === 0) return;
+		const oben = flaggenknoepfe[0].offsetTop;
+		const letzter = flaggenknoepfe[flaggenknoepfe.length - 1];
+		const breite = knoepfeBox.clientWidth;
+		const hoehe = letzter.offsetTop + letzter.offsetHeight - oben;
+		// wie object-fit: cover
+		const verhaeltnis = Number(knoepfeBox.dataset.wzBreite) / Number(knoepfeBox.dataset.wzHoehe);
+		const bildBreite = Math.max(breite, hoehe * verhaeltnis);
+		const bildHoehe = bildBreite / verhaeltnis;
+		const versatzX = (breite - bildBreite) / 2;
+		const versatzY = (hoehe - bildHoehe) / 2;
+		for (const knopf of flaggenknoepfe) {
+			knopf.style.setProperty('--wz-groesse', `${bildBreite}px ${bildHoehe}px`);
+			knopf.style.setProperty('--wz-lage', `${versatzX - knopf.offsetLeft}px ${versatzY - (knopf.offsetTop - oben)}px`);
+			knopf.classList.add('mit-wasserzeichen');
+		}
+	}
+	wasserzeichenSetzen();
+	addEventListener('resize', wasserzeichenSetzen);
+
+	const fotoKnopf = document.querySelector<HTMLButtonElement>('.foto-knopf');
+	const fotoLizenz = document.getElementById('teilen-foto-lizenz');
+	if (fotoKnopf && fotoLizenz) {
+		fotoKnopf.hidden = false;
+		document.querySelector('.foto-ohne-js')?.remove();
+		fotoLizenz.hidden = true;
+		fotoKnopf.addEventListener('click', () => {
+			const offen = fotoKnopf.getAttribute('aria-expanded') === 'true';
+			fotoKnopf.setAttribute('aria-expanded', String(!offen));
+			fotoLizenz.hidden = offen;
+		});
+	}
+
 	const teilen = document.getElementById('teilen') as HTMLButtonElement | null;
 	if (teilen && navigator.share) {
 		teilen.hidden = false;
@@ -108,6 +160,7 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 	}
 
 	.knoepfe {
+		position: relative; /* Bezugspunkt für die Lage des Wasserzeichens */
 		display: flex;
 		flex-direction: column;
 		gap: 0.65em;
@@ -176,6 +229,55 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 
 	.knopf[hidden] {
 		display: none;
+	}
+
+	/* „Foto“ klein und rechtsbündig direkt unter dem goldenen Knopf */
+	.foto-nachweis {
+		margin: -0.45em 0 0;
+		color: var(--grau);
+		font-size: 0.75rem;
+		text-align: right;
+	}
+
+	.foto-nachweis a {
+		color: inherit;
+	}
+
+	.foto-knopf {
+		padding: 0;
+		border: 0;
+		background: none;
+		color: inherit;
+		font: inherit;
+		text-decoration: underline;
+		cursor: pointer;
+	}
+
+	.foto-knopf:hover,
+	.foto-nachweis a:hover {
+		color: var(--rot);
+	}
+
+	/* Wasserzeichen hinter dem Text, über der Knopffarbe (Lage berechnet das Skript) */
+	.flaggenknopf {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+	}
+
+	.mit-wasserzeichen::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background-image: var(--wz-url);
+		background-size: var(--wz-groesse);
+		background-position: var(--wz-lage);
+		background-repeat: no-repeat;
+		filter: grayscale(1) contrast(1.1);
+		opacity: 0.25;
+		mix-blend-mode: luminosity;
+		pointer-events: none;
 	}
 
 	/* auf Schwarz goldene Schrift, wie in den Flaggen-Kästen */

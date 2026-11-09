@@ -34,7 +34,7 @@ const liste = [
 
 // Fotos oben, wechseln alle paar Sekunden; ein Klick springt zum gezeigten Motiv. Neues Foto = nach
 // src/assets/slider/ legen (1800 × 1200 Pixel, JPEG), oben importieren und hier eintragen.
-// „foto: true“ blendet beim Bild den Hinweis „Foto KI-generiert“ ein.
+// „foto: true“ blendet beim Bild den Hinweis „KI-generiert“ ein (Kennzeichnung nach Art. 50 KI-Verordnung, muss sichtbar bleiben).
 const bilder = [
 	{
 		src: laptop,
@@ -120,7 +120,7 @@ const shopAktiv = false;
 			))}
 		</div>
 		<!-- Kennzeichnung nach Art. 50 KI-Verordnung -->
-		<p class="ki-hinweis" hidden={!bilder[0].foto}>Foto KI-generiert</p>
+		<p class="ki-hinweis" hidden={!bilder[0].foto}>KI-generiert</p>
 	</div>
 
 	<h1>Wir zeigen Flagge</h1>
@@ -174,22 +174,23 @@ const shopAktiv = false;
 			</aside>
 		))}
 	</div>
-	<!-- Punkte zum Weiterschalten; ein Klick hält den automatischen Wechsel an -->
+	<!-- Punkte zum Weiterschalten (ein Klick hält den automatischen Wechsel an), rechts daneben der Bildnachweis -->
+	<div class="unter-zitaten">
 	<div class="punkte zitat-punkte" hidden>
 		{zitate.map((_, i) => (
 			<button type="button" aria-label={`Zitat ${i + 1} von ${zitate.length}`} aria-current={i === 0 ? 'true' : undefined}></button>
 		))}
 	</div>
-	<!-- Bildnachweis: „Foto“ klappt die Lizenzangaben auf (ohne JavaScript stehen sie gleich da), der Text führt zur Flaggengeschichte -->
+	<!-- Bildnachweis: nur „Foto“, ein Klick zeigt die Angaben (ohne JavaScript stehen sie gleich da) -->
 	<p class="wz-nachweis">
-		<button type="button" class="wz-knopf" aria-expanded="false" aria-controls="wz-lizenz" hidden>Foto</button><span class="wz-ohne-js">Foto</span>:
-		<a href="/geschichte-unserer-flagge/#1990">Flaggen vor dem Reichstag am 3. Oktober 1990</a>.
-		<span id="wz-lizenz">
+		<button type="button" class="wz-knopf" aria-expanded="false" aria-controls="wz-lizenz" hidden>Foto</button><span id="wz-lizenz"><span class="wz-ohne-js">Foto</span>:
+			<a href="/geschichte-unserer-flagge/#1990">Flaggen vor dem Reichstag am 3. Oktober 1990</a>.
 			Bundesarchiv, Bild 183-1990-1003-417, Foto: Thomas Uhlemann,
 			<a href="https://creativecommons.org/licenses/by-sa/3.0/de/deed.de" target="_blank" rel="noopener">CC BY-SA 3.0 DE</a>,
 			<a href="https://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_183-1990-1003-417,_Berlin,_Flaggen_vor_dem_Reichstag.jpg" target="_blank" rel="noopener">Quelle</a>
 		</span>
 	</p>
+	</div>
 
 	<div class="fragen">
 		<details id="herunterladen">
@@ -361,6 +362,7 @@ const shopAktiv = false;
 			const offen = wzKnopf.getAttribute('aria-expanded') === 'true';
 			wzKnopf.setAttribute('aria-expanded', String(!offen));
 			wzLizenz.hidden = offen;
+			wzKnopf.parentElement?.classList.toggle('offen', !offen);
 		});
 	}
 
@@ -516,8 +518,25 @@ const shopAktiv = false;
 		visibility: visible;
 	}
 
-	.zitat-punkte {
+	/* wie unter dem Fotoslider: Punkte in der Mitte, „Foto“ rechts auf gleicher Höhe */
+	.unter-zitaten {
+		position: relative;
+		min-height: 28px;
 		margin-top: 0.3em;
+	}
+
+	.unter-zitaten .wz-nachweis {
+		position: absolute;
+		top: 14px;
+		right: 0;
+		margin: 0;
+		transform: translateY(-50%);
+	}
+
+	/* aufgeklappt ist der Nachweis zu lang für die Zeile, dann steht er darunter */
+	.unter-zitaten .wz-nachweis.offen {
+		position: static;
+		transform: none;
 	}
 
 	.streifen {
