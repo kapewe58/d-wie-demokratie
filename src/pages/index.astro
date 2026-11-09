@@ -129,16 +129,18 @@ const pdfLink = (nr: number) =>
 		<strong>Deshalb zeigen wir Motive mit den Farben unserer Demokratie in der Öffentlichkeit: als Aufkleber auf unseren Laptops, unseren Autos, auf T-Shirts, Tassen, Taschen und vielem mehr.</strong>
 	</p>
 
-	<!-- Klopp-Zitat: verlinkt das Video nur (nicht eingebettet), damit beim Seitenaufruf nichts von YouTube geladen wird -->
-	<aside class="klopp">
-		<blockquote>
-			<p>„Ich würde mir oder uns gerne die Fahne zurückholen.“</p>
-			<footer>Bundestrainer Jürgen Klopp, 17. September 2026</footer>
-		</blockquote>
-		<p class="klopp-links">
-			<a href="https://www.youtube.com/watch?v=_jfi8T6pU0I&t=1052s" target="_blank" rel="noopener">▶ Video ansehen (ab 17:32)</a>
-			<a href="/geschichte-unserer-flagge/#2026">Mehr in unserer Flaggengeschichte</a>
-		</p>
+	<!-- Klopp-Zitat als Flagge (Schwarz-Rot-Gold); das Video ist nur verlinkt, nicht eingebettet, damit beim Seitenaufruf nichts von YouTube geladen wird -->
+	<aside class="flaggen-kasten">
+		<div class="streifen schwarz">
+			<p class="zitat">„Ich würde mir oder uns gerne die Fahne zurückholen.“</p>
+		</div>
+		<div class="streifen rot">
+			<p>Bundestrainer Jürgen Klopp, 17. September 2026</p>
+		</div>
+		<div class="streifen gold">
+			<a class="knopf-schwarz" href="https://www.youtube.com/watch?v=_jfi8T6pU0I&t=1052s" target="_blank" rel="noopener">▶ Video ansehen</a>
+			<a class="nebenlink" href="/geschichte-unserer-flagge/#2026">Mehr in unserer Flaggengeschichte</a>
+		</div>
 	</aside>
 
 	<div class="fragen">
@@ -391,43 +393,65 @@ const pdfLink = (nr: number) =>
 		white-space: nowrap;
 	}
 
-	/* Klopp-Zitat: goldener Kasten mit schwarzer Schrift */
-	.klopp {
+	/* Klopp-Zitat als Flagge: drei gleich hohe Streifen Schwarz-Rot-Gold */
+	.flaggen-kasten {
+		display: grid;
+		grid-template-rows: 1fr 1fr 1fr;
 		margin-top: 1.6em;
-		padding: 1.5em;
-		background: var(--gold);
-		color: var(--schwarz);
 	}
 
-	.klopp blockquote {
+	.streifen {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.6em 1.5em;
+		padding: 1em 1.5em;
+	}
+
+	.streifen p {
 		margin: 0;
 	}
 
-	.klopp blockquote p {
-		margin: 0;
-		color: var(--rot);
+	.streifen.schwarz {
+		background: var(--schwarz);
+	}
+
+	.streifen.schwarz .zitat {
+		color: var(--gold);
 		font-size: 1.5rem;
 		font-weight: bold;
 		line-height: 1.3;
 	}
 
-	.klopp footer {
-		margin-top: 0.5em;
-		font-size: 0.9rem;
+	.streifen.rot {
+		background: var(--rot);
+		color: #ffffff;
+		font-weight: bold;
 	}
 
-	.klopp-links {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.4em 1.5em;
-		margin: 1em 0 0;
+	.streifen.gold {
+		background: var(--gold);
 	}
 
-	.klopp-links a {
+	.knopf-schwarz {
+		padding: 0.6em 1.2em;
+		background: var(--schwarz);
+		color: var(--gold);
+		font-weight: bold;
+		text-decoration: none;
+		border-radius: 4px;
+	}
+
+	.knopf-schwarz:hover {
+		background: var(--rot);
+		color: #ffffff;
+	}
+
+	.nebenlink {
 		color: var(--schwarz);
 	}
 
-	.klopp-links a:hover {
+	.nebenlink:hover {
 		color: var(--rot);
 	}
 
