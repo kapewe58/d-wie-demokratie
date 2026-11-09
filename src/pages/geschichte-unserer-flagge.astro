@@ -638,20 +638,31 @@ const alleBilder = [
 	</ol>
 
 	<!-- Schlusskasten als Flagge, wie der Klopp-Kasten auf der Startseite -->
-	<section class="schluss">
+	<section class="schluss wz">
+		<Image src={reichstag} alt="" class="wz-bild" widths={[800, 1400]} sizes="(max-width: 680px) 100vw, 680px" />
 		<div class="streifen schwarz">
 			<h2>Holen wir uns die Fahne zurück</h2>
 		</div>
 		<div class="streifen rot">
 			<p>
-				Laden Sie unsere Motive in Schwarz-Rot-Gold kostenlos herunter oder bestellen Sie sie im Shop, als Aufkleber
-				für Ihr Auto oder Ihren Laptop, auf T-Shirts, Tassen und vielem mehr.
+				Laden Sie unsere Motive in Schwarz-Rot-Gold kostenlos herunter, als Aufkleber für Ihr Auto oder Ihren Laptop,
+				für T-Shirts, Tassen und vieles mehr.
 			</p>
 		</div>
 		<div class="streifen gold">
 			<a class="knopf-schwarz" href="/#motive">Zu unseren Motiven</a>
 		</div>
 	</section>
+	<!-- Bildnachweis wie auf der Startseite: „Foto“ klappt die Lizenzangaben auf, der Text springt zur Station 1990 -->
+	<p class="wz-nachweis">
+		<button type="button" class="wz-knopf" aria-expanded="false" aria-controls="wz-lizenz" hidden>Foto</button><span class="wz-ohne-js">Foto</span>:
+		<a href="#1990">Flaggen vor dem Reichstag am 3. Oktober 1990</a>.
+		<span id="wz-lizenz">
+			Bundesarchiv, Bild 183-1990-1003-417, Foto: Thomas Uhlemann,
+			<a href="https://creativecommons.org/licenses/by-sa/3.0/de/deed.de" target="_blank" rel="noopener">CC BY-SA 3.0 DE</a>,
+			<a href="https://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_183-1990-1003-417,_Berlin,_Flaggen_vor_dem_Reichstag.jpg" target="_blank" rel="noopener">Quelle</a>
+		</span>
+	</p>
 
 	<section class="nachweise">
 		<h2>Quellen und weiterführende Informationen</h2>
@@ -678,6 +689,20 @@ const alleBilder = [
 </Layout>
 
 <script>
+	// Bildnachweis im Schlusskasten: Lizenzangaben erst nach Klick auf „Foto“
+	const wzKnopf = document.querySelector<HTMLButtonElement>('.wz-knopf');
+	const wzLizenz = document.getElementById('wz-lizenz');
+	if (wzKnopf && wzLizenz) {
+		wzKnopf.hidden = false;
+		document.querySelector('.wz-ohne-js')?.remove();
+		wzLizenz.hidden = true;
+		wzKnopf.addEventListener('click', () => {
+			const offen = wzKnopf.getAttribute('aria-expanded') === 'true';
+			wzKnopf.setAttribute('aria-expanded', String(!offen));
+			wzLizenz.hidden = offen;
+		});
+	}
+
 	const jetzt = new Date().getFullYear();
 	for (const el of document.querySelectorAll<HTMLElement>('.vor')) {
 		const n = jetzt - Number(el.dataset.jahr);
@@ -1072,6 +1097,58 @@ const alleBilder = [
 	.knopf-schwarz:hover {
 		background: var(--rot);
 		color: #ffffff;
+	}
+
+	/* Foto als Wasserzeichen über die ganze Flagge, wie auf der Startseite */
+	.wz {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+	}
+
+	.wz-bild {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		filter: grayscale(1) contrast(1.1);
+		opacity: 0.25;
+		mix-blend-mode: luminosity;
+		pointer-events: none;
+		z-index: 1;
+	}
+
+	.wz .streifen > * {
+		position: relative;
+		z-index: 2;
+	}
+
+	.wz-nachweis {
+		margin: 0.2em 0 0;
+		color: var(--grau);
+		font-size: 0.75rem;
+		text-align: right;
+	}
+
+	.wz-nachweis a {
+		color: inherit;
+	}
+
+	/* „Foto“ sieht aus wie ein Link */
+	.wz-knopf {
+		padding: 0;
+		border: 0;
+		background: none;
+		color: inherit;
+		font: inherit;
+		text-decoration: underline;
+		cursor: pointer;
+	}
+
+	.wz-knopf:hover,
+	.wz-nachweis a:hover {
+		color: var(--rot);
 	}
 
 	.nachweise {
