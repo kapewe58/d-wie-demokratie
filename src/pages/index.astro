@@ -64,6 +64,8 @@ const pdfLink = (nr: number) =>
 
 // Der Shop liegt bei Spreadshop (Spreadshirt) und wird nur verlinkt (pro Motiv), nicht eingebettet,
 // damit diese Website frei von Cookies und Inhalten Dritter bleibt.
+// false: „Motiv … im Shop“ steht grau und ohne Link da (Shop vorübergehend abgeschaltet)
+const shopAktiv = false;
 ---
 
 <Layout
@@ -222,9 +224,13 @@ const pdfLink = (nr: number) =>
 						)}
 						{motiv.shop && (
 							<li>
-								<a href={motiv.shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv={motiv.nr}>
-									Motiv {motiv.nr} im Shop
-								</a>
+								{shopAktiv ? (
+									<a href={motiv.shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv={motiv.nr}>
+										Motiv {motiv.nr} im Shop
+									</a>
+								) : (
+									<span class="aus">Motiv {motiv.nr} im Shop</span>
+								)}
 							</li>
 						)}
 					</ul>
@@ -584,6 +590,11 @@ const pdfLink = (nr: number) =>
 
 	.links li + li {
 		margin-top: 0.3em;
+	}
+
+	/* abgeschalteter Link: grau, nicht klickbar */
+	.links .aus {
+		color: var(--grau);
 	}
 
 	@media (max-width: 540px) {
