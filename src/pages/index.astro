@@ -6,6 +6,8 @@ import Layout from '../layouts/Layout.astro';
 import laptop from '../assets/slider/02-laptop.png';
 import tassen from '../assets/slider/04-tassen.png';
 import tshirt from '../assets/slider/05-tshirtmaedchen.png';
+// Wasserzeichen im Zitat-Kasten (Nachweis unter dem Kasten)
+import fotoReichstag from '../assets/flagge/1990-reichstag.jpg';
 
 // Startseite: Fotos, Werte aus dem Grundgesetz, zwei Fragen zum Aufklappen (Herunterladen, Shop) und unsere Motive.
 //
@@ -66,14 +68,14 @@ const pdfLink = (nr: number) =>
 // Videos und Reden werden nur verlinkt, nicht eingebettet, damit beim Seitenaufruf nichts von Dritten geladen wird.
 const zitate = [
 	{
+		text: 'Lassen wir uns die Geschichte und die Symbole unserer Demokratie nicht von jenen stehlen, die kein Anrecht darauf haben.',
+		wer: 'Bundespräsident Frank-Walter Steinmeier, 18. März 2026, zum Tag der Demokratiegeschichte',
+		knopf: { text: 'Quelle lesen', url: 'https://www.evangelisch.de/inhalte/253768/18-03-2026/steinmeier-deutsche-konnen-stolz-sein' },
+	},
+	{
 		text: 'Ich würde mir oder uns gerne die Fahne zurückholen.',
 		wer: 'Bundestrainer Jürgen Klopp, 17. September 2026',
 		knopf: { text: '▶ Video ansehen', url: 'https://www.youtube.com/watch?v=_jfi8T6pU0I&t=1052s' },
-	},
-	{
-		text: 'Den Verächtern der Freiheit dürfen wir diese Farben niemals überlassen! … Schwarz-Rot-Gold, das sind Demokratie und Recht und Freiheit.',
-		wer: 'Bundespräsident Frank-Walter Steinmeier, 9. November 2018, Rede im Bundestag',
-		knopf: { text: 'Rede nachlesen', url: 'https://www.bundestag.de/resource/blob/577898/1fabb911443e38b78dc622d2b7d1aee6/Rede_BPraes_09November2018.pdf' },
 	},
 ];
 const zitatSekunden = 8;
@@ -150,7 +152,8 @@ const shopAktiv = false;
 	<!-- Klopp-Zitat als Flagge (Schwarz-Rot-Gold); das Video ist nur verlinkt, nicht eingebettet, damit beim Seitenaufruf nichts von YouTube geladen wird -->
 	<div class="zitate" data-sekunden={zitatSekunden}>
 		{zitate.map((z, i) => (
-			<aside class:list={['flaggen-kasten', { sichtbar: i === 0 }]} aria-hidden={i === 0 ? undefined : 'true'}>
+			<aside class:list={['flaggen-kasten', 'wz', { sichtbar: i === 0 }]} aria-hidden={i === 0 ? undefined : 'true'}>
+				<Image src={fotoReichstag} alt="" class="wz-bild" widths={[800, 1400]} sizes="(max-width: 680px) 100vw, 680px" />
 				<div class="streifen schwarz">
 					<p class="zitat">„{z.text}“</p>
 				</div>
@@ -170,6 +173,16 @@ const shopAktiv = false;
 			<button type="button" aria-label={`Zitat ${i + 1} von ${zitate.length}`} aria-current={i === 0 ? 'true' : undefined}></button>
 		))}
 	</div>
+	<!-- Bildnachweis: „Foto“ klappt die Lizenzangaben auf (ohne JavaScript stehen sie gleich da), der Text führt zur Flaggengeschichte -->
+	<p class="wz-nachweis">
+		<button type="button" class="wz-knopf" aria-expanded="false" aria-controls="wz-lizenz" hidden>Foto</button><span class="wz-ohne-js">Foto</span>:
+		<a href="/geschichte-unserer-flagge/#1990">Flaggen vor dem Reichstag am 3. Oktober 1990</a>.
+		<span id="wz-lizenz">
+			Bundesarchiv, Bild 183-1990-1003-417, Foto: Thomas Uhlemann,
+			<a href="https://creativecommons.org/licenses/by-sa/3.0/de/deed.de" target="_blank" rel="noopener">CC BY-SA 3.0 DE</a>,
+			<a href="https://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_183-1990-1003-417,_Berlin,_Flaggen_vor_dem_Reichstag.jpg" target="_blank" rel="noopener">Quelle</a>
+		</span>
+	</p>
 
 	<div class="fragen">
 		<details id="herunterladen">
@@ -328,6 +341,20 @@ const shopAktiv = false;
 			})
 		);
 		if (kaesten.length > 1) zitatPunkte.hidden = false;
+	}
+
+	// Bildnachweis im Zitat-Kasten: Lizenzangaben erst nach Klick auf „Foto“
+	const wzKnopf = document.querySelector<HTMLButtonElement>('.wz-knopf');
+	const wzLizenz = document.getElementById('wz-lizenz');
+	if (wzKnopf && wzLizenz) {
+		wzKnopf.hidden = false;
+		document.querySelector('.wz-ohne-js')?.remove();
+		wzLizenz.hidden = true;
+		wzKnopf.addEventListener('click', () => {
+			const offen = wzKnopf.getAttribute('aria-expanded') === 'true';
+			wzKnopf.setAttribute('aria-expanded', String(!offen));
+			wzLizenz.hidden = offen;
+		});
 	}
 
 	// Links wie /#herunterladen oder /#shop klappen die passende Frage gleich auf.
@@ -538,6 +565,58 @@ const shopAktiv = false;
 	}
 
 	.nebenlink:hover {
+		color: var(--rot);
+	}
+
+	/* Foto als Wasserzeichen über die ganze Flagge, schwarz-weiß; die Flaggenfarben färben es ein */
+	.wz {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+	}
+
+	.wz-bild {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		filter: grayscale(1) contrast(1.1);
+		opacity: 0.25;
+		mix-blend-mode: luminosity;
+		pointer-events: none;
+		z-index: 1;
+	}
+
+	.wz .streifen > * {
+		position: relative;
+		z-index: 2;
+	}
+
+	.wz-nachweis {
+		margin: 0.2em 0 0;
+		color: var(--grau);
+		font-size: 0.75rem;
+		text-align: right;
+	}
+
+	.wz-nachweis a {
+		color: inherit;
+	}
+
+	/* „Foto“ sieht aus wie ein Link */
+	.wz-knopf {
+		padding: 0;
+		border: 0;
+		background: none;
+		color: inherit;
+		font: inherit;
+		text-decoration: underline;
+		cursor: pointer;
+	}
+
+	.wz-knopf:hover,
+	.wz-nachweis a:hover {
 		color: var(--rot);
 	}
 
