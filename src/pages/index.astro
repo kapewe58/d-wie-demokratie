@@ -62,6 +62,22 @@ const motive = liste
 const pdfLink = (nr: number) =>
 	existsSync(`public/download/d-wie-demokratie-motiv-${nr}.pdf`) ? `/download/d-wie-demokratie-motiv-${nr}.pdf` : '';
 
+// Zitate im Flaggen-Kasten, wechseln alle paar Sekunden. Neues Zitat = neuer Eintrag.
+// Videos und Reden werden nur verlinkt, nicht eingebettet, damit beim Seitenaufruf nichts von Dritten geladen wird.
+const zitate = [
+	{
+		text: 'Ich würde mir oder uns gerne die Fahne zurückholen.',
+		wer: 'Bundestrainer Jürgen Klopp, 17. September 2026',
+		knopf: { text: '▶ Video ansehen', url: 'https://www.youtube.com/watch?v=_jfi8T6pU0I&t=1052s' },
+	},
+	{
+		text: 'Den Verächtern der Freiheit dürfen wir diese Farben niemals überlassen! … Schwarz-Rot-Gold, das sind Demokratie und Recht und Freiheit.',
+		wer: 'Bundespräsident Frank-Walter Steinmeier, 9. November 2018, Rede im Bundestag',
+		knopf: { text: 'Rede nachlesen', url: 'https://www.bundestag.de/resource/blob/577898/1fabb911443e38b78dc622d2b7d1aee6/Rede_BPraes_09November2018.pdf' },
+	},
+];
+const zitatSekunden = 8;
+
 // Der Shop liegt bei Spreadshop (Spreadshirt) und wird nur verlinkt (pro Motiv), nicht eingebettet,
 // damit diese Website frei von Cookies und Inhalten Dritter bleibt.
 // false: „Motiv … im Shop“ steht grau und ohne Link da (Shop vorübergehend abgeschaltet)
@@ -132,26 +148,28 @@ const shopAktiv = false;
 	</p>
 
 	<!-- Klopp-Zitat als Flagge (Schwarz-Rot-Gold); das Video ist nur verlinkt, nicht eingebettet, damit beim Seitenaufruf nichts von YouTube geladen wird -->
-	<aside class="flaggen-kasten">
-		<div class="streifen schwarz">
-			<p class="zitat">„Ich würde mir oder uns gerne die Fahne zurückholen.“</p>
-		</div>
-		<div class="streifen rot">
-			<p>Bundestrainer Jürgen Klopp, 17. September 2026</p>
-		</div>
-		<div class="streifen gold">
-			<a class="knopf-schwarz" href="https://www.youtube.com/watch?v=_jfi8T6pU0I&t=1052s" target="_blank" rel="noopener">▶ Video ansehen</a>
-			<a class="nebenlink" href="/geschichte-unserer-flagge/#2026">Mehr in unserer Flaggengeschichte</a>
-		</div>
-	</aside>
-
-	<blockquote class="klopp-zitat">
-		<p>
-			Jürgen Klopp: „… ich möchte, dass, wenn man sie schwingt, … man einfach nur das Gefühl hat, … du bist happy und
-			verstehst, … dass du Glück hattest, dass du in diesem wundervollen Land geboren, aufgewachsen, zugezogen …
-			wie auch immer, dass du hier lebst … Ich möchte den Nationalstolz nicht den falschen Leuten überlassen …“
-		</p>
-	</blockquote>
+	<div class="zitate" data-sekunden={zitatSekunden}>
+		{zitate.map((z, i) => (
+			<aside class:list={['flaggen-kasten', { sichtbar: i === 0 }]} aria-hidden={i === 0 ? undefined : 'true'}>
+				<div class="streifen schwarz">
+					<p class="zitat">„{z.text}“</p>
+				</div>
+				<div class="streifen rot">
+					<p>{z.wer}</p>
+				</div>
+				<div class="streifen gold">
+					<a class="knopf-schwarz" href={z.knopf.url} target="_blank" rel="noopener">{z.knopf.text}</a>
+					<a class="nebenlink" href="/geschichte-unserer-flagge/">Mehr in unserer Flaggengeschichte</a>
+				</div>
+			</aside>
+		))}
+	</div>
+	<!-- Punkte zum Weiterschalten; ein Klick hält den automatischen Wechsel an -->
+	<div class="punkte zitat-punkte" hidden>
+		{zitate.map((_, i) => (
+			<button type="button" aria-label={`Zitat ${i + 1} von ${zitate.length}`} aria-current={i === 0 ? 'true' : undefined}></button>
+		))}
+	</div>
 
 	<div class="fragen">
 		<details id="herunterladen">
@@ -277,6 +295,39 @@ const shopAktiv = false;
 			})
 		);
 		punkte.hidden = false;
+	}
+
+	// Zitate im Flaggen-Kasten: wechseln wie die Fotos, ein Klick auf einen Punkt hält an
+	const zitateBox = document.querySelector<HTMLElement>('.zitate');
+	const zitatPunkte = document.querySelector<HTMLElement>('.zitat-punkte');
+	if (zitateBox && zitatPunkte) {
+		const kaesten = [...zitateBox.querySelectorAll<HTMLElement>('.flaggen-kasten')];
+		const knoepfe = [...zitatPunkte.querySelectorAll('button')];
+		let aktuell = 0;
+
+		const zeige = (n: number) => {
+			kaesten[aktuell].classList.remove('sichtbar');
+			kaesten[aktuell].setAttribute('aria-hidden', 'true');
+			knoepfe[aktuell].removeAttribute('aria-current');
+			aktuell = n;
+			kaesten[aktuell].classList.add('sichtbar');
+			kaesten[aktuell].removeAttribute('aria-hidden');
+			knoepfe[aktuell].setAttribute('aria-current', 'true');
+		};
+
+		const ruhig = matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const takt =
+			ruhig || kaesten.length < 2
+				? undefined
+				: setInterval(() => zeige((aktuell + 1) % kaesten.length), Number(zitateBox.dataset.sekunden) * 1000);
+
+		knoepfe.forEach((knopf, i) =>
+			knopf.addEventListener('click', () => {
+				clearInterval(takt);
+				zeige(i);
+			})
+		);
+		if (kaesten.length > 1) zitatPunkte.hidden = false;
 	}
 
 	// Links wie /#herunterladen oder /#shop klappen die passende Frage gleich auf.
@@ -411,7 +462,28 @@ const shopAktiv = false;
 	.flaggen-kasten {
 		display: grid;
 		grid-template-rows: 1fr 1fr 1fr;
+	}
+
+	/* alle Zitate liegen übereinander, der Kasten ist so hoch wie das längste; ohne JavaScript bleibt das erste stehen */
+	.zitate {
+		display: grid;
 		margin-top: 1.6em;
+	}
+
+	.zitate > .flaggen-kasten {
+		grid-area: 1 / 1;
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 0.6s, visibility 0.6s;
+	}
+
+	.zitate > .sichtbar {
+		opacity: 1;
+		visibility: visible;
+	}
+
+	.zitat-punkte {
+		margin-top: 0.3em;
 	}
 
 	.streifen {
@@ -469,24 +541,19 @@ const shopAktiv = false;
 		color: var(--rot);
 	}
 
-	/* weiteres Klopp-Zitat direkt unter dem Flaggen-Kasten */
-	/* links die dreifarbige Linie wie bei den Fragen zum Aufklappen */
-	.klopp-zitat {
-		margin: 0.8em 0 0;
-		padding: 1em 1.2em 1em calc(12px + 1.2em);
-		background:
-			linear-gradient(
-				to right,
-				var(--schwarz) 0 33.33%,
-				var(--rot) 33.33% 66.66%,
-				var(--gold) 66.66% 100%
-			) left / 12px 100% no-repeat,
-			#fafafa;
-		font-style: italic;
-	}
+	/* auf dem Handy kleiner, sonst werden die drei gleich hohen Streifen beim längsten Zitat sehr hoch */
+	@media (max-width: 540px) {
+		.streifen {
+			padding: 0.8em 1.1em;
+		}
 
-	.klopp-zitat p {
-		margin: 0;
+		.streifen.schwarz .zitat {
+			font-size: 1.2rem;
+		}
+
+		.streifen.rot {
+			font-size: 0.95rem;
+		}
 	}
 
 	/* Ziehharmonika: Fragen zum Aufklappen, mit Schwarz-Rot-Gold links wie die Kästen auf „Mitmachen“ */
