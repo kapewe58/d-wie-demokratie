@@ -75,6 +75,8 @@ const zitate = [
 	{
 		text: 'Ich würde mir oder uns gerne die Fahne zurückholen.',
 		wer: 'Bundestrainer Jürgen Klopp, 17. September 2026',
+		// „Mehr in unserer Flaggengeschichte“ springt hier direkt zur Station 2026
+		mehr: '/geschichte-unserer-flagge/#2026',
 		knopf: { text: '▶ Video ansehen', url: 'https://www.youtube.com/watch?v=_jfi8T6pU0I&t=1052s' },
 	},
 	{
@@ -169,7 +171,7 @@ const shopAktiv = false;
 				</div>
 				<div class="streifen gold">
 					<a class="knopf-schwarz" href={z.knopf.url} target="_blank" rel="noopener">{z.knopf.text}</a>
-					<a class="nebenlink" href="/geschichte-unserer-flagge/">Mehr in unserer Flaggengeschichte</a>
+					<a class="nebenlink" href={z.mehr ?? '/geschichte-unserer-flagge/'}>Mehr in unserer Flaggengeschichte</a>
 				</div>
 			</aside>
 		))}
