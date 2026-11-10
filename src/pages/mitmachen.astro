@@ -18,9 +18,11 @@ type Stelle = {
 	bieten: string[];
 	interesse?: string;
 	betreff: string;
+	// true: nur lokal mit „npm run dev“ sichtbar, nicht auf der veröffentlichten Website
+	entwurf?: boolean;
 };
 
-const stellen: Stelle[] = [
+const alleStellen: Stelle[] = [
 	{
 		id: 'design',
 		titel: 'Wir suchen kreative Köpfe, die Spaß daran haben, neue Motive zu entwerfen!',
@@ -111,7 +113,52 @@ const stellen: Stelle[] = [
 		],
 		betreff: 'Ehrenamt: Vertrieb und Organisation',
 	},
+	{
+		id: 'produktion',
+		titel: 'Wir suchen ein Produktionstalent für nachhaltige Demokratie-Produkte!',
+		kurz: 'ein Produktionstalent für nachhaltige Demokratie-Produkte',
+		eckdaten: ['Ehrenamtlich', 'Zeitlich flexibel', 'Ortsunabhängig'],
+		einleitung: [
+			'd-wie-demokratie.de ist eine junge, unabhängige Initiative. Wir möchten möglichst viele Menschen ermutigen, sich sichtbar zu unserer Demokratie und ihren Werten zu bekennen.',
+			'Unsere Motive sollen nicht nur auf Bildschirmen zu sehen sein, sondern im Alltag: auf T-Shirts, Taschen, Autos und Laptops. Dafür suchen wir jemanden, der sich um unsere Produkte kümmert, so umweltfreundlich und fair wie möglich.',
+			'Für Textilien bekommen wir eine eigene Partnerseite bei einem Anbieter für GOTS-zertifizierte Bio-Kleidung. Dort werden T-Shirts, Hoodies und Taschen mit unseren Motiven erst bedruckt, wenn jemand bestellt. Diese Seite ist wie ein kleiner eigener Shop, und sie braucht jemanden, der sie mit Leben füllt.',
+		],
+		aufgaben: [
+			{
+				rolle: 'Unsere Partnerseite für Textilien',
+				punkte: [
+					'Die Partnerseite beim Textilanbieter einrichten und pflegen: Produkte auswählen, unsere Motive einstellen, Farben und Größen festlegen',
+					'Texte und Produktbilder erstellen und aktuell halten',
+					'Neue Motive zügig auf passende Produkte bringen, in Abstimmung mit unserem Gestaltungsteam',
+					'Muster bestellen und die Druckqualität prüfen',
+					'Im Blick behalten, was gefragt ist, und das Angebot weiterentwickeln',
+				],
+			},
+			{
+				rolle: 'Alles, was keine Textilien sind',
+				punkte: [
+					'Umweltfreundliche Hersteller und Druckereien finden, vergleichen und auswählen, etwa für Aufkleber und Autoaufkleber, Postkarten, Flyer und Plakate, Buttons, Tassen und Fahnen',
+					'Auf Nachhaltigkeit achten: Recyclingpapier mit Blauem Engel oder FSC-Siegel, Aufkleber ohne PVC, Farben auf Wasserbasis, kurze Transportwege',
+					'Lösungen ohne Überproduktion finden: Druck auf Bestellung (Print on Demand) oder kleine Auflagen statt großer Lager',
+					'Angebote einholen, Muster bestellen und die Qualität prüfen',
+					'Eigene Ideen einbringen und selbstständig umsetzen',
+				],
+			},
+		],
+		wichtig: [
+			'Du hast Freude an schönen Produkten, arbeitest gern genau und behältst den Überblick. Du stehst aus Überzeugung hinter unserer freiheitlichen Demokratie.',
+			'Erfahrung mit Onlineshops, Druck, Textilveredelung oder Merchandising ist hilfreich, aber keine Voraussetzung. Wichtiger ist uns, dass dir Umwelt und faire Herstellung am Herzen liegen.',
+		],
+		bieten: [
+			'Die Chance, von Anfang an mitzubestimmen, wie und wo unsere Produkte entstehen, und zu zeigen, dass Demokratie-Produkte umweltfreundlich und fair sein können.',
+			'Die Tätigkeit ist ehrenamtlich, zeitlich flexibel und vollständig ortsunabhängig.',
+		],
+		betreff: 'Ehrenamt: Produktion',
+	},
 ];
+
+// Entwürfe nur lokal zeigen (import.meta.env.DEV ist nur bei „npm run dev“ wahr)
+const stellen = alleStellen.filter((stelle) => !stelle.entwurf || import.meta.env.DEV);
 
 const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${encodeURIComponent(betreff)}`;
 ---
@@ -154,6 +201,7 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 
 	{stellen.map((stelle) => (
 		<section class="stelle" id={stelle.id} aria-labelledby={`${stelle.id}-titel`}>
+			{stelle.entwurf && <p class="entwurf">Entwurf, nur lokal sichtbar</p>}
 			<h2 id={`${stelle.id}-titel`}>{stelle.titel}</h2>
 			<p class="eckdaten">{stelle.eckdaten.join(' · ')}</p>
 
@@ -191,6 +239,16 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 </Layout>
 
 <style>
+	.entwurf {
+		display: inline-block;
+		margin: 0 0 0.5em;
+		padding: 0.2em 0.6em;
+		background: var(--rot);
+		color: #ffffff;
+		font-size: 0.8rem;
+		font-weight: bold;
+	}
+
 	h1 {
 		font-size: clamp(1.85rem, 7.5vw, 2.75rem);
 	}
