@@ -1,14 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
-import beispielLogo from '../assets/verbuendete/beispiel-logo.svg';
-
-// Entwurf: die Seite /verbuendete/ entsteht nur bei „npm run dev“, im fertigen Build fehlt sie.
-// Zum Veröffentlichen: Datei in verbuendete.astro umbenennen, getStaticPaths löschen und in Layout.astro
-// `verbuendete` auf true setzen.
-export function getStaticPaths() {
-	return import.meta.env.DEV ? [{ params: { verbuendete: 'verbuendete' } }] : [];
-}
 
 type Verbuendeter = {
 	name: string;
@@ -16,22 +8,14 @@ type Verbuendeter = {
 	// bei Menschen z. B. Beruf, bei Organisationen und Firmen der Ort
 	zusatz?: string;
 	url?: string;
+	// kurzer Satz des Verbündeten, warum er dabei ist (ohne Anführungszeichen eintragen)
+	zitat?: string;
 	// Logo von Organisationen und Firmen, Datei in src/assets/verbuendete/
 	logo?: ImageMetadata;
 };
 
 // Neue Einträge erst nach Prüfung und schriftlicher Einwilligung aufnehmen
 const verbuendete: Verbuendeter[] = [];
-
-// nur lokal und nur solange die Liste leer ist, damit man das Aussehen sieht
-// (beim Veröffentlichen mit beispiel-logo.svg löschen)
-const beispiele: Verbuendeter[] = [
-	{ name: 'Erika Musterfrau', art: 'mensch', zusatz: 'Lehrerin, Köln' },
-	{ name: 'Max Mustermann', art: 'mensch', zusatz: 'Rentner, Leipzig' },
-	{ name: 'Sportverein Musterstadt e. V.', art: 'organisation', zusatz: 'Musterstadt', url: 'https://example.org', logo: beispielLogo },
-	{ name: 'Muster GmbH', art: 'firma', zusatz: 'Hamburg', url: 'https://example.com', logo: beispielLogo },
-];
-const liste = verbuendete.length ? verbuendete : beispiele;
 
 const gruppen = [
 	{ art: 'mensch', titel: 'Menschen' },
@@ -45,9 +29,7 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 <Layout
 	title="Verbündete – D wie Demokratie"
 	description="Menschen, Organisationen und Firmen, die mit d-wie-demokratie.de Flagge zeigen für Demokratie und Grundgesetz. Werden Sie unser Verbündeter."
-	noindex
 >
-	<p class="entwurf">Entwurf, nur lokal sichtbar</p>
 	<h1>Unsere Verbündeten</h1>
 
 	<p class="lead">
@@ -55,10 +37,15 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 		Ziele und Werte.
 	</p>
 
-	{!verbuendete.length && <p class="entwurf">Beispiele, nur lokal sichtbar</p>}
+	{verbuendete.length === 0 && (
+		<p class="neu">
+			<strong>Diese Seite ist ganz neu.</strong> Noch stehen hier keine Namen. Seien Sie unter den Ersten, die mit uns
+			Flagge zeigen!
+		</p>
+	)}
 
 	{gruppen.map((g) => {
-		const eintraege = liste.filter((v) => v.art === g.art);
+		const eintraege = verbuendete.filter((v) => v.art === g.art);
 		return (
 			eintraege.length > 0 && (
 				<section aria-labelledby={`gruppe-${g.art}`}>
@@ -70,6 +57,7 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 								<div>
 									{v.url ? <a href={v.url} rel="noopener">{v.name}</a> : <strong>{v.name}</strong>}
 									{v.zusatz && <span class="zusatz">{v.zusatz}</span>}
+									{v.zitat && <q class="zitat">{v.zitat}</q>}
 								</div>
 							</li>
 						))}
@@ -89,7 +77,8 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 		<ul>
 			<li>unter welchem Namen wir Sie hier nennen dürfen,</li>
 			<li>als Privatperson auf Wunsch Ihren Beruf oder Ihren Ort,</li>
-			<li>als Organisation oder Firma Ihren Ort, Ihre Website und auf Wunsch Ihr Logo.</li>
+			<li>als Organisation oder Firma Ihren Ort, Ihre Website und auf Wunsch Ihr Logo,</li>
+			<li>auf Wunsch einen kurzen Satz, warum Sie dabei sind.</li>
 		</ul>
 		<p>
 			Verbündete teilen unsere Werte. Verpflichtungen entstehen dadurch keine, und es kostet nichts. Wir prüfen jeden
@@ -107,14 +96,11 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 </Layout>
 
 <style>
-	.entwurf {
-		display: inline-block;
-		margin: 0 0 0.5em;
-		padding: 0.2em 0.6em;
-		background: var(--rot);
-		color: #ffffff;
-		font-size: 0.8rem;
-		font-weight: bold;
+	/* Hinweis, solange die Liste leer ist */
+	.neu {
+		padding: 0.8em 1em;
+		border-left: 4px solid var(--gold);
+		background: #fff8d6;
 	}
 
 	h1 {
@@ -137,9 +123,17 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 	.liste li {
 		display: flex;
 		gap: 1em;
-		align-items: center;
+		align-items: flex-start;
 		padding: 0.5em 0;
 		border-bottom: 1px solid #e4e4e4;
+	}
+
+	/* Zitat unter dem Namen, mit deutschen Anführungszeichen */
+	.zitat {
+		display: block;
+		margin-top: 0.3em;
+		font-style: italic;
+		quotes: '„' '“';
 	}
 
 	/* Logos einheitlich klein, ohne sie zu verzerren */
