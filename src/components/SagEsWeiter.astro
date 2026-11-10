@@ -14,7 +14,7 @@ const whatsappHref = `https://wa.me/?text=${encodeURIComponent(`${nachricht} ${s
 const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&body=${encodeURIComponent(`${nachricht} ${seite}`)}`;
 ---
 
-<section class="teilen" id="sag-es-weiter" aria-labelledby="sag-es-weiter-titel">
+<section class="teilen" id="sag-es-weiter" aria-labelledby="sag-es-weiter-titel" style={`--wz-url: url(${wasserzeichen.src})`}>
 	<h2 id="sag-es-weiter-titel">Bitte weitersagen</h2>
 	<p>
 		Kennen Sie jemanden, den d-wie-demokratie.de interessieren könnte? Teilen Sie die Seite
@@ -22,7 +22,7 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 	</p>
 
 	<!-- Knöpfe in Schwarz, Rot, Gold wie die Flagge; Klicks zählt Umami als Ereignis (data-umami-event) -->
-	<div class="knoepfe" style={`--wz-url: url(${wasserzeichen.src})`} data-wz-breite={reichstag.width} data-wz-hoehe={reichstag.height}>
+	<div class="knoepfe" data-wz-breite={reichstag.width} data-wz-hoehe={reichstag.height}>
 		<a class="knopf schwarz flaggenknopf" data-umami-event="teilen-whatsapp" href={whatsappHref} target="_blank" rel="noopener">Auf WhatsApp teilen</a>
 		<a class="knopf rot flaggenknopf" data-umami-event="teilen-email" href={mailtoHref}>Per E-Mail empfehlen</a>
 		<button class="knopf gold flaggenknopf" data-umami-event="link-kopieren" id="kopieren" type="button" data-url={seite}>Link kopieren</button>
@@ -37,7 +37,7 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 		</p>
 		<!-- nur sichtbar, wenn das Gerät eigenes Teilen anbietet (meist Handys); steht unten,
 		     damit oben die Flaggenfolge erhalten bleibt -->
-		<button class="knopf schwarz" data-umami-event="teilen-geraet" id="teilen" type="button" data-url={seite} data-text={nachricht} hidden>
+		<button class="knopf schwarz textur" data-umami-event="teilen-geraet" id="teilen" type="button" data-url={seite} data-text={nachricht} hidden>
 			Teilen
 		</button>
 	</div>
@@ -61,7 +61,7 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 		<label for="neuigkeiten-email">Ihre E-Mail-Adresse</label>
 		<div class="eingabe">
 			<input id="neuigkeiten-email" type="email" name="email" autocomplete="email" required />
-			<button class="knopf schwarz" data-umami-event="neuigkeiten-anmelden" type="submit">Anmelden</button>
+			<button class="knopf schwarz textur" data-umami-event="neuigkeiten-anmelden" type="submit">Anmelden</button>
 		</div>
 	</form>
 </section>
@@ -274,6 +274,26 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 		background-size: var(--wz-groesse);
 		background-position: var(--wz-lage);
 		background-repeat: no-repeat;
+		filter: grayscale(1) contrast(1.1);
+		opacity: 0.25;
+		mix-blend-mode: luminosity;
+		pointer-events: none;
+	}
+
+	/* „Teilen“ und „Anmelden“: dasselbe Foto als Textur, unten mit der Menschenmenge */
+	.textur {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+	}
+
+	.textur::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		/* mindestens so breit wie die Knopfspalte, damit auch der schmale „Anmelden“ nur Menschen zeigt */
+		background: var(--wz-url) center 85% / max(100%, 435px) auto no-repeat;
 		filter: grayscale(1) contrast(1.1);
 		opacity: 0.25;
 		mix-blend-mode: luminosity;
