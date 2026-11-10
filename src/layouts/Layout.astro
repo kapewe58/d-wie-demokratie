@@ -17,12 +17,15 @@ const { title, description, noindex = false, teilen = true } = Astro.props;
 const pfad = Astro.url.pathname;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
+// Entwurf „Verbündete“ (nur lokal): dort ersetzt sein Reiter „Unterstützen“, das ins Menü ☰ wandert
+const verbuendete = import.meta.env.DEV;
 // Reihenfolge der Reiter, für das Wischen auf dem Handy und die Richtung der Animation
-const reiter = ['/', '/haeufige-fragen/', '/unterstuetzen/', '/mitmachen/'];
+const reiter = ['/', '/haeufige-fragen/', verbuendete ? '/verbuendete/' : '/unterstuetzen/', '/mitmachen/'];
 // Menü ☰ oben rechts: alle Seiten, auch die ohne eigenen Reiter. Neue Seite = neuer Eintrag hier.
 const menue = [
 	{ href: '/', text: 'Startseite' },
 	{ href: '/haeufige-fragen/', text: 'Fragen' },
+	...(verbuendete ? [{ href: '/verbuendete/', text: 'Verbündete' }] : []),
 	{ href: '/unterstuetzen/', text: 'Unterstützen' },
 	{ href: '/mitmachen/', text: 'Mitmachen' },
 	{ href: '/motiv-einreichen/', text: 'Motiv einreichen' },
@@ -146,7 +149,11 @@ const ohneReiter = !reiter.some((r) => (r === '/' ? pfad === '/' : pfad.startsWi
 						<Image src={logo} alt="" width={103} densities={[1, 2, 3]} loading="eager" />
 					</a>
 					<a href="/haeufige-fragen/" aria-current={pfad.startsWith('/haeufige-fragen') ? 'page' : undefined}>Fragen</a>
-					<a href="/unterstuetzen/" aria-current={pfad.startsWith('/unterstuetzen') ? 'page' : undefined}>Unterstützen</a>
+					{verbuendete ? (
+						<a href="/verbuendete/" aria-current={pfad.startsWith('/verbuendete') ? 'page' : undefined}>Verbündete</a>
+					) : (
+						<a href="/unterstuetzen/" aria-current={pfad.startsWith('/unterstuetzen') ? 'page' : undefined}>Unterstützen</a>
+					)}
 					<a href="/mitmachen/" aria-current={pfad.startsWith('/mitmachen') ? 'page' : undefined}>Mitmachen</a>
 				</nav>
 

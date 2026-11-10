@@ -1,0 +1,184 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import beispielLogo from '../assets/verbuendete/beispiel-logo.svg';
+
+// Entwurf: die Seite /verbuendete/ entsteht nur bei „npm run dev“, im fertigen Build fehlt sie.
+// Zum Veröffentlichen: Datei in verbuendete.astro umbenennen, getStaticPaths löschen und in Layout.astro
+// `verbuendete` auf true setzen.
+export function getStaticPaths() {
+	return import.meta.env.DEV ? [{ params: { verbuendete: 'verbuendete' } }] : [];
+}
+
+type Verbuendeter = {
+	name: string;
+	art: 'mensch' | 'organisation' | 'firma';
+	// bei Menschen z. B. Beruf, bei Organisationen und Firmen der Ort
+	zusatz?: string;
+	url?: string;
+	// Logo von Organisationen und Firmen, Datei in src/assets/verbuendete/
+	logo?: ImageMetadata;
+};
+
+// Neue Einträge erst nach Prüfung und schriftlicher Einwilligung aufnehmen
+const verbuendete: Verbuendeter[] = [];
+
+// nur lokal und nur solange die Liste leer ist, damit man das Aussehen sieht
+// (beim Veröffentlichen mit beispiel-logo.svg löschen)
+const beispiele: Verbuendeter[] = [
+	{ name: 'Erika Musterfrau', art: 'mensch', zusatz: 'Lehrerin, Köln' },
+	{ name: 'Max Mustermann', art: 'mensch', zusatz: 'Rentner, Leipzig' },
+	{ name: 'Sportverein Musterstadt e. V.', art: 'organisation', zusatz: 'Musterstadt', url: 'https://example.org', logo: beispielLogo },
+	{ name: 'Muster GmbH', art: 'firma', zusatz: 'Hamburg', url: 'https://example.com', logo: beispielLogo },
+];
+const liste = verbuendete.length ? verbuendete : beispiele;
+
+const gruppen = [
+	{ art: 'mensch', titel: 'Menschen' },
+	{ art: 'organisation', titel: 'Organisationen: Vereine, Schulen etc.' },
+	{ art: 'firma', titel: 'Firmen' },
+] as const;
+
+const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${encodeURIComponent(betreff)}`;
+---
+
+<Layout
+	title="Verbündete – D wie Demokratie"
+	description="Menschen, Organisationen und Firmen, die mit d-wie-demokratie.de Flagge zeigen für Demokratie und Grundgesetz. Werden Sie unser Verbündeter."
+	noindex
+>
+	<p class="entwurf">Entwurf, nur lokal sichtbar</p>
+	<h1>Unsere Verbündeten</h1>
+
+	<p class="lead">
+		Diese Menschen, Organisationen und Firmen zeigen mit uns Flagge für Demokratie und Grundgesetz. Sie teilen unsere
+		Ziele und Werte.
+	</p>
+
+	{!verbuendete.length && <p class="entwurf">Beispiele, nur lokal sichtbar</p>}
+
+	{gruppen.map((g) => {
+		const eintraege = liste.filter((v) => v.art === g.art);
+		return (
+			eintraege.length > 0 && (
+				<section aria-labelledby={`gruppe-${g.art}`}>
+					<h2 id={`gruppe-${g.art}`}>{g.titel}</h2>
+					<ul class="liste">
+						{eintraege.map((v) => (
+							<li>
+								{v.logo && <Image class="logo" src={v.logo} alt="" width={240} />}
+								<div>
+									{v.url ? <a href={v.url} rel="noopener">{v.name}</a> : <strong>{v.name}</strong>}
+									{v.zusatz && <span class="zusatz">{v.zusatz}</span>}
+								</div>
+							</li>
+						))}
+					</ul>
+				</section>
+			)
+		);
+	})}
+
+	<section class="kasten" id="eintragen" aria-labelledby="eintragen-titel">
+		<h2 id="eintragen-titel">Sie sind gleichgesinnt? Dann verbünden Sie sich mit uns!</h2>
+		<p>
+			Ob als Privatperson, Verein, Organisation oder Firma: Schreiben Sie uns eine E-Mail an
+			<a href={mailto('Verbündete')} data-umami-event="email-verbuendete">info@d-wie-demokratie.de</a>, Betreff
+			„Verbündete“. Schreiben Sie dazu,
+		</p>
+		<ul>
+			<li>unter welchem Namen wir Sie hier nennen dürfen,</li>
+			<li>als Privatperson auf Wunsch Ihren Beruf oder Ihren Ort,</li>
+			<li>als Organisation oder Firma Ihren Ort, Ihre Website und auf Wunsch Ihr Logo.</li>
+		</ul>
+		<p>
+			Verbündete teilen unsere Werte. Verpflichtungen entstehen dadurch keine, und es kostet nichts. Wir prüfen jeden
+			Eintrag, bevor er hier erscheint. Ob wir einen Eintrag veröffentlichen, entscheiden wir.
+			Mit einem eingesandten Logo erlauben Sie uns, es hier zu zeigen.
+		</p>
+		<p>
+			Sie können Ihren Eintrag jederzeit mit einer kurzen E-Mail wieder entfernen lassen.
+		</p>
+	</section>
+
+	<p class="mehr">
+		Sie möchten mehr tun? Dann schauen Sie bei <a href="/unterstuetzen/">„Unterstützen“</a> vorbei.
+	</p>
+</Layout>
+
+<style>
+	.entwurf {
+		display: inline-block;
+		margin: 0 0 0.5em;
+		padding: 0.2em 0.6em;
+		background: var(--rot);
+		color: #ffffff;
+		font-size: 0.8rem;
+		font-weight: bold;
+	}
+
+	h1 {
+		font-size: clamp(1.85rem, 7.5vw, 2.75rem);
+	}
+
+	.lead {
+		font-size: 1.3rem;
+	}
+
+	h2 {
+		font-size: 1.4rem;
+	}
+
+	.liste {
+		padding: 0;
+		list-style: none;
+	}
+
+	.liste li {
+		display: flex;
+		gap: 1em;
+		align-items: center;
+		padding: 0.5em 0;
+		border-bottom: 1px solid #e4e4e4;
+	}
+
+	/* Logos einheitlich klein, ohne sie zu verzerren */
+	.logo {
+		flex: none;
+		width: 96px;
+		height: 48px;
+		object-fit: contain;
+	}
+
+	.zusatz {
+		display: block;
+		color: #555555;
+		font-size: 0.95rem;
+	}
+
+	/* Kasten mit Schwarz-Rot-Gold links, wie auf „Mitmachen“ und „Motiv einreichen“ */
+	.kasten {
+		margin-top: 2.5em;
+		padding: 0.2em 1.5em 0.5em;
+		padding-left: calc(1.5em + 12px);
+		background:
+			linear-gradient(
+				to right,
+				var(--schwarz) 0 33.33%,
+				var(--rot) 33.33% 66.66%,
+				var(--gold) 66.66% 100%
+			) left / 12px 100% no-repeat,
+			#fafafa;
+	}
+
+	@media (max-width: 480px) {
+		.kasten {
+			padding-right: 1em;
+			padding-left: calc(1em + 12px);
+		}
+	}
+
+	.mehr {
+		margin-top: 2em;
+	}
+</style>
