@@ -655,13 +655,15 @@ const alleBilder = [
 	</section>
 	<!-- Bildnachweis wie auf der Startseite: nur „Foto“, ein Klick zeigt die Angaben -->
 	<p class="wz-nachweis">
-		<button type="button" class="wz-knopf" aria-expanded="false" aria-controls="wz-lizenz" hidden>Foto</button><span id="wz-lizenz"><span class="wz-ohne-js">Foto</span>:
+		<button type="button" class="wz-knopf" aria-expanded="false" aria-controls="wz-lizenz" hidden>Foto</button><span id="wz-lizenz" hidden><span class="wz-ohne-js">Foto</span>:
 			<a href="#1990">Flaggen vor dem Reichstag am 3. Oktober 1990</a>.
 			Bundesarchiv, Bild 183-1990-1003-417, Foto: Thomas Uhlemann,
 			<a href="https://creativecommons.org/licenses/by-sa/3.0/de/deed.de" target="_blank" rel="noopener">CC BY-SA 3.0 DE</a>,
-			<a href="https://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_183-1990-1003-417,_Berlin,_Flaggen_vor_dem_Reichstag.jpg" target="_blank" rel="noopener">Quelle</a>
+			<a href="https://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_183-1990-1003-417,_Berlin,_Flaggen_vor_dem_Reichstag.jpg" target="_blank" rel="noopener">Quelle</a><a class="original" href="#1990"><Image src={reichstag} alt="Originalfoto: Flaggen vor dem Reichstag am 3. Oktober 1990" widths={[200, 400]} sizes="200px" /></a>
 		</span>
 	</p>
+	<!-- versteckt, damit das Originalfoto erst beim Aufklappen lädt; ohne JavaScript stehen die Angaben gleich da -->
+	<noscript><style is:inline>#wz-lizenz { display: inline; }</style></noscript>
 
 	<section class="nachweise">
 		<h2>Quellen und weiterführende Informationen</h2>
@@ -1132,6 +1134,19 @@ const alleBilder = [
 
 	.wz-nachweis a {
 		color: inherit;
+	}
+
+	/* Originalfoto über den Angaben; wird erst beim Aufklappen geladen (lazy im versteckten Bereich) */
+	.original {
+		display: block;
+		width: 200px;
+		margin: 0.4em 0 0.2em auto;
+	}
+
+	.original img {
+		display: block;
+		width: 100%;
+		height: auto;
 	}
 
 	/* „Foto“ sieht aus wie ein Link */

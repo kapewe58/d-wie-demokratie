@@ -1,6 +1,6 @@
 ---
 // Teilen-Kasten unten auf jeder Seite (über Layout.astro eingebunden)
-import { getImage } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
 import reichstag from '../assets/flagge/1990-reichstag.jpg';
 
 // Reichstag-Foto als Wasserzeichen hinter den drei Flaggen-Knöpfen (Nachweis unter dem goldenen Knopf)
@@ -28,13 +28,15 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 		<button class="knopf gold flaggenknopf" data-umami-event="link-kopieren" id="kopieren" type="button" data-url={seite}>Link kopieren</button>
 		<!-- Bildnachweis zum Wasserzeichen: nur „Foto“, ein Klick zeigt die Angaben (ohne JavaScript stehen sie gleich da) -->
 		<p class="foto-nachweis">
-			<button type="button" class="foto-knopf" aria-expanded="false" aria-controls="teilen-foto-lizenz" hidden>Foto</button><span id="teilen-foto-lizenz"><span class="foto-ohne-js">Foto</span>:
+			<button type="button" class="foto-knopf" aria-expanded="false" aria-controls="teilen-foto-lizenz" hidden>Foto</button><span id="teilen-foto-lizenz" hidden><span class="foto-ohne-js">Foto</span>:
 				<a href="/geschichte-unserer-flagge/#1990">Flaggen vor dem Reichstag am 3. Oktober 1990</a>.
 				Bundesarchiv, Bild 183-1990-1003-417, Foto: Thomas Uhlemann,
 				<a href="https://creativecommons.org/licenses/by-sa/3.0/de/deed.de" target="_blank" rel="noopener">CC BY-SA 3.0 DE</a>,
-				<a href="https://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_183-1990-1003-417,_Berlin,_Flaggen_vor_dem_Reichstag.jpg" target="_blank" rel="noopener">Quelle</a>
+				<a href="https://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_183-1990-1003-417,_Berlin,_Flaggen_vor_dem_Reichstag.jpg" target="_blank" rel="noopener">Quelle</a><a class="original" href="/geschichte-unserer-flagge/#1990"><Image src={reichstag} alt="Originalfoto: Flaggen vor dem Reichstag am 3. Oktober 1990" widths={[200, 400]} sizes="200px" /></a>
 			</span>
 		</p>
+		<!-- versteckt, damit das Originalfoto erst beim Aufklappen lädt; ohne JavaScript stehen die Angaben gleich da -->
+		<noscript><style is:inline>#teilen-foto-lizenz { display: inline; }</style></noscript>
 		<!-- nur sichtbar, wenn das Gerät eigenes Teilen anbietet (meist Handys); steht unten,
 		     damit oben die Flaggenfolge erhalten bleibt -->
 		<button class="knopf schwarz textur" data-umami-event="teilen-geraet" id="teilen" type="button" data-url={seite} data-text={nachricht} hidden>
@@ -241,6 +243,19 @@ const mailtoHref = `mailto:?subject=${encodeURIComponent('D wie Demokratie')}&bo
 
 	.foto-nachweis a {
 		color: inherit;
+	}
+
+	/* Originalfoto über den Angaben; wird erst beim Aufklappen geladen (lazy im versteckten Bereich) */
+	.original {
+		display: block;
+		width: 200px;
+		margin: 0.4em 0 0.2em auto;
+	}
+
+	.original img {
+		display: block;
+		width: 100%;
+		height: auto;
 	}
 
 	.foto-knopf {
