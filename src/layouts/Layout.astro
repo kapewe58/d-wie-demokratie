@@ -28,6 +28,8 @@ const menue = [
 	{ href: '/mitmachen/', text: 'Mitmachen' },
 	{ href: '/motiv-einreichen/', text: 'Motiv einreichen' },
 	{ href: '/geschichte-unserer-flagge/', text: 'Kleine Geschichte unserer Flagge' },
+	// Anmeldung steht unten auf jeder Seite mit Teilen-Kasten; auf den anderen (Impressum usw.) zur Startseite
+	{ href: teilen ? '#neuigkeiten' : '/#neuigkeiten', text: 'Neuigkeiten per E-Mail' },
 ];
 const menueKlein = [
 	{ href: '/impressum/', text: 'Impressum' },
@@ -178,6 +180,10 @@ const ohneReiter = !reiter.some((r) => (r === '/' ? pfad === '/' : pfad.startsWi
 			if (menue) {
 				document.addEventListener('click', (e) => {
 					if (menue.open && !menue.contains(e.target as Node)) menue.open = false;
+				});
+				// ein Link im Menü schließt es, auch wenn er nur auf derselben Seite springt (#neuigkeiten)
+				menue.addEventListener('click', (e) => {
+					if ((e.target as Element).closest('a')) menue.open = false;
 				});
 				document.addEventListener('keydown', (e) => {
 					if (e.key === 'Escape' && menue.open) {
