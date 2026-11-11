@@ -552,18 +552,20 @@ const shopAktiv = false;
 		background: var(--gold);
 	}
 
+	/* gelb auf dem goldenen Streifen, mit ganz dünnem schwarzem Rand */
 	.knopf-schwarz {
 		padding: 0.6em 1.2em;
-		background: var(--schwarz);
-		color: var(--gold);
+		border: 1px solid var(--schwarz);
+		background: var(--gold);
+		color: var(--schwarz);
 		font-weight: bold;
 		text-decoration: none;
 		border-radius: 4px;
 	}
 
 	.knopf-schwarz:hover {
-		background: var(--rot);
-		color: #ffffff;
+		background: var(--schwarz);
+		color: var(--gold);
 	}
 
 	.nebenlink {
