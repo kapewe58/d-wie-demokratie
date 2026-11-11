@@ -11,7 +11,7 @@ const werte = [
 ];
 ---
 
-<ul class={klasse}>
+<ul class:list={['werte-liste', klasse]}>
 	{werte.map((w) => (
 		<li>
 			{w.text}
@@ -21,6 +21,11 @@ const werte = [
 </ul>
 
 <style>
+	/* wenig Einzug, damit auf dem Handy mehr Platz für den Text bleibt */
+	.werte-liste {
+		padding-left: 0.8em;
+	}
+
 	/* Verweise aufs Grundgesetz: klein und grau, damit sie den Text nicht stören */
 	.gg {
 		margin-left: 0.3em;

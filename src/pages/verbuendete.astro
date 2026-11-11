@@ -45,7 +45,7 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 			<p><strong>Unsere Werte</strong> sind die zentralen Werte unseres Grundgesetzes:</p>
 			<Werte />
 			<p><strong>Unsere Ziele:</strong></p>
-			<ul>
+			<ul class="ziele">
 				<li>Schwarz-Rot-Gold als Zeichen für Demokratie und Freiheit sichtbar machen und unsere Farben nicht den Feinden der Demokratie überlassen</li>
 				<li>Menschen ermutigen, offen zu zeigen, dass sie zu unserer Demokratie stehen</li>
 				<li>alle Demokratinnen und Demokraten über Parteigrenzen hinweg verbinden, statt zu spalten</li>
@@ -218,9 +218,17 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 		grid-template-rows: 0fr;
 	}
 
+	/* der Innenabstand links hält die Aufzählungspunkte im sichtbaren Bereich (overflow schneidet sonst ab) */
 	.werte-ziele-innen {
 		min-height: 0;
 		overflow: hidden;
+		margin-left: -1em;
+		padding-left: 1em;
+	}
+
+	/* gleicher Einzug wie die Werte darüber */
+	.ziele {
+		padding-left: 0.8em;
 	}
 
 	.werte-ziele-innen > p:first-child {
