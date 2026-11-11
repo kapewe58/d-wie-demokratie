@@ -2,6 +2,7 @@
 import { existsSync } from 'node:fs';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import Werte from '../components/Werte.astro';
 import Layout from '../layouts/Layout.astro';
 import laptop from '../assets/slider/02-laptop.png';
 import tassen from '../assets/slider/04-tassen.png';
@@ -137,28 +138,7 @@ const shopAktiv = false;
 		<strong>Wir schätzen unsere Demokratie und die zentralen Werte unseres Grundgesetzes:</strong>
 	</p>
 
-	<ul class="lead werte">
-		<li>
-			die Menschenwürde
-			<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_1.html" target="_blank" rel="noopener">Art.&nbsp;1&nbsp;GG</a>
-		</li>
-		<li>
-			die freie Entfaltung der Persönlichkeit
-			<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_2.html" target="_blank" rel="noopener">Art.&nbsp;2&nbsp;GG</a>
-		</li>
-		<li>
-			die Gleichheit vor dem Gesetz unabhängig von Geschlecht und Herkunft
-			<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_3.html" target="_blank" rel="noopener">Art.&nbsp;3&nbsp;GG</a>
-		</li>
-		<li>
-			die Glaubens- und Gewissensfreiheit
-			<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_4.html" target="_blank" rel="noopener">Art.&nbsp;4&nbsp;GG</a>
-		</li>
-		<li>
-			die Meinungsfreiheit und die Freiheit von Kunst und Wissenschaft 
-			<a class="gg" href="https://www.gesetze-im-internet.de/gg/art_5.html" target="_blank" rel="noopener">Art.&nbsp;5&nbsp;GG</a>
-		</li>
-	</ul>
+	<Werte class="lead werte" />
 
 	<p class="lead">
 		<strong>Deshalb zeigen wir Motive mit den Farben unserer Demokratie in der Öffentlichkeit: als Aufkleber auf unseren Laptops, unseren Autos, auf T-Shirts, Tassen, Taschen und vielem mehr.</strong>
@@ -494,16 +474,6 @@ const shopAktiv = false;
 	.werte {
 		margin-top: -0.5em;
 	}
-	/* Verweise aufs Grundgesetz: klein und grau, damit sie den Text nicht stören */
-	.gg {
-		margin-left: 0.3em;
-		font-size: 0.65em;
-		color: var(--grau);
-		text-decoration-color: currentColor;
-		text-decoration-thickness: 1px;
-		white-space: nowrap;
-	}
-
 	/* Klopp-Zitat als Flagge: drei gleich hohe Streifen Schwarz-Rot-Gold */
 	.flaggen-kasten {
 		display: grid;

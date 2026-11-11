@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import Werte from '../components/Werte.astro';
 import Layout from '../layouts/Layout.astro';
 
 type Verbuendeter = {
@@ -33,8 +34,73 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 	<h1>Wir sind Verbündete</h1>
 
 	<p class="lead">
-		Wir teilen Werte und Ziele. Wir zeigen Flagge für unsere Demokratie.
+		Wir teilen
+		<button type="button" class="aufklappen" aria-expanded="false" aria-controls="werte-ziele" hidden>Werte und Ziele</button><span class="aufklappen-text">Werte und Ziele</span>.
+		Wir zeigen Flagge für unsere Demokratie.
 	</p>
+
+	<!-- ohne JavaScript gleich offen; …/verbuendete/#werte öffnet den Abschnitt -->
+	<div class="werte-ziele" id="werte-ziele">
+		<div class="werte-ziele-innen" id="werte">
+			<p><strong>Unsere Werte</strong> sind die zentralen Werte unseres Grundgesetzes:</p>
+			<Werte />
+			<p><strong>Unsere Ziele:</strong></p>
+			<ul>
+				<li>Schwarz-Rot-Gold als Zeichen für Demokratie und Freiheit sichtbar machen und unsere Farben nicht den Feinden der Demokratie überlassen</li>
+				<li>Menschen ermutigen, offen zu zeigen, dass sie zu unserer Demokratie stehen</li>
+				<li>überparteilich verbinden statt spalten</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- steht direkt hinter dem Abschnitt und läuft sofort, damit er nicht kurz aufblitzt (wie der Lebenslauf auf „Fragen“) -->
+	<script is:inline>
+		(() => {
+			const knopf = document.querySelector('.aufklappen');
+			const bereich = document.getElementById('werte-ziele');
+			const innen = bereich.firstElementChild;
+
+			knopf.hidden = false;
+			document.querySelector('.aufklappen-text').remove();
+			bereich.classList.add('zu');
+			// „until-found“: die Suche im Browser (Strg+F) klappt den Abschnitt bei einem Treffer auf
+			innen.setAttribute('hidden', 'until-found');
+
+			function oeffnen() {
+				knopf.setAttribute('aria-expanded', 'true');
+				innen.hidden = false;
+				bereich.offsetHeight; // erst einblenden, dann aufschieben, sonst springt es ohne Animation auf
+				bereich.classList.remove('zu');
+			}
+
+			function schliessen() {
+				knopf.setAttribute('aria-expanded', 'false');
+				bereich.classList.add('zu');
+				setTimeout(() => {
+					if (bereich.classList.contains('zu')) innen.setAttribute('hidden', 'until-found');
+				}, 300); // Dauer der Animation
+			}
+
+			knopf.addEventListener('click', () => {
+				if (knopf.getAttribute('aria-expanded') === 'true') {
+					schliessen();
+				} else {
+					oeffnen();
+					// nur das Aufklappen zählen, nicht das Zuklappen
+					window.umami?.track('werte-ziele-aufklappen');
+				}
+			});
+
+			innen.addEventListener('beforematch', oeffnen);
+
+			function perAdresse() {
+				if (['#werte', '#werte-ziele'].includes(location.hash) && knopf.getAttribute('aria-expanded') !== 'true') oeffnen();
+			}
+			addEventListener('hashchange', perAdresse);
+			addEventListener('pageshow', perAdresse);
+			perAdresse();
+		})();
+	</script>
 
 	{verbuendete.length === 0 && (
 		<p class="neu">
@@ -104,6 +170,68 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 
 	h1 {
 		font-size: clamp(1.85rem, 7.5vw, 2.75rem);
+	}
+
+	/* „Werte und Ziele“ als Knopf, der wie ein Link aussieht; der Pfeil dreht sich beim Aufklappen (wie auf „Fragen“) */
+	.aufklappen {
+		padding: 0;
+		border: 0;
+		background: none;
+		color: inherit;
+		font: inherit;
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 3px;
+		cursor: pointer;
+	}
+
+	.aufklappen[hidden] {
+		display: none;
+	}
+
+	.aufklappen::after {
+		content: '▾';
+		display: inline-block;
+		margin-left: 0.25em;
+		font-size: 0.8em;
+		transition: transform 0.3s;
+	}
+
+	.aufklappen[aria-expanded='true']::after {
+		transform: rotate(180deg);
+	}
+
+	@media (hover: hover) {
+		.aufklappen:hover {
+			color: var(--rot);
+		}
+	}
+
+	/* Aufschieben über die Zeilenhöhe des Rasters (0fr = zu, 1fr = so hoch wie der Inhalt) */
+	.werte-ziele {
+		display: grid;
+		grid-template-rows: 1fr;
+		transition: grid-template-rows 0.3s ease;
+	}
+
+	.werte-ziele.zu {
+		grid-template-rows: 0fr;
+	}
+
+	.werte-ziele-innen {
+		min-height: 0;
+		overflow: hidden;
+	}
+
+	.werte-ziele-innen > p:first-child {
+		margin-top: 0;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.werte-ziele,
+		.aufklappen::after {
+			transition: none;
+		}
 	}
 
 	.lead {

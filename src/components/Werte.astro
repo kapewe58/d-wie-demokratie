@@ -1,0 +1,33 @@
+---
+// Die zentralen Werte des Grundgesetzes mit Verweisen auf die Artikel; steht auf der Startseite und bei den Verbündeten
+const { class: klasse } = Astro.props;
+
+const werte = [
+	{ text: 'die Menschenwürde', artikel: 1 },
+	{ text: 'die freie Entfaltung der Persönlichkeit', artikel: 2 },
+	{ text: 'die Gleichheit vor dem Gesetz unabhängig von Geschlecht und Herkunft', artikel: 3 },
+	{ text: 'die Glaubens- und Gewissensfreiheit', artikel: 4 },
+	{ text: 'die Meinungsfreiheit und die Freiheit von Kunst und Wissenschaft', artikel: 5 },
+];
+---
+
+<ul class={klasse}>
+	{werte.map((w) => (
+		<li>
+			{w.text}
+			<a class="gg" href={`https://www.gesetze-im-internet.de/gg/art_${w.artikel}.html`} target="_blank" rel="noopener">Art.&nbsp;{w.artikel}&nbsp;GG</a>
+		</li>
+	))}
+</ul>
+
+<style>
+	/* Verweise aufs Grundgesetz: klein und grau, damit sie den Text nicht stören */
+	.gg {
+		margin-left: 0.3em;
+		font-size: 0.65em;
+		color: var(--grau);
+		text-decoration-color: currentColor;
+		text-decoration-thickness: 1px;
+		white-space: nowrap;
+	}
+</style>
