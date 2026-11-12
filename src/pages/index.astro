@@ -15,7 +15,7 @@ import fotoReichstag from '../assets/flagge/1990-reichstag.jpg';
 //
 // Unsere Motive, durchnummeriert, untereinander mit Links zu PNG, PDF und Shop. Neues Motiv = zwei Dateien ablegen
 // und hier einen Eintrag ergänzen:
-//   PNG (4000 px breit, transparent): src/assets/motive/motiv-<nr>.png  (Vorschaubild und Download)
+//   PNG (4000 px breit, transparent): src/assets/motive/d-wie-demokratie-motiv-<nr>.png  (Vorschaubild und Download)
 //   PDF (CMYK, Druckgröße):           public/download/d-wie-demokratie-motiv-<nr>.pdf
 // Ein Motiv erscheint erst, wenn sein PNG da ist; fehlen PDF oder Shop-Link, wird nur dieser Link weggelassen.
 // Jedes Motiv ist verlinkbar: /flagge-zeigen/#motiv-<nr>
@@ -25,20 +25,25 @@ const liste = [
 		name: 'D wie Demokratie',
 		alt: 'Ein großes D in Schwarz-Rot-Gold, darunter „wie Demokratie“ und die Adresse d-wie-demokratie.de, rechts ein QR-Code, in einem Oval wie beim Länderkennzeichen am Auto.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?searchTerm=D%20wie%20Demokratie%20Logo',
-		// weitere Fassungen: Dateien wie oben, nur mit Endung, z. B. motiv-1-qr-weiss.png / d-wie-demokratie-motiv-1-qr-weiss.pdf
+		// weitere Fassungen: Dateien wie oben, nur mit Endung, z. B. d-wie-demokratie-motiv-1-qr-weiss.png / .pdf
 		varianten: [
-			{ endung: '', name: 'Weiß', text: 'Mit weißem Oval, für Aufkleber, Papier und Tassen.' },
+			// mittlerer Ton, damit man das weiße Oval sieht (wie ein Aufkleber auf einem Laptop)
+			{ endung: '', name: 'Weiß', text: 'Mit weißem Oval, für Aufkleber, Papier und Tassen.', stoff: '#71839b' },
 			{
 				endung: '-qr-weiss',
 				name: 'Weiß nur hinter QR-Code',
 				text: 'Oval durchsichtig, nur hinter dem QR-Code weiß, damit er auch auf farbigen Textilien lesbar bleibt.',
 			},
 			{ endung: '-transparent', name: 'Transparent', text: 'Ganz ohne Weiß, die Textilfarbe scheint überall durch. Für helle Textilien.' },
-			{ endung: '-dunkel', name: 'Für dunkle Textilien', text: 'Rand und Schrift weiß, QR-Code auf weißem Feld. Für dunkle Textilien.' },
 			{
-				endung: '-schwarz',
-				name: 'Für schwarze Textilien',
-				text: 'Wie für dunkle Textilien, dazu ein feiner weißer Rand um das D, damit der schwarze Streifen nicht verschwindet.',
+				endung: '-farbig',
+				name: 'Für farbige Textilien',
+				text: 'Rand und Schrift weiß, QR-Code auf weißem Feld. Für farbige Textilien wie Blau, Grün oder Grau.',
+			},
+			{
+				endung: '-dunkel',
+				name: 'Für dunkle Textilien',
+				text: 'Wie für farbige Textilien, dazu ein feiner weißer Rand um das D. Für Schwarz, Dunkelblau und andere sehr dunkle Textilien.',
 			},
 		],
 	},
@@ -50,11 +55,11 @@ const liste = [
 		// eine Fassung erscheint erst, wenn ihr PNG da ist (die schwarze folgt noch)
 		varianten: [
 			{ endung: '', name: 'Für helle Untergründe', text: 'Schrift und Augen schwarz. Für Papier, Aufkleber und helle Textilien.' },
-			{ endung: '-dunkel', name: 'Für dunkle Textilien', text: 'Schrift und Augen weiß. Für dunkle Textilien.' },
+			{ endung: '-farbig', name: 'Für farbige Textilien', text: 'Schrift und Augen weiß. Für farbige Textilien wie Blau, Grün oder Grau.' },
 			{
-				endung: '-schwarz',
-				name: 'Für schwarze Textilien',
-				text: 'Wie für dunkle Textilien, dazu ein feiner weißer Rand um die schwarze Ente, damit sie nicht verschwindet.',
+				endung: '-dunkel',
+				name: 'Für dunkle Textilien',
+				text: 'Wie für farbige Textilien, dazu ein feiner weißer Rand um die schwarze Ente. Für Schwarz, Dunkelblau und andere sehr dunkle Textilien.',
 			},
 		],
 	},
@@ -85,16 +90,16 @@ const bilder = [
 ];
 const sekunden = 5;
 
-type Variante = { endung: string; name?: string; text?: string };
-// Vorschau auf der Stofffarbe, für die die Fassung gedacht ist; sonst ein mittlerer Ton
-const stoff: Record<string, string> = { '-dunkel': '#1f2a44', '-schwarz': '#000000' };
-const pngs = import.meta.glob<{ default: ImageMetadata }>('../assets/motive/motiv-*.png', { eager: true });
+// stoff: Hintergrund der Vorschau, sonst je nach Endung (dunkel/schwarz) bzw. ein heller Stoffton
+type Variante = { endung: string; name?: string; text?: string; stoff?: string };
+const stoff: Record<string, string> = { '-farbig': '#3f5f86', '-dunkel': '#000000' };
+const pngs = import.meta.glob<{ default: ImageMetadata }>('../assets/motive/d-wie-demokratie-motiv-*.png', { eager: true });
 // je Motiv die Fassungen, deren PNG da ist; ohne Angabe nur die eine Standardfassung
 const motive = liste
 	.map((motiv) => ({
 		...motiv,
 		fassungen: ((motiv as { varianten?: Variante[] }).varianten ?? [{ endung: '' }])
-			.map((v: Variante) => ({ ...v, bild: pngs[`../assets/motive/motiv-${motiv.nr}${v.endung}.png`]?.default }))
+			.map((v: Variante) => ({ ...v, bild: pngs[`../assets/motive/d-wie-demokratie-motiv-${motiv.nr}${v.endung}.png`]?.default }))
 			.filter((v) => v.bild),
 	}))
 	.filter((motiv) => motiv.fassungen.length > 0);
@@ -287,7 +292,7 @@ const shopAktiv = false;
 							widths={[240, 480]}
 							sizes="200px"
 							class:list={{ 'auf-farbe': motiv.fassungen.length > 1 }}
-							style={stoff[f.endung] ? `background: ${stoff[f.endung]}` : undefined}
+							style={f.stoff ?? stoff[f.endung] ? `background: ${f.stoff ?? stoff[f.endung]}` : undefined}
 						/>
 						<div>
 							<h3>Motiv {motiv.nr}: {motiv.name}</h3>
@@ -839,11 +844,11 @@ const shopAktiv = false;
 		display: none;
 	}
 
-	/* Motive mit mehreren Fassungen: alle auf derselben Stofffarbe, damit man sieht, wo Weiß ist und wo nicht */
+	/* Motive mit mehreren Fassungen: jede Vorschau auf dem Stoff, für den sie gedacht ist (Farbe pro Fassung im Bild-Stil) */
 	.motive img.auf-farbe {
 		border-radius: 6px;
-		/* mittlerer Ton: Schwarz und Weiß sind beide gut zu erkennen */
-		background: #71839b;
+		/* heller Stoffton wie ein graumeliertes Shirt: Weiß ist darauf noch zu erkennen */
+		background: #c3c7cd;
 	}
 
 	.fassung-knoepfe {
