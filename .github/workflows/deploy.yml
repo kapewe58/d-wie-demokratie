@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+  # Knopf „Run workflow“ auf GitHub: Deployment von Hand starten, z. B. nach einer Störung bei GitHub
+  workflow_dispatch:
 
 jobs:
   deploy:
