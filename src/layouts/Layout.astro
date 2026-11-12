@@ -37,10 +37,11 @@ const menueKlein = [
 ];
 // Seite ohne eigenen Reiter: dann trägt das Menü ☰ den roten Balken
 const ohneReiter = !reiter.some((r) => (r === '/' ? pfad === '/' : pfad.startsWith(r)));
-// auf breiten Bildschirmen bekommt eine solche Seite einen eigenen Reiter hinter „Mitmachen“ (kurzer Name, falls vorhanden)
-const aktuell: { href: string; text: string; kurz?: string } | undefined = ohneReiter
-	? [...menue, ...menueKlein].find((m) => m.href === pfad)
-	: undefined;
+// auf breiten Bildschirmen steht „Unterstützen“ dauerhaft als Reiter hinter „Mitmachen“ (nicht beim Wischen auf dem Handy)
+const aufUnterstuetzen = pfad.startsWith('/unterstuetzen');
+// andere Seiten ohne Reiter bekommen dort einen eigenen Reiter für die aktuelle Seite (kurzer Name, falls vorhanden)
+const aktuell: { href: string; text: string; kurz?: string } | undefined =
+	ohneReiter && !aufUnterstuetzen ? [...menue, ...menueKlein].find((m) => m.href === pfad) : undefined;
 ---
 
 <!doctype html>
@@ -155,11 +156,16 @@ const aktuell: { href: string; text: string; kurz?: string } | undefined = ohneR
 					<a href="/haeufige-fragen/" aria-current={pfad.startsWith('/haeufige-fragen') ? 'page' : undefined}>Fragen</a>
 					<a href="/verbuendete/" aria-current={pfad.startsWith('/verbuendete') ? 'page' : undefined}>Verbündete</a>
 					<a href="/mitmachen/" aria-current={pfad.startsWith('/mitmachen') ? 'page' : undefined}>Mitmachen</a>
-					{aktuell && <a href={aktuell.href} class="reiter-hier" aria-current="page">{aktuell.kurz ?? aktuell.text}</a>}
+					{/* für beide zusammen reicht die Seitenbreite nicht: die aktuelle Seite verdrängt „Unterstützen“ */}
+					{aktuell ? (
+						<a href={aktuell.href} class="reiter-breit" aria-current="page">{aktuell.kurz ?? aktuell.text}</a>
+					) : (
+						<a href="/unterstuetzen/" class="reiter-breit" aria-current={aufUnterstuetzen ? 'page' : undefined}>Unterstützen</a>
+					)}
 				</nav>
 
 				<!-- Menü mit allen Seiten; <details> klappt auch ohne JavaScript auf -->
-				<details class:list={['menue', { hier: ohneReiter, 'mit-reiter': aktuell }]}>
+				<details class:list={['menue', { hier: ohneReiter, 'mit-reiter': aktuell || aufUnterstuetzen }]}>
 					<summary aria-label="Menü">
 						<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
 							<path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
@@ -491,14 +497,14 @@ const aktuell: { href: string; text: string; kurz?: string } | undefined = ohneR
 		color: var(--text);
 	}
 
-	/* zusätzlicher Reiter für die aktuelle Seite (siehe „aktuell“ oben): nur wo er neben die anderen passt;
-	   dann trägt ihn der rote Balken und nicht mehr das Menü ☰ */
-	.reiter-hier {
+	/* Reiter nur für breite Bildschirme: „Unterstützen“ und die aktuelle Seite (siehe oben);
+	   dann trägt der Reiter den roten Balken und nicht mehr das Menü ☰ */
+	.reiter-breit {
 		display: none;
 	}
 
 	@media (min-width: 700px) {
-		.reiter-hier {
+		.reiter-breit {
 			display: block;
 		}
 
