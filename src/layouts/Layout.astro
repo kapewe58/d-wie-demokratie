@@ -26,8 +26,8 @@ const menue = [
 	{ href: '/verbuendete/', text: 'Verbündete' },
 	{ href: '/mitmachen/', text: 'Mitmachen' },
 	{ href: '/unterstuetzen/', text: 'Unterstützen' },
-	{ href: '/motiv-einreichen/', text: 'Motiv einreichen' },
-	{ href: '/geschichte-unserer-flagge/', text: 'Kleine Geschichte unserer Flagge', kurz: 'Flaggengeschichte' },
+	{ href: '/motiv-einreichen/', text: 'Motiv einreichen', handy: 'Einreichen' },
+	{ href: '/geschichte-unserer-flagge/', text: 'Kleine Geschichte unserer Flagge', kurz: 'Flaggengeschichte', handy: 'Geschichte' },
 	// Anmeldung steht unten auf jeder Seite mit Teilen-Kasten; auf den anderen (Impressum usw.) zur Startseite
 	{ href: teilen ? '#neuigkeiten' : '/#neuigkeiten', text: 'Neuigkeiten per E-Mail' },
 ];
@@ -35,13 +35,14 @@ const menueKlein = [
 	{ href: '/impressum/', text: 'Impressum' },
 	{ href: '/datenschutz/', text: 'Datenschutz' },
 ];
-// Seite ohne eigenen Reiter: dann trägt das Menü ☰ den roten Balken
 const ohneReiter = !reiter.some((r) => (r === '/' ? pfad === '/' : pfad.startsWith(r)));
-// auf breiten Bildschirmen steht „Unterstützen“ dauerhaft als Reiter hinter „Mitmachen“ (nicht beim Wischen auf dem Handy)
-const aufUnterstuetzen = pfad.startsWith('/unterstuetzen');
-// andere Seiten ohne Reiter bekommen dort einen eigenen Reiter für die aktuelle Seite (kurzer Name, falls vorhanden)
-const aktuell: { href: string; text: string; kurz?: string } | undefined =
-	ohneReiter && !aufUnterstuetzen ? [...menue, ...menueKlein].find((m) => m.href === pfad) : undefined;
+// Seiten ohne eigenen Reiter, die im Menü stehen, bekommen einen Reiter für die aktuelle Seite: am Computer hinter
+// „Mitmachen“ (statt „Unterstützen“, beides passt nicht), auf dem Handy statt „Mitmachen“. Namen: `kurz` am Computer,
+// `handy` auf dem Handy, sonst `text`. Nicht im Wischen zwischen den Reitern.
+const aktuell: { href: string; text: string; kurz?: string; handy?: string } | undefined = ohneReiter
+	? [...menue, ...menueKlein].find((m) => m.href === pfad)
+	: undefined;
+// sonst (z. B. Statistik) trägt das Menü ☰ den roten Balken
 ---
 
 <!doctype html>
@@ -155,17 +156,19 @@ const aktuell: { href: string; text: string; kurz?: string } | undefined =
 					</a>
 					<a href="/haeufige-fragen/" aria-current={pfad.startsWith('/haeufige-fragen') ? 'page' : undefined}>Fragen</a>
 					<a href="/verbuendete/" aria-current={pfad.startsWith('/verbuendete') ? 'page' : undefined}>Verbündete</a>
-					<a href="/mitmachen/" aria-current={pfad.startsWith('/mitmachen') ? 'page' : undefined}>Mitmachen</a>
-					{/* für beide zusammen reicht die Seitenbreite nicht: die aktuelle Seite verdrängt „Unterstützen“ */}
+					<a href="/mitmachen/" class:list={{ 'nicht-am-handy': aktuell }} aria-current={pfad.startsWith('/mitmachen') ? 'page' : undefined}>Mitmachen</a>
 					{aktuell ? (
-						<a href={aktuell.href} class="reiter-breit" aria-current="page">{aktuell.kurz ?? aktuell.text}</a>
+						<a href={aktuell.href} aria-current="page">
+							<span class="name-breit">{aktuell.kurz ?? aktuell.text}</span>
+							<span class="name-handy">{aktuell.handy ?? aktuell.text}</span>
+						</a>
 					) : (
-						<a href="/unterstuetzen/" class="reiter-breit" aria-current={aufUnterstuetzen ? 'page' : undefined}>Unterstützen</a>
+						<a href="/unterstuetzen/" class="nur-breit">Unterstützen</a>
 					)}
 				</nav>
 
 				<!-- Menü mit allen Seiten; <details> klappt auch ohne JavaScript auf -->
-				<details class:list={['menue', { hier: ohneReiter, 'mit-reiter': aktuell || aufUnterstuetzen }]}>
+				<details class:list={['menue', { hier: ohneReiter && !aktuell }]}>
 					<summary aria-label="Menü">
 						<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
 							<path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
@@ -418,10 +421,14 @@ const aktuell: { href: string; text: string; kurz?: string } | undefined =
 		width: auto;
 	}
 
-	/* schmale Handys (z. B. 360 px): Logo etwas kleiner */
+	/* schmale Handys (z. B. 360 px): Logo etwas kleiner, Reiter etwas enger (damit auch „Unterstützen“ passt) */
 	@media (max-width: 380px) {
 		.logo img {
 			height: 32px;
+		}
+
+		nav {
+			gap: 0.4em;
 		}
 	}
 
@@ -436,7 +443,7 @@ const aktuell: { href: string; text: string; kurz?: string } | undefined =
 		}
 
 		.logo img {
-			height: 26px;
+			height: 24px;
 		}
 	}
 
@@ -497,20 +504,30 @@ const aktuell: { href: string; text: string; kurz?: string } | undefined =
 		color: var(--text);
 	}
 
-	/* Reiter nur für breite Bildschirme: „Unterstützen“ und die aktuelle Seite (siehe oben);
-	   dann trägt der Reiter den roten Balken und nicht mehr das Menü ☰ */
-	.reiter-breit {
+	/* Reiter für die aktuelle Seite bzw. „Unterstützen“ (siehe `aktuell` oben): am Handy ersetzt die aktuelle Seite
+	   „Mitmachen“, „Unterstützen“ steht nur am Computer; Namen je nach Breite */
+	.nur-breit,
+	.name-breit {
 		display: none;
 	}
 
 	@media (min-width: 700px) {
-		.reiter-breit {
+		.nur-breit {
 			display: block;
 		}
 
-		.menue.mit-reiter summary {
-			border-bottom-color: transparent;
-			color: var(--grau);
+		.name-breit {
+			display: inline;
+		}
+
+		.name-handy {
+			display: none;
+		}
+	}
+
+	@media (max-width: 699px) {
+		.nicht-am-handy {
+			display: none;
 		}
 	}
 
