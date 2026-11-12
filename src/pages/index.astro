@@ -1,5 +1,6 @@
 ---
-import { existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync } from 'node:fs';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Werte from '../components/Werte.astro';
@@ -62,8 +63,14 @@ const pngs = import.meta.glob<{ default: ImageMetadata }>('../assets/motive/moti
 const motive = liste
 	.map((motiv) => ({ ...motiv, bild: pngs[`../assets/motive/motiv-${motiv.nr}.png`]?.default }))
 	.filter((motiv) => motiv.bild);
-const pdfLink = (nr: number) =>
-	existsSync(`public/download/d-wie-demokratie-motiv-${nr}.pdf`) ? `/download/d-wie-demokratie-motiv-${nr}.pdf` : '';
+// ?v= mit einem Fingerabdruck der Datei: ändert sich das PDF, ist es eine neue Adresse und kein Browser zeigt die alte
+// Fassung aus seinem Zwischenspeicher (der Server erlaubt dort einen Tag)
+const pdfLink = (nr: number) => {
+	const datei = `public/download/d-wie-demokratie-motiv-${nr}.pdf`;
+	if (!existsSync(datei)) return '';
+	const fingerabdruck = createHash('md5').update(readFileSync(datei)).digest('hex').slice(0, 8);
+	return `/download/d-wie-demokratie-motiv-${nr}.pdf?v=${fingerabdruck}`;
+};
 
 // Zitate im Flaggen-Kasten, wechseln alle paar Sekunden. Neues Zitat = neuer Eintrag.
 // Videos und Reden werden nur verlinkt, nicht eingebettet, damit beim Seitenaufruf nichts von Dritten geladen wird.
