@@ -114,13 +114,16 @@ const pdfLink = (nr: number, endung = '') => {
 
 // Zitate im Flaggen-Kasten, wechseln alle paar Sekunden. Neues Zitat = neuer Eintrag.
 // Videos und Reden werden nur verlinkt, nicht eingebettet, damit beim Seitenaufruf nichts von Dritten geladen wird.
+// id: eigene Adresse je Zitat, z. B. /#zitat-aigner zeigt dieses Zitat und hält den Wechsel an
 const zitate = [
 	{
+		id: 'zitat-steinmeier',
 		text: 'Den Verächtern der Freiheit dürfen wir diese Farben niemals überlassen! … Schwarz-Rot-Gold, das sind Demokratie und Recht und Freiheit.',
 		wer: 'Bundespräsident Frank-Walter Steinmeier, 9. November 2018, Rede im Bundestag',
 		knopf: { text: 'Rede nachlesen', url: 'https://www.bundestag.de/resource/blob/577898/1fabb911443e38b78dc622d2b7d1aee6/Rede_BPraes_09November2018.pdf' },
 	},
 	{
+		id: 'zitat-klopp',
 		text: 'Ich würde mir oder uns gerne die Fahne zurückholen.',
 		wer: 'Bundestrainer Jürgen Klopp, 17. September 2026',
 		// „Mehr in unserer Flaggengeschichte“ springt hier direkt zur Station 2026
@@ -128,6 +131,7 @@ const zitate = [
 		knopf: { text: '▶ Video ansehen', url: 'https://www.youtube.com/watch?v=_jfi8T6pU0I&t=1052s' },
 	},
 	{
+		id: 'zitat-pistorius',
 		text: 'Wir dürfen uns die Symbole dieses Staates nicht von Rechtsextremen nehmen lassen.',
 		wer: 'Verteidigungsminister Boris Pistorius, 8. November 2026, im Interview mit den Funke-Zeitungen',
 		// AFP-Meldung; falls der Yahoo-Link einmal tot ist, ersetzen durch die dts-Meldung:
@@ -135,8 +139,9 @@ const zitate = [
 		knopf: { text: 'Quelle lesen', url: 'https://de.nachrichten.yahoo.com/pistorius-f%C3%BCr-selbstbewussteren-umgang-nationalhymne-092230184.html' },
 	},
 	{
+		id: 'zitat-aigner',
 		text: 'Die Feinde der Demokratie sind stark. Aber wir, wir sind viel stärker, weil uns die Freiheit leistungsfähiger, kreativer und solidarischer macht.',
-		// Wahl durch die Bundesversammlung am 30. Januar 2027; danach „zukünftige“ anpassen
+		// Wahl durch die Bundesversammlung am 30. Januar 2027; wenn gewählt, „Bundespräsidentin“ eintragen
 		wer: 'Ilse Aigner, Präsidentin des Bayerischen Landtags, 6. Juli 2026',
 		knopf: { text: 'Rede nachlesen', url: 'https://www.bayern.landtag.de/fileadmin/Internet_Dokumente/Presse/2026-07-06_Rede_LPin_Ilse_Aigner_anl_Auszeichnung_Gro%C3%9Fe_Aula_LMU_zu_Ort_der_Demokratie.pdf' },
 	},
@@ -194,7 +199,7 @@ const shopAktiv = true;
 	<!-- Klopp-Zitat als Flagge (Schwarz-Rot-Gold); das Video ist nur verlinkt, nicht eingebettet, damit beim Seitenaufruf nichts von YouTube geladen wird -->
 	<div class="zitate" data-sekunden={zitatSekunden}>
 		{zitate.map((z, i) => (
-			<aside class:list={['flaggen-kasten', 'wz', { sichtbar: i === 0 }]} aria-hidden={i === 0 ? undefined : 'true'}>
+			<aside id={z.id} class:list={['flaggen-kasten', 'wz', { sichtbar: i === 0 }]} aria-hidden={i === 0 ? undefined : 'true'}>
 				<Image src={fotoReichstag} alt="" class="wz-bild" widths={[800, 1400]} sizes="(max-width: 680px) 100vw, 680px" />
 				<div class="streifen schwarz">
 					<p class="zitat">„{z.text}“</p>
@@ -400,9 +405,13 @@ const shopAktiv = true;
 			knoepfe[aktuell].setAttribute('aria-current', 'true');
 		};
 
+		// Aufruf mit /#zitat-…: dieses Zitat zeigen und nicht weiterwechseln
+		const angefragt = kaesten.findIndex((k) => k.id && '#' + k.id === location.hash);
+		if (angefragt > 0) zeige(angefragt);
+
 		const ruhig = matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const takt =
-			ruhig || kaesten.length < 2
+		let takt =
+			ruhig || kaesten.length < 2 || angefragt >= 0
 				? undefined
 				: setInterval(() => zeige((aktuell + 1) % kaesten.length), Number(zitateBox.dataset.sekunden) * 1000);
 
@@ -412,6 +421,13 @@ const shopAktiv = true;
 				zeige(i);
 			})
 		);
+		addEventListener('hashchange', () => {
+			const n = kaesten.findIndex((k) => '#' + k.id === location.hash);
+			if (n < 0) return;
+			clearInterval(takt);
+			takt = undefined;
+			zeige(n);
+		});
 		if (kaesten.length > 1) zitatPunkte.hidden = false;
 	}
 
