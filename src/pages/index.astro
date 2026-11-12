@@ -24,7 +24,7 @@ const liste = [
 		nr: 1,
 		name: 'D wie Demokratie',
 		alt: 'Ein großes D in Schwarz-Rot-Gold, darunter „wie Demokratie“ und die Adresse d-wie-demokratie.de, rechts ein QR-Code, in einem Oval wie beim Länderkennzeichen am Auto.',
-		shop: 'https://d-wie-demokratie.myspreadshop.de/all?searchTerm=D%20wie%20Demokratie%20Logo',
+		shop: 'https://biotshirt.de/collections/d-wie-demokratie',
 		// weitere Fassungen: Dateien wie oben, nur mit Endung, z. B. d-wie-demokratie-motiv-1-qr-weiss.png / .pdf
 		varianten: [
 			// mittlerer Ton, damit man das weiße Oval sieht (wie ein Aufkleber auf einem Laptop)
@@ -51,7 +51,7 @@ const liste = [
 		nr: 2,
 		name: 'Drei Entchen für die Demokratie',
 		alt: 'Drei Badeenten nebeneinander, gezeichnet in Schwarz, Rot und Gold, darunter die Adresse d-wie-demokratie.de.',
-		shop: 'https://d-wie-demokratie.myspreadshop.de/all?searchTerm=Drei%20Entchen%20f%C3%BCr%20die%20Demokratie%20%E2%80%93%20Motiv%20%232',
+		shop: 'https://biotshirt.de/collections/d-wie-demokratie',
 		// eine Fassung erscheint erst, wenn ihr PNG da ist (die schwarze folgt noch)
 		varianten: [
 			{ endung: '', name: 'Für helle Untergründe', text: 'Schrift und Augen schwarz. Für Papier, Aufkleber und helle Textilien.' },
@@ -145,8 +145,8 @@ const zitatSekunden = 8;
 
 // Der Shop liegt bei Spreadshop (Spreadshirt) und wird nur verlinkt (pro Motiv), nicht eingebettet,
 // damit diese Website frei von Cookies und Inhalten Dritter bleibt.
-// false: „Motiv … im Shop“ steht grau und ohne Link da (Shop vorübergehend abgeschaltet)
-const shopAktiv = false;
+// false: „Zum Shop“ steht bei den Motiven grau und ohne Link da (Shop vorübergehend abgeschaltet)
+const shopAktiv = true;
 ---
 
 <Layout
@@ -261,18 +261,25 @@ const shopAktiv = false;
 		<details id="shop">
 			<summary>Kann ich fertige Produkte mit den Motiven kaufen?</summary>
 			<p>
-				Bald. Wir suchen gerade eine Shoplösung, die zu unserem Anliegen passt: Produkte aus umweltfreundlichen
-				Materialien, fair hergestellt und erst gedruckt, wenn sie bestellt werden. Sobald wir einen passenden Anbieter
-				gefunden haben, findest du hier Produkte mit unseren Motiven.
+				<strong>Ja, ganz neu!</strong> Bei unserem Partner bioTshirt gibt es T-Shirts, Hoodies, Taschen und mehr mit
+				unseren Motiven, zum Beispiel vorne die Entchen und hinten „D wie Demokratie“. Der Shop steht noch ganz am
+				Anfang, weitere Produkte und Motive folgen.
 			</p>
 			<p>
-				Bis dahin kannst du alle Motive <a href="#herunterladen">kostenlos herunterladen</a> und selbst drucken oder
-				drucken lassen. Wenn du erfahren möchtest, sobald der Shop da ist, melde dich für unsere
-				<a href="#neuigkeiten">Neuigkeiten per E-Mail</a> an.
+				Du möchtest ein anderes Produkt oder eine andere Fassung? Dann gestalte es selbst: <a href="#motive">Lade
+				ein Motiv herunter</a> und lade es bei <a href="https://biotshirt.de" target="_blank" rel="noopener">bioTshirt</a>
+				im Konfigurator auf das Produkt deiner Wahl.
 			</p>
 			<p>
-				<strong>Wir werden daran nichts verdienen.</strong> Auf eine Provision werden wir verzichten. Du wirst nur zahlen,
-				was der Anbieter für Produkt, Druck und Versand berechnet.
+				<strong>Wir verdienen daran nichts.</strong> Du zahlst nur den normalen Preis von bioTshirt, ohne Aufschlag.
+				Kaufvertrag, Rechnung und Versand laufen direkt über bioTshirt.
+			</p>
+			<p>
+				Die Textilien stammen von Stanley/Stella und sind aus GOTS-zertifizierter Bio-Baumwolle. Bedruckt werden sie bei
+				bioTshirt in Düsseldorf, mit wasserbasierten Farben und erst, wenn du bestellst.
+			</p>
+			<p>
+				<a class="knopf-schwarz" href="https://biotshirt.de/collections/d-wie-demokratie" target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv="frage">Zum Shop</a>
 			</p>
 		</details>
 	</div>
@@ -321,10 +328,10 @@ const shopAktiv = false;
 									<li>
 										{shopAktiv ? (
 											<a href={motiv.shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv={motiv.nr}>
-												Motiv {motiv.nr} im Shop
+												Zum Shop
 											</a>
 										) : (
-											<span class="aus">Motiv {motiv.nr} im Shop</span>
+											<span class="aus">Zum Shop</span>
 										)}
 									</li>
 								)}
@@ -655,6 +662,11 @@ const shopAktiv = false;
 		font-weight: bold;
 		text-decoration: none;
 		border-radius: 4px;
+	}
+
+	/* in der Shop-Frage steht der Knopf in einem Absatz */
+	.fragen .knopf-schwarz {
+		display: inline-block;
 	}
 
 	.knopf-schwarz:hover {
