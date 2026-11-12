@@ -27,7 +27,7 @@ const menue = [
 	{ href: '/mitmachen/', text: 'Mitmachen' },
 	{ href: '/unterstuetzen/', text: 'Unterstützen' },
 	{ href: '/motiv-einreichen/', text: 'Motiv einreichen' },
-	{ href: '/geschichte-unserer-flagge/', text: 'Kleine Geschichte unserer Flagge' },
+	{ href: '/geschichte-unserer-flagge/', text: 'Kleine Geschichte unserer Flagge', kurz: 'Flaggengeschichte' },
 	// Anmeldung steht unten auf jeder Seite mit Teilen-Kasten; auf den anderen (Impressum usw.) zur Startseite
 	{ href: teilen ? '#neuigkeiten' : '/#neuigkeiten', text: 'Neuigkeiten per E-Mail' },
 ];
@@ -37,6 +37,10 @@ const menueKlein = [
 ];
 // Seite ohne eigenen Reiter: dann trägt das Menü ☰ den roten Balken
 const ohneReiter = !reiter.some((r) => (r === '/' ? pfad === '/' : pfad.startsWith(r)));
+// auf breiten Bildschirmen bekommt eine solche Seite einen eigenen Reiter hinter „Mitmachen“ (kurzer Name, falls vorhanden)
+const aktuell: { href: string; text: string; kurz?: string } | undefined = ohneReiter
+	? [...menue, ...menueKlein].find((m) => m.href === pfad)
+	: undefined;
 ---
 
 <!doctype html>
@@ -151,10 +155,11 @@ const ohneReiter = !reiter.some((r) => (r === '/' ? pfad === '/' : pfad.startsWi
 					<a href="/haeufige-fragen/" aria-current={pfad.startsWith('/haeufige-fragen') ? 'page' : undefined}>Fragen</a>
 					<a href="/verbuendete/" aria-current={pfad.startsWith('/verbuendete') ? 'page' : undefined}>Verbündete</a>
 					<a href="/mitmachen/" aria-current={pfad.startsWith('/mitmachen') ? 'page' : undefined}>Mitmachen</a>
+					{aktuell && <a href={aktuell.href} class="reiter-hier" aria-current="page">{aktuell.kurz ?? aktuell.text}</a>}
 				</nav>
 
 				<!-- Menü mit allen Seiten; <details> klappt auch ohne JavaScript auf -->
-				<details class:list={['menue', { hier: ohneReiter }]}>
+				<details class:list={['menue', { hier: ohneReiter, 'mit-reiter': aktuell }]}>
 					<summary aria-label="Menü">
 						<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
 							<path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
@@ -484,6 +489,23 @@ const ohneReiter = !reiter.some((r) => (r === '/' ? pfad === '/' : pfad.startsWi
 	.menue.hier summary {
 		border-bottom-color: var(--rot);
 		color: var(--text);
+	}
+
+	/* zusätzlicher Reiter für die aktuelle Seite (siehe „aktuell“ oben): nur wo er neben die anderen passt;
+	   dann trägt ihn der rote Balken und nicht mehr das Menü ☰ */
+	.reiter-hier {
+		display: none;
+	}
+
+	@media (min-width: 700px) {
+		.reiter-hier {
+			display: block;
+		}
+
+		.menue.mit-reiter summary {
+			border-bottom-color: transparent;
+			color: var(--grau);
+		}
 	}
 
 	.menue summary::-webkit-details-marker {
