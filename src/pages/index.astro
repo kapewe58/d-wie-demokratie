@@ -92,7 +92,7 @@ const sekunden = 5;
 
 // stoff: Hintergrund der Vorschau, sonst je nach Endung (dunkel/schwarz) bzw. ein heller Stoffton
 type Variante = { endung: string; name?: string; text?: string; stoff?: string };
-const stoff: Record<string, string> = { '-farbig': '#3f5f86', '-dunkel': '#000000' };
+const stoff: Record<string, string> = { '-farbig': '#5a7aa3', '-dunkel': '#3d3d3d' };
 const pngs = import.meta.glob<{ default: ImageMetadata }>('../assets/motive/d-wie-demokratie-motiv-*.png', { eager: true });
 // je Motiv die Fassungen, deren PNG da ist; ohne Angabe nur die eine Standardfassung
 const motive = liste
