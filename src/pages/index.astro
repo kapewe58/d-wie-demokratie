@@ -25,6 +25,16 @@ const liste = [
 		name: 'D wie Demokratie',
 		alt: 'Ein großes D in Schwarz-Rot-Gold, darunter „wie Demokratie“ und die Adresse d-wie-demokratie.de, rechts ein QR-Code, in einem Oval wie beim Länderkennzeichen am Auto.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?searchTerm=D%20wie%20Demokratie%20Logo',
+		// weitere Fassungen: Dateien wie oben, nur mit Endung, z. B. motiv-1-qr-weiss.png / d-wie-demokratie-motiv-1-qr-weiss.pdf
+		varianten: [
+			{ endung: '', name: 'Weiß', text: 'Mit weißem Oval, für Aufkleber, Papier und Tassen.' },
+			{
+				endung: '-qr-weiss',
+				name: 'Weiß nur hinter QR-Code',
+				text: 'Oval durchsichtig, nur hinter dem QR-Code weiß, damit er auch auf farbigen Textilien lesbar bleibt.',
+			},
+			{ endung: '-transparent', name: 'Transparent', text: 'Ganz ohne Weiß, die Textilfarbe scheint überall durch. Für helle Textilien.' },
+		],
 	},
 	{
 		nr: 2,
@@ -59,17 +69,24 @@ const bilder = [
 ];
 const sekunden = 5;
 
+type Variante = { endung: string; name?: string; text?: string };
 const pngs = import.meta.glob<{ default: ImageMetadata }>('../assets/motive/motiv-*.png', { eager: true });
+// je Motiv die Fassungen, deren PNG da ist; ohne Angabe nur die eine Standardfassung
 const motive = liste
-	.map((motiv) => ({ ...motiv, bild: pngs[`../assets/motive/motiv-${motiv.nr}.png`]?.default }))
-	.filter((motiv) => motiv.bild);
+	.map((motiv) => ({
+		...motiv,
+		fassungen: ((motiv as { varianten?: Variante[] }).varianten ?? [{ endung: '' }])
+			.map((v: Variante) => ({ ...v, bild: pngs[`../assets/motive/motiv-${motiv.nr}${v.endung}.png`]?.default }))
+			.filter((v) => v.bild),
+	}))
+	.filter((motiv) => motiv.fassungen.length > 0);
 // ?v= mit einem Fingerabdruck der Datei: ändert sich das PDF, ist es eine neue Adresse und kein Browser zeigt die alte
 // Fassung aus seinem Zwischenspeicher (der Server erlaubt dort einen Tag)
-const pdfLink = (nr: number) => {
-	const datei = `public/download/d-wie-demokratie-motiv-${nr}.pdf`;
+const pdfLink = (nr: number, endung = '') => {
+	const datei = `public/download/d-wie-demokratie-motiv-${nr}${endung}.pdf`;
 	if (!existsSync(datei)) return '';
 	const fingerabdruck = createHash('md5').update(readFileSync(datei)).digest('hex').slice(0, 8);
-	return `/download/d-wie-demokratie-motiv-${nr}.pdf?v=${fingerabdruck}`;
+	return `/download/d-wie-demokratie-motiv-${nr}${endung}.pdf?v=${fingerabdruck}`;
 };
 
 // Zitate im Flaggen-Kasten, wechseln alle paar Sekunden. Neues Zitat = neuer Eintrag.
@@ -242,35 +259,55 @@ const shopAktiv = false;
 	<ul class="motive">
 		{motive.map((motiv) => (
 			<li id={`motiv-${motiv.nr}`}>
-				<Image src={motiv.bild!} alt={motiv.alt} width={240} widths={[240, 480]} sizes="200px" />
-				<div>
-					<h3>Motiv {motiv.nr}: {motiv.name}</h3>
-					<ul class="links">
-						<li>
-							<a href={motiv.bild!.src} download={`d-wie-demokratie-motiv-${motiv.nr}.png`} data-umami-event="download-png" data-umami-event-motiv={motiv.nr}>
-								Motiv {motiv.nr} als PNG herunterladen
-							</a>
-						</li>
-						{pdfLink(motiv.nr) && (
-							<li>
-								<a href={pdfLink(motiv.nr)} download data-umami-event="download-pdf" data-umami-event-motiv={motiv.nr}>
-									Motiv {motiv.nr} als PDF für Druckereien
-								</a>
-							</li>
-						)}
-						{motiv.shop && (
-							<li>
-								{shopAktiv ? (
-									<a href={motiv.shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv={motiv.nr}>
-										Motiv {motiv.nr} im Shop
+				{/* mehrere Fassungen: Knöpfe wechseln zwischen ihnen; ohne JavaScript stehen alle untereinander */}
+				{motiv.fassungen.map((f, i) => (
+					<div class="fassung" data-fassung={i}>
+						<Image
+							src={f.bild!}
+							alt={motiv.alt}
+							width={240}
+							widths={[240, 480]}
+							sizes="200px"
+							class:list={{ 'auf-farbe': f.endung !== '' }}
+						/>
+						<div>
+							<h3>Motiv {motiv.nr}: {motiv.name}</h3>
+							{motiv.fassungen.length > 1 && (
+								<div class="fassung-knoepfe" role="group" aria-label="Fassung wählen" hidden>
+									{motiv.fassungen.map((g, k) => (
+										<button type="button" data-zu={k} aria-pressed={k === i ? 'true' : 'false'}>{g.name}</button>
+									))}
+								</div>
+							)}
+							{f.text && <p class="fassung-text">{f.name && <strong class="ohne-js">{f.name}: </strong>}{f.text}</p>}
+							<ul class="links">
+								<li>
+									<a href={f.bild!.src} download={`d-wie-demokratie-motiv-${motiv.nr}${f.endung}.png`} data-umami-event="download-png" data-umami-event-motiv={`${motiv.nr}${f.endung}`}>
+										Motiv {motiv.nr} als PNG herunterladen
 									</a>
-								) : (
-									<span class="aus">Motiv {motiv.nr} im Shop</span>
+								</li>
+								{pdfLink(motiv.nr, f.endung) && (
+									<li>
+										<a href={pdfLink(motiv.nr, f.endung)} download data-umami-event="download-pdf" data-umami-event-motiv={`${motiv.nr}${f.endung}`}>
+											Motiv {motiv.nr} als PDF für Druckereien
+										</a>
+									</li>
 								)}
-							</li>
-						)}
-					</ul>
-				</div>
+								{motiv.shop && (
+									<li>
+										{shopAktiv ? (
+											<a href={motiv.shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv={motiv.nr}>
+												Motiv {motiv.nr} im Shop
+											</a>
+										) : (
+											<span class="aus">Motiv {motiv.nr} im Shop</span>
+										)}
+									</li>
+								)}
+							</ul>
+						</div>
+					</div>
+				))}
 			</li>
 		))}
 	</ul>
@@ -764,11 +801,59 @@ const shopAktiv = false;
 	}
 
 	.motive > li {
+		padding: 1.2em 0;
+		border-top: 1px solid #e5e5e5;
+	}
+
+	.fassung {
 		display: flex;
 		align-items: center;
 		gap: 1.5em;
-		padding: 1.2em 0;
-		border-top: 1px solid #e5e5e5;
+	}
+
+	/* ohne JavaScript stehen die Fassungen untereinander */
+	.fassung + .fassung {
+		margin-top: 1.2em;
+	}
+
+	.fassung[hidden] {
+		display: none;
+	}
+
+	/* durchsichtige Fassungen auf einer Stofffarbe zeigen, sonst sähen sie aus wie die weiße */
+	.motive img.auf-farbe {
+		border-radius: 6px;
+		background: #9fb4c7;
+	}
+
+	.fassung-knoepfe {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4em;
+		margin-bottom: 0.5em;
+	}
+
+	.fassung-knoepfe button {
+		padding: 0.25em 0.7em;
+		border: 1px solid #c4c4c4;
+		border-radius: 999px;
+		background: #ffffff;
+		color: var(--text);
+		font: inherit;
+		font-size: 0.85rem;
+		cursor: pointer;
+	}
+
+	.fassung-knoepfe button[aria-pressed='true'] {
+		border-color: var(--schwarz);
+		background: var(--schwarz);
+		color: var(--gold);
+	}
+
+	.fassung-text {
+		margin: 0 0 0.4em;
+		color: var(--grau);
+		font-size: 0.9rem;
 	}
 
 	.motive img {
@@ -798,7 +883,7 @@ const shopAktiv = false;
 	}
 
 	@media (max-width: 540px) {
-		.motive > li {
+		.fassung {
 			flex-direction: column;
 			align-items: flex-start;
 			gap: 0.8em;
@@ -810,3 +895,23 @@ const shopAktiv = false;
 		}
 	}
 </style>
+
+<script>
+	// Fassungen eines Motivs: nur die gewählte zeigen; die Knöpfe gibt es in jeder Fassung, damit sie neben dem Bild stehen
+	for (const motiv of document.querySelectorAll<HTMLElement>('.motive > li')) {
+		const fassungen = [...motiv.querySelectorAll<HTMLElement>('.fassung')];
+		if (fassungen.length < 2) continue;
+		const zeigen = (nr: number) => fassungen.forEach((f, i) => (f.hidden = i !== nr));
+		motiv.querySelectorAll<HTMLElement>('.fassung-knoepfe').forEach((k) => (k.hidden = false));
+		motiv.querySelectorAll<HTMLElement>('.ohne-js').forEach((e) => e.remove());
+		motiv.addEventListener('click', (e) => {
+			const knopf = (e.target as Element).closest<HTMLButtonElement>('button[data-zu]');
+			if (!knopf) return;
+			const nr = Number(knopf.dataset.zu);
+			zeigen(nr);
+			// Fokus auf denselben Knopf in der nun sichtbaren Fassung, damit Tastaturbedienung nicht verloren geht
+			fassungen[nr].querySelector<HTMLButtonElement>(`button[data-zu="${nr}"]`)?.focus();
+		});
+		zeigen(0);
+	}
+</script>
