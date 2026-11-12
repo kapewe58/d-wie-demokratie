@@ -136,7 +136,7 @@ const shopAktiv = false;
 			))}
 		</div>
 		<!-- Kennzeichnung nach Art. 50 KI-Verordnung -->
-		<p class="ki-hinweis" hidden={!bilder[0].foto}>KI-generierte Bilder, bald ersetzen wir sie durch echte</p>
+		<p class="ki-hinweis" hidden={!bilder[0].foto}>KI-Bilder, bald ersetzen wir sie durch echte.</p>
 	</div>
 
 	<h1>Wir zeigen Flagge</h1>
@@ -423,7 +423,7 @@ const shopAktiv = false;
 		gap: 0.2em;
 	}
 
-	/* eigene Zeile unter den Punkten; bei Bildern ohne Hinweis bleibt der Platz frei, damit nichts springt */
+	/* auf dem Handy eigene Zeile unter den Punkten; bei Bildern ohne Hinweis bleibt der Platz frei, damit nichts springt */
 	.ki-hinweis {
 		margin: 0.2em 0 0;
 		font-size: 0.75rem;
@@ -434,6 +434,29 @@ const shopAktiv = false;
 	.ki-hinweis[hidden] {
 		display: block;
 		visibility: hidden;
+	}
+
+	/* auf dem Handy steht der Hinweis über den Punkten, direkt unter dem Bild */
+	@media (max-width: 659px) {
+		.unter-slider {
+			display: flex;
+			flex-direction: column-reverse;
+		}
+
+		.ki-hinweis {
+			margin: 0 0 0.2em;
+		}
+	}
+
+	/* auf breiten Bildschirmen passt er rechts neben die Punkte */
+	@media (min-width: 660px) {
+		.ki-hinweis {
+			position: absolute;
+			top: 50%;
+			right: 0;
+			margin: 0;
+			transform: translateY(-50%);
+		}
 	}
 
 	.punkte[hidden] {
