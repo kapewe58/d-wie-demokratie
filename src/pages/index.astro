@@ -34,6 +34,7 @@ const liste = [
 				text: 'Oval durchsichtig, nur hinter dem QR-Code weiß, damit er auch auf farbigen Textilien lesbar bleibt.',
 			},
 			{ endung: '-transparent', name: 'Transparent', text: 'Ganz ohne Weiß, die Textilfarbe scheint überall durch. Für helle Textilien.' },
+			{ endung: '-dunkel', name: 'Für dunkle Textilien', text: 'Rand und Schrift weiß, QR-Code auf weißem Feld. Für dunkle Textilien.' },
 		],
 	},
 	{
@@ -823,7 +824,8 @@ const shopAktiv = false;
 	/* Motive mit mehreren Fassungen: alle auf derselben Stofffarbe, damit man sieht, wo Weiß ist und wo nicht */
 	.motive img.auf-farbe {
 		border-radius: 6px;
-		background: #9fb4c7;
+		/* mittlerer Ton: Schwarz und Weiß sind beide gut zu erkennen */
+		background: #71839b;
 	}
 
 	.fassung-knoepfe {
