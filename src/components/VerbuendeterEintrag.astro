@@ -1,0 +1,47 @@
+---
+// Ein Eintrag in der Liste der Verbündeten (Seite /verbuendete/)
+import { Image } from 'astro:assets';
+
+const { v } = Astro.props;
+---
+
+<li>
+	{v.logo && <Image class="logo" src={v.logo} alt="" width={240} />}
+	<div>
+		{v.url ? <a href={v.url} rel="noopener">{v.name}</a> : <strong>{v.name}</strong>}
+		{v.zusatz && <span class="zusatz">{v.zusatz}</span>}
+		{v.zitat && <q class="zitat">{v.zitat}</q>}
+	</div>
+</li>
+
+<style>
+	li {
+		display: flex;
+		gap: 1em;
+		align-items: flex-start;
+		padding: 0.5em 0;
+		border-bottom: 1px solid #e4e4e4;
+	}
+
+	/* Zitat unter dem Namen, mit deutschen Anführungszeichen */
+	.zitat {
+		display: block;
+		margin-top: 0.3em;
+		font-style: italic;
+		quotes: '„' '“';
+	}
+
+	/* Logos einheitlich klein, ohne sie zu verzerren */
+	.logo {
+		flex: none;
+		width: 96px;
+		height: 48px;
+		object-fit: contain;
+	}
+
+	.zusatz {
+		display: block;
+		color: #555555;
+		font-size: 0.95rem;
+	}
+</style>
