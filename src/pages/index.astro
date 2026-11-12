@@ -268,7 +268,7 @@ const shopAktiv = false;
 							width={240}
 							widths={[240, 480]}
 							sizes="200px"
-							class:list={{ 'auf-farbe': f.endung !== '' }}
+							class:list={{ 'auf-farbe': motiv.fassungen.length > 1 }}
 						/>
 						<div>
 							<h3>Motiv {motiv.nr}: {motiv.name}</h3>
@@ -820,7 +820,7 @@ const shopAktiv = false;
 		display: none;
 	}
 
-	/* durchsichtige Fassungen auf einer Stofffarbe zeigen, sonst sähen sie aus wie die weiße */
+	/* Motive mit mehreren Fassungen: alle auf derselben Stofffarbe, damit man sieht, wo Weiß ist und wo nicht */
 	.motive img.auf-farbe {
 		border-radius: 6px;
 		background: #9fb4c7;
