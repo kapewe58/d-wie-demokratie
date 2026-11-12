@@ -5,13 +5,14 @@ import Layout from '../layouts/Layout.astro';
 
 type Verbuendeter = {
 	name: string;
-	art: 'mensch' | 'organisation' | 'firma';
-	// bei Menschen z. B. Beruf, bei Organisationen und Firmen der Ort
+	// Organisation: Vereine, Schulen, Firmen usw.
+	art: 'person' | 'organisation';
+	// Tätigkeit und/oder Ort, z. B. „Lehrerin, Köln“
 	zusatz?: string;
 	url?: string;
 	// kurzer Satz des Verbündeten, warum er dabei ist (ohne Anführungszeichen eintragen)
 	zitat?: string;
-	// Logo von Organisationen und Firmen, Datei in src/assets/verbuendete/
+	// Logo (meist bei Organisationen), Datei in src/assets/verbuendete/
 	logo?: ImageMetadata;
 };
 
@@ -19,9 +20,8 @@ type Verbuendeter = {
 const verbuendete: Verbuendeter[] = [];
 
 const gruppen = [
-	{ art: 'mensch', titel: 'Menschen' },
-	{ art: 'organisation', titel: 'Organisationen: Vereine, Schulen etc.' },
-	{ art: 'firma', titel: 'Firmen' },
+	{ art: 'person', titel: 'Personen' },
+	{ art: 'organisation', titel: 'Organisationen' },
 ] as const;
 
 const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${encodeURIComponent(betreff)}`;
@@ -135,15 +135,14 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 	<section class="kasten" id="eintragen" aria-labelledby="eintragen-titel">
 		<h2 id="eintragen-titel">Du bist gleichgesinnt? Dann verbünde dich mit uns!</h2>
 		<p>
-			Ob als Privatperson, Verein oder Firma: Schreib uns eine E-Mail an
+			Ob als Person oder Organisation: Schreib uns eine E-Mail an
 			<a href={mailto('Wir sind Verbündete')} data-umami-event="email-verbuendete">info@d-wie-demokratie.de</a>, Betreff
-			„Wir sind Verbündete“. Schreib dazu,
+			„Wir sind Verbündete“. Schick uns dazu:
 		</p>
 		<ul>
-			<li>unter welchem Namen wir dich hier nennen dürfen,</li>
-			<li>als Privatperson auf Wunsch deinen Beruf oder deinen Ort,</li>
-			<li>als Organisation euren Ort, eure Website und auf Wunsch euer Logo,</li>
-			<li>auf Wunsch einen kurzen Satz, warum du dabei bist.</li>
+			<li>den Namen bzw. die Bezeichnung, die wir nennen sollen</li>
+			<li>Tätigkeit, Ort, Website, Logo</li>
+			<li>sehr gerne einen kurzen Satz</li>
 		</ul>
 		<p>
 			Verbündete teilen unsere Werte. Verpflichtungen entstehen dadurch keine, und es kostet nichts. Wir prüfen jeden
