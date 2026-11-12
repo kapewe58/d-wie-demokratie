@@ -14,3 +14,6 @@ npm-debug.log*
 
 # macOS
 .DS_Store
+
+# Arbeitsordner mit allen Motiv-Dateien (PDF + PNG); Claude übernimmt Neues/Geändertes in die Website
+/motive/
