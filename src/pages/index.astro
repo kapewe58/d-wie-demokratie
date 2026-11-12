@@ -86,6 +86,8 @@ const bilder = [
 const sekunden = 5;
 
 type Variante = { endung: string; name?: string; text?: string };
+// Vorschau auf der Stofffarbe, für die die Fassung gedacht ist; sonst ein mittlerer Ton
+const stoff: Record<string, string> = { '-dunkel': '#1f2a44', '-schwarz': '#000000' };
 const pngs = import.meta.glob<{ default: ImageMetadata }>('../assets/motive/motiv-*.png', { eager: true });
 // je Motiv die Fassungen, deren PNG da ist; ohne Angabe nur die eine Standardfassung
 const motive = liste
@@ -285,6 +287,7 @@ const shopAktiv = false;
 							widths={[240, 480]}
 							sizes="200px"
 							class:list={{ 'auf-farbe': motiv.fassungen.length > 1 }}
+							style={stoff[f.endung] ? `background: ${stoff[f.endung]}` : undefined}
 						/>
 						<div>
 							<h3>Motiv {motiv.nr}: {motiv.name}</h3>
