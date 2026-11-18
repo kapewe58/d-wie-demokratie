@@ -37,12 +37,13 @@ const liste = [
 			{
 				endung: '-farbig',
 				name: 'Für mittlere Untergründe',
+				versteckt: true,
 				text: 'Rand und Schrift weiß, QR-Code auf weißem Feld. Für farbige Textilien wie Blau, Grün oder Grau.',
 			},
 			{
 				endung: '-dunkel',
 				name: 'Für dunkle Untergründe',
-				text: 'Wie für mittlere Untergründe, dazu ein feiner weißer Rand um das D. Für Schwarz, Dunkelblau und andere sehr dunkle Textilien.',
+				text: 'Rand und Schrift weiß, QR-Code auf weißem Feld, dazu ein feiner weißer Rand um das D. Für mittlere und dunkle Farben wie Blau, Grün, Grau oder Schwarz.',
 			},
 		],
 	},
@@ -53,11 +54,11 @@ const liste = [
 		// eine Fassung erscheint erst, wenn ihr PNG da ist (die schwarze folgt noch)
 		varianten: [
 			{ endung: '', name: 'Für helle Untergründe', text: 'Schrift und Augen schwarz. Für Papier, Aufkleber und helle Textilien.' },
-			{ endung: '-farbig', name: 'Für mittlere Untergründe', text: 'Schrift und Augen weiß. Für farbige Textilien wie Blau, Grün oder Grau.' },
+			{ endung: '-farbig', name: 'Für mittlere Untergründe', versteckt: true, text: 'Schrift und Augen weiß. Für farbige Textilien wie Blau, Grün oder Grau.' },
 			{
 				endung: '-dunkel',
 				name: 'Für dunkle Untergründe',
-				text: 'Wie für mittlere Untergründe, dazu ein feiner weißer Rand um die schwarze Ente. Für Schwarz, Dunkelblau und andere sehr dunkle Textilien.',
+				text: 'Schrift und Augen weiß, dazu ein feiner weißer Rand um die schwarze Ente. Für mittlere und dunkle Farben wie Blau, Grün, Grau oder Schwarz.',
 			},
 		],
 	},
@@ -89,7 +90,8 @@ const bilder = [
 const sekunden = 5;
 
 // stoff: Hintergrund der Vorschau, sonst je nach Endung (dunkel/schwarz) bzw. ein heller Stoffton
-type Variante = { endung: string; name?: string; text?: string; stoff?: string };
+// versteckt: true blendet die Fassung aus (Dateien bleiben liegen, zum Zurückholen nur die Zeile löschen)
+type Variante = { endung: string; name?: string; text?: string; stoff?: string; versteckt?: boolean };
 const stoff: Record<string, string> = { '-farbig': '#5a7aa3', '-dunkel': '#3d3d3d' };
 const pngs = import.meta.glob<{ default: ImageMetadata }>('../assets/motive/d-wie-demokratie-motiv-*.png', { eager: true });
 // je Motiv die Fassungen, deren PNG da ist; ohne Angabe nur die eine Standardfassung
@@ -98,7 +100,7 @@ const motive = liste
 		...motiv,
 		fassungen: ((motiv as { varianten?: Variante[] }).varianten ?? [{ endung: '' }])
 			.map((v: Variante) => ({ ...v, bild: pngs[`../assets/motive/d-wie-demokratie-motiv-${motiv.nr}${v.endung}.png`]?.default }))
-			.filter((v) => v.bild),
+			.filter((v) => v.bild && !v.versteckt),
 	}))
 	.filter((motiv) => motiv.fassungen.length > 0);
 // ?v= mit einem Fingerabdruck der Datei: ändert sich das PDF, ist es eine neue Adresse und kein Browser zeigt die alte
