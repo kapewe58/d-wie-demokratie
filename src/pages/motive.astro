@@ -1,0 +1,359 @@
+---
+// Reiter „Motive“: alle Motive mit Fassungen, Download (PNG, PDF) und Shop-Link, dazu die Fragen zum Herunterladen
+// und zum Shop. Die Motive selbst stehen in src/data/motive.ts (auch für die Vorschau auf der Startseite).
+// /#motiv-<nr>, /#herunterladen und /#shop von früher leitet die Startseite hierher weiter.
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import { motive, pdfLink, shopAktiv, shopStart, stoff } from '../data/motive';
+---
+
+<Layout
+	title="Unsere Motive – D wie Demokratie"
+	description="Motive für Demokratie und Grundgesetz in Schwarz-Rot-Gold: kostenlos herunterladen, selbst drucken oder fertig bedruckt im Shop bestellen."
+>
+	<h1>Unsere Motive</h1>
+
+	<p class="lead">
+		Unsere Motive zeigen Flagge für die Demokratie. Du kannst sie kostenlos herunterladen, selbst drucken oder fertig
+		bedruckt in unserem Shop bestellen.
+	</p>
+	<p>
+		Bisher sind es zwei, aber das soll sich ändern: Wir wünschen uns viele neue Motive, von Kindern und Jugendlichen,
+		von Künstlerinnen und Künstlern, von Designerinnen und Designern und von allen, die Lust haben, mitzumachen.
+		<a href="/motiv-einreichen/">Motiv einreichen</a>
+	</p>
+
+	<div class="fragen">
+		<details id="herunterladen">
+			<summary>Kann ich die Motive herunterladen und selbst drucken (lassen)?</summary>
+			<p>
+				Ja. Alle unsere Motive stehen dir kostenlos zur Verfügung. Druck sie selbst oder lass sie
+				von einer Druckerei oder einem Textildrucker oder Dienstleister deiner Wahl drucken. Unten findest du zu jedem Motiv zwei Dateien:
+			</p>
+			<ul>
+				<li><strong>PNG:</strong> zum Drucken zu Hause, im Copyshop oder für Bildschirm und Social Media, Hintergrund transparent</li>
+				<li><strong>PDF:</strong> Druckdatei in CMYK für Druckereien</li>
+			</ul>
+			<p>
+				Brauchst du mehrere Stück, etwa für deinen Verein, deine Firma oder deine Nachbarschaft? Dann ist das meist der
+				günstigste Weg. Online-Druckereien, Textildrucker und Dienstleister stellen Aufkleber, Plakate, T-Shirts, Tassen und alle möglichen Dinge schon in
+				kleinen Auflagen günstig her.
+			</p>
+			<p>
+				Lade dazu die PDF-Datei herunter und gib die Produktion bei einem Anbieter deiner Wahl in Auftrag. So entscheidest
+				du auch selbst, worauf gedruckt wird: zum Beispiel auf Recyclingpapier oder auf Textilien aus Bio-Baumwolle.
+			</p>
+			<p>
+				Du planst eine kleinere oder größere Auflage? Wir helfen dir gerne dabei. Schreib uns an
+				<a href="mailto:info@d-wie-demokratie.de?subject=Auflage%20D%20wie%20Demokratie" data-umami-event="email-unterstuetzung" data-umami-event-seite="motive">info@d-wie-demokratie.de</a>.
+			</p>
+			<p>
+				Du darfst unsere Motive kostenlos drucken und verteilen. Die Nutzungsrechte dazu erhältst du. Verändern darfst du die Motive jedoch nicht.
+			</p>
+		</details>
+
+		<details id="shop">
+			<summary>Kann ich fertige Produkte mit den Motiven kaufen?</summary>
+			<p>
+				<strong>Ja.</strong> In unserem Shop bei Spreadshirt gibt es T-Shirts, Hoodies und eine Kappe mit unseren
+				Motiven, alle aus Bio-Baumwolle. Bei jedem Motiv weiter unten führt „Zum Shop“ direkt zu den passenden
+				Produkten.
+			</p>
+			<p>
+				Spreadshirt aus Leipzig druckt erst, wenn du bestellst, verschickt und rechnet ab und ist dein
+				Vertragspartner. Passt etwas nicht, kannst du es innerhalb von 30 Tagen zurückschicken oder umtauschen. Bei
+				Fragen zu Bestellung oder Lieferung hilft dir der Kundenservice von Spreadshirt.
+				<a href="/haeufige-fragen/#umwelt">Wie umweltfreundlich sind die Produkte?</a>
+			</p>
+			<p>
+				<strong>Wir verdienen daran nichts.</strong> Unser Shop ist als Non-Profit-Shop eingerichtet: Du zahlst nur
+				den Preis von Spreadshirt, ohne Aufschlag für uns.
+			</p>
+			<p>
+				Unabhängig davon kannst du alle Motive jederzeit <a href="#herunterladen">kostenlos herunterladen</a> und
+				selbst drucken oder drucken lassen.
+			</p>
+			<p>
+				<a class="knopf-schwarz" href={shopStart} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv="frage">Zum Shop</a>
+			</p>
+		</details>
+	</div>
+
+	<ul class="motive">
+		{motive.map((motiv) => (
+			<li id={`motiv-${motiv.nr}`}>
+				{/* mehrere Fassungen: Knöpfe wechseln zwischen ihnen; ohne JavaScript stehen alle untereinander */}
+				{motiv.fassungen.map((f, i) => (
+					<div class="fassung" data-fassung={i}>
+						<Image
+							src={f.bild!}
+							alt={motiv.alt}
+							width={240}
+							widths={[240, 480]}
+							sizes="200px"
+							class:list={{ 'auf-farbe': motiv.fassungen.length > 1 }}
+							style={f.stoff ?? stoff[f.endung] ? `background: ${f.stoff ?? stoff[f.endung]}` : undefined}
+						/>
+						<div>
+							<h2>Motiv {motiv.nr}: {motiv.name}</h2>
+							{motiv.fassungen.length > 1 && (
+								<div class="fassung-knoepfe" role="group" aria-label="Fassung wählen" hidden>
+									{motiv.fassungen.map((g, k) => (
+										<button type="button" data-zu={k} aria-pressed={k === i ? 'true' : 'false'}>{g.name}</button>
+									))}
+								</div>
+							)}
+							{f.text && <p class="fassung-text">{f.name && <strong class="ohne-js">{f.name}: </strong>}{f.text}</p>}
+							<ul class="links">
+								<li>
+									<a href={f.bild!.src} download={`d-wie-demokratie-motiv-${motiv.nr}${f.endung}.png`} data-umami-event="download-png" data-umami-event-motiv={`${motiv.nr}${f.endung}`}>
+										Motiv {motiv.nr} als PNG herunterladen
+									</a>
+								</li>
+								{pdfLink(motiv.nr, f.endung) && (
+									<li>
+										<a href={pdfLink(motiv.nr, f.endung)} download data-umami-event="download-pdf" data-umami-event-motiv={`${motiv.nr}${f.endung}`}>
+											Motiv {motiv.nr} als PDF für Druckereien
+										</a>
+									</li>
+								)}
+								{(f.shop ?? motiv.shop) && (
+									<li>
+										{shopAktiv ? (
+											<a href={f.shop ?? motiv.shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv={motiv.nr}>
+												Zum Shop
+											</a>
+										) : (
+											<span class="aus">Zum Shop</span>
+										)}
+									</li>
+								)}
+							</ul>
+						</div>
+					</div>
+				))}
+			</li>
+		))}
+	</ul>
+
+	<p class="mehr-motive">
+		Weitere Motive kommen bald. <a href="#neuigkeiten">Wir informieren dich gerne.</a>
+		Oder gestalte selbst eins: <a href="/motiv-einreichen/">Motiv einreichen</a>.
+	</p>
+</Layout>
+
+<script>
+	// Links wie /motive/#herunterladen oder /motive/#shop klappen die passende Frage gleich auf.
+	function aufklappen() {
+		const ziel = location.hash && document.querySelector(location.hash);
+		if (ziel instanceof HTMLDetailsElement) ziel.open = true;
+	}
+	addEventListener('hashchange', aufklappen);
+	aufklappen();
+
+	// Fassungen eines Motivs: nur die gewählte zeigen; die Knöpfe gibt es in jeder Fassung, damit sie neben dem Bild stehen
+	for (const motiv of document.querySelectorAll<HTMLElement>('.motive > li')) {
+		const fassungen = [...motiv.querySelectorAll<HTMLElement>('.fassung')];
+		if (fassungen.length < 2) continue;
+		const zeigen = (nr: number) => fassungen.forEach((f, i) => (f.hidden = i !== nr));
+		motiv.querySelectorAll<HTMLElement>('.fassung-knoepfe').forEach((k) => (k.hidden = false));
+		motiv.querySelectorAll<HTMLElement>('.ohne-js').forEach((e) => e.remove());
+		motiv.addEventListener('click', (e) => {
+			const knopf = (e.target as Element).closest<HTMLButtonElement>('button[data-zu]');
+			if (!knopf) return;
+			const nr = Number(knopf.dataset.zu);
+			zeigen(nr);
+			// Fokus auf denselben Knopf in der nun sichtbaren Fassung, damit Tastaturbedienung nicht verloren geht
+			fassungen[nr].querySelector<HTMLButtonElement>(`button[data-zu="${nr}"]`)?.focus();
+		});
+		zeigen(0);
+	}
+</script>
+
+<style>
+	.lead {
+		font-size: 1.3rem;
+	}
+
+	/* Ziehharmonika: Fragen zum Aufklappen, mit Schwarz-Rot-Gold links wie die Kästen auf „Mitmachen“ */
+	.fragen {
+		margin-top: 2em;
+	}
+
+	details {
+		margin-top: 0.8em;
+		padding-left: 12px;
+		background:
+			linear-gradient(
+				to right,
+				var(--schwarz) 0 33.33%,
+				var(--rot) 33.33% 66.66%,
+				var(--gold) 66.66% 100%
+			) left / 12px 100% no-repeat,
+			#fafafa;
+	}
+
+	summary {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1em;
+		padding: 1em 1.2em;
+		font-size: 1.1rem;
+		font-weight: bold;
+		cursor: pointer;
+		list-style: none;
+	}
+
+	summary::-webkit-details-marker {
+		display: none;
+	}
+
+	summary::after {
+		content: '+';
+		flex-shrink: 0;
+		font-size: 1.5rem;
+		line-height: 1;
+	}
+
+	details[open] summary::after {
+		content: '–';
+	}
+
+	details > :not(summary) {
+		margin-right: 1.2em;
+		margin-left: 1.2em;
+	}
+
+	details > :last-child {
+		margin-bottom: 0;
+		padding-bottom: 1.2em;
+	}
+
+	/* gelber Knopf mit ganz dünnem, halb durchsichtigem schwarzem Rand (wie auf der Startseite) */
+	.knopf-schwarz {
+		display: inline-block;
+		padding: 0.6em 1.2em;
+		border: 1px solid rgba(0, 0, 0, 0.4);
+		background: var(--gold);
+		color: var(--schwarz);
+		font-weight: bold;
+		text-decoration: none;
+		border-radius: 4px;
+	}
+
+	.knopf-schwarz:hover {
+		background: var(--schwarz);
+		color: var(--gold);
+	}
+
+	/* Motive untereinander: Bild links, Links rechts; auf dem Handy Bild oben */
+	.motive {
+		margin: 2em 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	/* Hinweis unter dem letzten Motiv, mit derselben Trennlinie wie zwischen den Motiven */
+	.mehr-motive {
+		margin: 0;
+		padding-top: 1.2em;
+		border-top: 1px solid #e5e5e5;
+	}
+
+	.motive > li {
+		padding: 1.2em 0;
+		border-top: 1px solid #e5e5e5;
+	}
+
+	.fassung {
+		display: flex;
+		align-items: center;
+		gap: 1.5em;
+	}
+
+	/* ohne JavaScript stehen die Fassungen untereinander */
+	.fassung + .fassung {
+		margin-top: 1.2em;
+	}
+
+	.fassung[hidden] {
+		display: none;
+	}
+
+	/* Motive mit mehreren Fassungen: jede Vorschau auf dem Stoff, für den sie gedacht ist (Farbe pro Fassung im Bild-Stil) */
+	.motive img.auf-farbe {
+		border-radius: 6px;
+		/* heller Stoffton wie ein graumeliertes Shirt: Weiß ist darauf noch zu erkennen */
+		background: #c3c7cd;
+	}
+
+	.fassung-knoepfe {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4em;
+		margin-bottom: 0.5em;
+	}
+
+	.fassung-knoepfe button {
+		padding: 0.25em 0.7em;
+		border: 1px solid #c4c4c4;
+		border-radius: 999px;
+		background: #ffffff;
+		color: var(--text);
+		font: inherit;
+		font-size: 0.85rem;
+		cursor: pointer;
+	}
+
+	.fassung-knoepfe button[aria-pressed='true'] {
+		border-color: var(--schwarz);
+		background: var(--schwarz);
+		color: var(--gold);
+	}
+
+	.fassung-text {
+		margin: 0 0 0.4em;
+		color: var(--grau);
+		font-size: 0.9rem;
+	}
+
+	.motive img {
+		flex-shrink: 0;
+		width: 200px;
+		height: auto;
+	}
+
+	.motive h2 {
+		margin: 0 0 0.4em;
+		font-size: 1.1rem;
+	}
+
+	.links {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.links li + li {
+		margin-top: 0.3em;
+	}
+
+	/* abgeschalteter Link: grau, nicht klickbar */
+	.links .aus {
+		color: var(--grau);
+	}
+
+	@media (max-width: 540px) {
+		.fassung {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.8em;
+		}
+
+		.motive img {
+			width: 100%;
+			max-width: 320px;
+		}
+	}
+</style>

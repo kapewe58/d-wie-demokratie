@@ -1,5 +1,5 @@
 ---
-// Alte Adresse: Download, Shop und Motive stehen jetzt auf der Startseite. Eigene Weiterleitung statt
+// Alte Adresse: Download, Shop und Motive stehen jetzt auf /motive/. Eigene Weiterleitung statt
 // `redirects` in astro.config.mjs, damit Links wie /flagge-zeigen/#motiv-2 an der richtigen Stelle landen.
 ---
 
@@ -7,13 +7,13 @@
 <html lang="de">
 	<head>
 		<meta charset="utf-8" />
-		<title>Weiterleitung zur Startseite</title>
+		<title>Weiterleitung zu unseren Motiven</title>
 		<meta name="robots" content="noindex" />
-		<link rel="canonical" href="https://d-wie-demokratie.de/" />
-		<script is:inline>location.replace('/' + location.hash);</script>
-		<meta http-equiv="refresh" content="0;url=/" />
+		<link rel="canonical" href="https://d-wie-demokratie.de/motive/" />
+		<script is:inline>location.replace('/motive/' + location.hash);</script>
+		<meta http-equiv="refresh" content="0;url=/motive/" />
 	</head>
 	<body>
-		<a href="/">Weiter zur Startseite</a>
+		<a href="/motive/">Weiter zu unseren Motiven</a>
 	</body>
 </html>

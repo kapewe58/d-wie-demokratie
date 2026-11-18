@@ -18,12 +18,13 @@ const pfad = Astro.url.pathname;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/aufkleber-d-wie-demokratie.png', Astro.site);
 // Reihenfolge der Reiter, für das Wischen auf dem Handy und die Richtung der Animation
-const reiter = ['/', '/haeufige-fragen/', '/verbuendete/', '/mitmachen/'];
+const reiter = ['/', '/haeufige-fragen/', '/verbuendete/', '/motive/'];
 // Menü ☰ oben rechts: alle Seiten, auch die ohne eigenen Reiter. Neue Seite = neuer Eintrag hier.
 const menue = [
 	{ href: '/', text: 'Startseite' },
 	{ href: '/haeufige-fragen/', text: 'Fragen' },
 	{ href: '/verbuendete/', text: 'Verbündete' },
+	{ href: '/motive/', text: 'Motive' },
 	{ href: '/mitmachen/', text: 'Mitmachen' },
 	{ href: '/unterstuetzen/', text: 'Unterstützen' },
 	{ href: '/motiv-einreichen/', text: 'Motiv einreichen', handy: 'Einreichen' },
@@ -37,7 +38,7 @@ const menueKlein = [
 ];
 const ohneReiter = !reiter.some((r) => (r === '/' ? pfad === '/' : pfad.startsWith(r)));
 // Seiten ohne eigenen Reiter, die im Menü stehen, bekommen einen Reiter für die aktuelle Seite: am Computer hinter
-// „Mitmachen“ (statt „Unterstützen“, beides passt nicht), auf dem Handy statt „Mitmachen“. Namen: `kurz` am Computer,
+// „Motive“, auf dem Handy statt „Motive“ (beides passt dort nicht). Namen: `kurz` am Computer,
 // `handy` auf dem Handy, sonst `text`. Nicht im Wischen zwischen den Reitern.
 const aktuell: { href: string; text: string; kurz?: string; handy?: string } | undefined = ohneReiter
 	? [...menue, ...menueKlein].find((m) => m.href === pfad)
@@ -156,14 +157,12 @@ const aktuell: { href: string; text: string; kurz?: string; handy?: string } | u
 					</a>
 					<a href="/haeufige-fragen/" aria-current={pfad.startsWith('/haeufige-fragen') ? 'page' : undefined}>Fragen</a>
 					<a href="/verbuendete/" aria-current={pfad.startsWith('/verbuendete') ? 'page' : undefined}>Verbündete</a>
-					<a href="/mitmachen/" class:list={{ 'nicht-am-handy': aktuell }} aria-current={pfad.startsWith('/mitmachen') ? 'page' : undefined}>Mitmachen</a>
-					{aktuell ? (
+					<a href="/motive/" class:list={{ 'nicht-am-handy': aktuell }} aria-current={pfad.startsWith('/motive') ? 'page' : undefined}>Motive</a>
+					{aktuell && (
 						<a href={aktuell.href} aria-current="page">
 							<span class="name-breit">{aktuell.kurz ?? aktuell.text}</span>
 							<span class="name-handy">{aktuell.handy ?? aktuell.text}</span>
 						</a>
-					) : (
-						<a href="/unterstuetzen/" class="nur-breit">Unterstützen</a>
 					)}
 				</nav>
 
@@ -504,18 +503,12 @@ const aktuell: { href: string; text: string; kurz?: string; handy?: string } | u
 		color: var(--text);
 	}
 
-	/* Reiter für die aktuelle Seite bzw. „Unterstützen“ (siehe `aktuell` oben): am Handy ersetzt die aktuelle Seite
-	   „Mitmachen“, „Unterstützen“ steht nur am Computer; Namen je nach Breite */
-	.nur-breit,
+	/* Reiter für die aktuelle Seite (siehe `aktuell` oben): am Handy ersetzt er „Motive“; Namen je nach Breite */
 	.name-breit {
 		display: none;
 	}
 
 	@media (min-width: 700px) {
-		.nur-breit {
-			display: block;
-		}
-
 		.name-breit {
 			display: inline;
 		}

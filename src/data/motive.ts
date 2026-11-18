@@ -1,0 +1,89 @@
+// Unsere Motive, für die Seite /motive/ (alle Motive mit Download und Shop) und die Vorschau auf der Startseite.
+//
+// Neues Motiv = zwei Dateien ablegen und hier einen Eintrag ergänzen:
+//   PNG (4000 px breit, transparent): src/assets/motive/d-wie-demokratie-motiv-<nr>.png  (Vorschaubild und Download)
+//   PDF (CMYK, Druckgröße):           public/download/d-wie-demokratie-motiv-<nr>.pdf
+// Ein Motiv erscheint erst, wenn sein PNG da ist; fehlen PDF oder Shop-Link, wird nur dieser Link weggelassen.
+// Jedes Motiv ist verlinkbar: /motive/#motiv-<nr> (alte Links /#motiv-<nr> leitet die Startseite weiter)
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync } from 'node:fs';
+import type { ImageMetadata } from 'astro';
+
+const liste = [
+	{
+		nr: 1,
+		name: 'D wie Demokratie',
+		alt: 'Ein großes D in Schwarz-Rot-Gold, darunter „wie Demokratie“ und die Adresse d-wie-demokratie.de, rechts ein QR-Code, in einem Oval wie beim Länderkennzeichen am Auto.',
+		// shop: „Zum Shop“ bei diesem Motiv (Design im Spreadshop, Nummer = mainDesignId); eine Fassung kann ein eigenes shop haben
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360830677',
+		// weitere Fassungen: Dateien wie oben, nur mit Endung, z. B. d-wie-demokratie-motiv-1-qr-weiss.png / .pdf
+		varianten: [
+			// mittlerer Ton, damit man das weiße Oval sieht (wie ein Aufkleber auf einem Laptop)
+			{ endung: '', name: 'Für alle Untergründe', text: 'Das weiße Oval erinnert an das alte Länderkennzeichen am Auto und wirkt auf jedem Untergrund.', stoff: '#71839b' },
+			{
+				endung: '-qr-weiss',
+				name: 'Für helle Untergründe',
+				text: 'Oval durchsichtig, nur hinter dem QR-Code weiß, damit er sich überall scannen lässt.',
+			},
+			{
+				endung: '-farbig',
+				name: 'Für mittlere Untergründe',
+				versteckt: true,
+				text: 'Rand und Schrift weiß, QR-Code auf weißem Feld. Für farbige Textilien wie Blau, Grün oder Grau.',
+			},
+			{
+				endung: '-dunkel',
+				name: 'Für dunkle Untergründe',
+				text: 'Rand und Schrift weiß, QR-Code auf weißem Feld, dazu ein feiner weißer Rand um das D. Für mittlere und dunkle Farben wie Blau, Grün, Grau oder Schwarz.',
+			},
+		],
+	},
+	{
+		nr: 2,
+		name: 'Drei Entchen für die Demokratie',
+		alt: 'Drei Badeenten nebeneinander, gezeichnet in Schwarz, Rot und Gold, darunter die Adresse d-wie-demokratie.de.',
+		// eine Fassung erscheint erst, wenn ihr PNG da ist (die schwarze folgt noch)
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360826940',
+		varianten: [
+			{ endung: '', name: 'Für helle Untergründe', text: 'Schrift und Augen schwarz. Für Papier, Aufkleber und helle Textilien.' },
+			{ endung: '-farbig', name: 'Für mittlere Untergründe', versteckt: true, text: 'Schrift und Augen weiß. Für farbige Textilien wie Blau, Grün oder Grau.' },
+			{
+				endung: '-dunkel',
+				name: 'Für dunkle Untergründe',
+				shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360830490',
+				text: 'Schrift und Augen weiß, dazu ein feiner weißer Rand um die schwarze Ente. Für mittlere und dunkle Farben wie Blau, Grün, Grau oder Schwarz.',
+			},
+		],
+	},
+];
+
+// stoff: Hintergrund der Vorschau, sonst je nach Endung (dunkel/schwarz) bzw. ein heller Stoffton
+// versteckt: true blendet die Fassung aus (Dateien bleiben liegen, zum Zurückholen nur die Zeile löschen)
+type Variante = { endung: string; name?: string; text?: string; stoff?: string; versteckt?: boolean; shop?: string };
+export const stoff: Record<string, string> = { '-farbig': '#5a7aa3', '-dunkel': '#3d3d3d' };
+const pngs = import.meta.glob<{ default: ImageMetadata }>('../assets/motive/d-wie-demokratie-motiv-*.png', { eager: true });
+
+// je Motiv die Fassungen, deren PNG da ist; ohne Angabe nur die eine Standardfassung
+export const motive = liste
+	.map((motiv) => ({
+		...motiv,
+		fassungen: ((motiv as { varianten?: Variante[] }).varianten ?? [{ endung: '' }])
+			.map((v: Variante) => ({ ...v, bild: pngs[`../assets/motive/d-wie-demokratie-motiv-${motiv.nr}${v.endung}.png`]?.default }))
+			.filter((v) => v.bild && !v.versteckt),
+	}))
+	.filter((motiv) => motiv.fassungen.length > 0);
+
+// ?v= mit einem Fingerabdruck der Datei: ändert sich das PDF, ist es eine neue Adresse und kein Browser zeigt die alte
+// Fassung aus seinem Zwischenspeicher (der Server erlaubt dort einen Tag)
+export const pdfLink = (nr: number, endung = '') => {
+	const datei = `public/download/d-wie-demokratie-motiv-${nr}${endung}.pdf`;
+	if (!existsSync(datei)) return '';
+	const fingerabdruck = createHash('md5').update(readFileSync(datei)).digest('hex').slice(0, 8);
+	return `/download/d-wie-demokratie-motiv-${nr}${endung}.pdf?v=${fingerabdruck}`;
+};
+
+// Der Shop liegt bei Spreadshop (Spreadshirt, Non-Profit-Shop: Marge 0) und wird nur verlinkt (pro Motiv bzw. Fassung),
+// nicht eingebettet, damit diese Website frei von Cookies und Inhalten Dritter bleibt.
+// false: „Zum Shop“ steht bei den Motiven grau und ohne Link da (Shop vorübergehend abgeschaltet)
+export const shopAktiv = true;
+export const shopStart = 'https://d-wie-demokratie.myspreadshop.de/';

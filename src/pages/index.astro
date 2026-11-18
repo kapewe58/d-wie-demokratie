@@ -1,8 +1,6 @@
 ---
-import { createHash } from 'node:crypto';
-import { existsSync, readFileSync } from 'node:fs';
 import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
+import { motive } from '../data/motive';
 import Werte from '../components/Werte.astro';
 import Layout from '../layouts/Layout.astro';
 import laptop from '../assets/slider/02-laptop.png';
@@ -11,63 +9,10 @@ import tshirt from '../assets/slider/05-tshirtmaedchen.png';
 // Wasserzeichen im Zitat-Kasten (Nachweis unter dem Kasten)
 import fotoReichstag from '../assets/flagge/1990-reichstag.jpg';
 
-// Startseite: Fotos, Werte aus dem Grundgesetz, zwei Fragen zum Aufklappen (Herunterladen, Shop) und unsere Motive.
-//
-// Unsere Motive, durchnummeriert, untereinander mit Links zu PNG, PDF und Shop. Neues Motiv = zwei Dateien ablegen
-// und hier einen Eintrag ergänzen:
-//   PNG (4000 px breit, transparent): src/assets/motive/d-wie-demokratie-motiv-<nr>.png  (Vorschaubild und Download)
-//   PDF (CMYK, Druckgröße):           public/download/d-wie-demokratie-motiv-<nr>.pdf
-// Ein Motiv erscheint erst, wenn sein PNG da ist; fehlen PDF oder Shop-Link, wird nur dieser Link weggelassen.
-// Jedes Motiv ist verlinkbar: /flagge-zeigen/#motiv-<nr>
-const liste = [
-	{
-		nr: 1,
-		name: 'D wie Demokratie',
-		alt: 'Ein großes D in Schwarz-Rot-Gold, darunter „wie Demokratie“ und die Adresse d-wie-demokratie.de, rechts ein QR-Code, in einem Oval wie beim Länderkennzeichen am Auto.',
-		// shop: „Zum Shop“ bei diesem Motiv (Design im Spreadshop, Nummer = mainDesignId); eine Fassung kann ein eigenes shop haben
-		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360830677',
-		// weitere Fassungen: Dateien wie oben, nur mit Endung, z. B. d-wie-demokratie-motiv-1-qr-weiss.png / .pdf
-		varianten: [
-			// mittlerer Ton, damit man das weiße Oval sieht (wie ein Aufkleber auf einem Laptop)
-			{ endung: '', name: 'Für alle Untergründe', text: 'Das weiße Oval erinnert an das alte Länderkennzeichen am Auto und wirkt auf jedem Untergrund.', stoff: '#71839b' },
-			{
-				endung: '-qr-weiss',
-				name: 'Für helle Untergründe',
-				text: 'Oval durchsichtig, nur hinter dem QR-Code weiß, damit er sich überall scannen lässt.',
-			},
-			{
-				endung: '-farbig',
-				name: 'Für mittlere Untergründe',
-				versteckt: true,
-				text: 'Rand und Schrift weiß, QR-Code auf weißem Feld. Für farbige Textilien wie Blau, Grün oder Grau.',
-			},
-			{
-				endung: '-dunkel',
-				name: 'Für dunkle Untergründe',
-				text: 'Rand und Schrift weiß, QR-Code auf weißem Feld, dazu ein feiner weißer Rand um das D. Für mittlere und dunkle Farben wie Blau, Grün, Grau oder Schwarz.',
-			},
-		],
-	},
-	{
-		nr: 2,
-		name: 'Drei Entchen für die Demokratie',
-		alt: 'Drei Badeenten nebeneinander, gezeichnet in Schwarz, Rot und Gold, darunter die Adresse d-wie-demokratie.de.',
-		// eine Fassung erscheint erst, wenn ihr PNG da ist (die schwarze folgt noch)
-		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360826940',
-		varianten: [
-			{ endung: '', name: 'Für helle Untergründe', text: 'Schrift und Augen schwarz. Für Papier, Aufkleber und helle Textilien.' },
-			{ endung: '-farbig', name: 'Für mittlere Untergründe', versteckt: true, text: 'Schrift und Augen weiß. Für farbige Textilien wie Blau, Grün oder Grau.' },
-			{
-				endung: '-dunkel',
-				name: 'Für dunkle Untergründe',
-				shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360830490',
-				text: 'Schrift und Augen weiß, dazu ein feiner weißer Rand um die schwarze Ente. Für mittlere und dunkle Farben wie Blau, Grün, Grau oder Schwarz.',
-			},
-		],
-	},
-];
+// Startseite: Fotos, Werte aus dem Grundgesetz, Zitate und eine Vorschau unserer Motive (alle Motive: /motive/,
+// Daten in src/data/motive.ts). Alte Links wie /#motiv-1, /#herunterladen, /#shop leitet das Skript unten auf /motive/ weiter.
 
-// Fotos oben, wechseln alle paar Sekunden; ein Klick springt zum gezeigten Motiv. Neues Foto = nach
+// Fotos oben, wechseln alle paar Sekunden; ein Klick springt zum gezeigten Motiv auf /motive/. Neues Foto = nach
 // src/assets/slider/ legen (1800 × 1200 Pixel, JPEG), oben importieren und hier eintragen.
 // „foto: true“ blendet beim Bild den Hinweis „KI-generiert“ ein (Kennzeichnung nach Art. 50 KI-Verordnung, muss sichtbar bleiben).
 const bilder = [
@@ -91,29 +36,6 @@ const bilder = [
 	},
 ];
 const sekunden = 5;
-
-// stoff: Hintergrund der Vorschau, sonst je nach Endung (dunkel/schwarz) bzw. ein heller Stoffton
-// versteckt: true blendet die Fassung aus (Dateien bleiben liegen, zum Zurückholen nur die Zeile löschen)
-type Variante = { endung: string; name?: string; text?: string; stoff?: string; versteckt?: boolean; shop?: string };
-const stoff: Record<string, string> = { '-farbig': '#5a7aa3', '-dunkel': '#3d3d3d' };
-const pngs = import.meta.glob<{ default: ImageMetadata }>('../assets/motive/d-wie-demokratie-motiv-*.png', { eager: true });
-// je Motiv die Fassungen, deren PNG da ist; ohne Angabe nur die eine Standardfassung
-const motive = liste
-	.map((motiv) => ({
-		...motiv,
-		fassungen: ((motiv as { varianten?: Variante[] }).varianten ?? [{ endung: '' }])
-			.map((v: Variante) => ({ ...v, bild: pngs[`../assets/motive/d-wie-demokratie-motiv-${motiv.nr}${v.endung}.png`]?.default }))
-			.filter((v) => v.bild && !v.versteckt),
-	}))
-	.filter((motiv) => motiv.fassungen.length > 0);
-// ?v= mit einem Fingerabdruck der Datei: ändert sich das PDF, ist es eine neue Adresse und kein Browser zeigt die alte
-// Fassung aus seinem Zwischenspeicher (der Server erlaubt dort einen Tag)
-const pdfLink = (nr: number, endung = '') => {
-	const datei = `public/download/d-wie-demokratie-motiv-${nr}${endung}.pdf`;
-	if (!existsSync(datei)) return '';
-	const fingerabdruck = createHash('md5').update(readFileSync(datei)).digest('hex').slice(0, 8);
-	return `/download/d-wie-demokratie-motiv-${nr}${endung}.pdf?v=${fingerabdruck}`;
-};
 
 // Zitate im Flaggen-Kasten, wechseln alle paar Sekunden. Neues Zitat = neuer Eintrag.
 // Videos und Reden werden nur verlinkt, nicht eingebettet, damit beim Seitenaufruf nichts von Dritten geladen wird.
@@ -153,11 +75,6 @@ const zitate = [
 ];
 const zitatSekunden = 8;
 
-// Der Shop liegt bei Spreadshop (Spreadshirt, Non-Profit-Shop: Marge 0) und wird nur verlinkt (pro Motiv bzw. Fassung), nicht eingebettet,
-// damit diese Website frei von Cookies und Inhalten Dritter bleibt.
-// false: „Zum Shop“ steht bei den Motiven grau und ohne Link da (Shop vorübergehend abgeschaltet)
-const shopAktiv = true;
-const shopStart = 'https://d-wie-demokratie.myspreadshop.de/';
 ---
 
 <Layout
@@ -167,7 +84,7 @@ const shopStart = 'https://d-wie-demokratie.myspreadshop.de/';
 	<!-- Fotos liegen übereinander und werden nacheinander eingeblendet; ohne JavaScript bleibt das erste stehen -->
 	<div class="slider" data-sekunden={sekunden}>
 		{bilder.map((bild, i) => (
-			<a href={`#motiv-${bild.motiv}`} class:list={['folie', { sichtbar: i === 0 }]} data-foto={bild.foto ? '' : undefined} tabindex={i === 0 ? undefined : -1}>
+			<a href={`/motive/#motiv-${bild.motiv}`} class:list={['folie', { sichtbar: i === 0 }]} data-foto={bild.foto ? '' : undefined} tabindex={i === 0 ? undefined : -1}>
 				<Image
 					src={bild.src}
 					alt={bild.alt}
@@ -240,125 +157,25 @@ const shopStart = 'https://d-wie-demokratie.myspreadshop.de/';
 	<noscript><style is:inline>#wz-lizenz { display: inline; }</style></noscript>
 	</div>
 
-	<div class="fragen">
-		<details id="herunterladen">
-			<summary>Kann ich die Motive herunterladen und selbst drucken (lassen)?</summary>
-			<p>
-				Ja. Alle unsere Motive stehen dir kostenlos zur Verfügung. Druck sie selbst oder lass sie
-				von einer Druckerei oder einem Textildrucker oder Dienstleister deiner Wahl drucken. Unten findest du zu jedem Motiv zwei Dateien:
-			</p>
-			<ul>
-				<li><strong>PNG:</strong> zum Drucken zu Hause, im Copyshop oder für Bildschirm und Social Media, Hintergrund transparent</li>
-				<li><strong>PDF:</strong> Druckdatei in CMYK für Druckereien</li>
-			</ul>
-			<p>
-				Brauchst du mehrere Stück, etwa für deinen Verein, deine Firma oder deine Nachbarschaft? Dann ist das meist der
-				günstigste Weg. Online-Druckereien, Textildrucker und Dienstleister stellen Aufkleber, Plakate, T-Shirts, Tassen und alle möglichen Dinge schon in
-				kleinen Auflagen günstig her.
-			</p>
-			<p>
-				Lade dazu die PDF-Datei herunter und gib die Produktion bei einem Anbieter deiner Wahl in Auftrag. So entscheidest
-				du auch selbst, worauf gedruckt wird: zum Beispiel auf Recyclingpapier oder auf Textilien aus Bio-Baumwolle.
-			</p>
-			<p>
-				Du planst eine kleinere oder größere Auflage? Wir helfen dir gerne dabei. Schreib uns an
-				<a href="mailto:info@d-wie-demokratie.de?subject=Auflage%20D%20wie%20Demokratie" data-umami-event="email-unterstuetzung" data-umami-event-seite="startseite">info@d-wie-demokratie.de</a>.
-			</p>
-			<p>
-				Du darfst unsere Motive kostenlos drucken und verteilen. Die Nutzungsrechte dazu erhältst du. Verändern darfst du die Motive jedoch nicht.
-			</p>
-		</details>
-
-		<details id="shop">
-			<summary>Kann ich fertige Produkte mit den Motiven kaufen?</summary>
-			<p>
-				<strong>Ja.</strong> In unserem Shop bei Spreadshirt gibt es T-Shirts, Hoodies und eine Kappe mit unseren
-				Motiven, alle aus Bio-Baumwolle. Bei jedem Motiv weiter unten führt „Zum Shop“ direkt zu den passenden
-				Produkten.
-			</p>
-			<p>
-				Spreadshirt aus Leipzig druckt erst, wenn du bestellst, verschickt und rechnet ab und ist dein
-				Vertragspartner. Passt etwas nicht, kannst du es innerhalb von 30 Tagen zurückschicken oder umtauschen. Bei
-				Fragen zu Bestellung oder Lieferung hilft dir der Kundenservice von Spreadshirt.
-				<a href="/haeufige-fragen/#umwelt">Wie umweltfreundlich sind die Produkte?</a>
-			</p>
-			<p>
-				<strong>Wir verdienen daran nichts.</strong> Unser Shop ist als Non-Profit-Shop eingerichtet: Du zahlst nur
-				den Preis von Spreadshirt, ohne Aufschlag für uns.
-			</p>
-			<p>
-				Unabhängig davon kannst du alle Motive jederzeit <a href="#herunterladen">kostenlos herunterladen</a> und
-				selbst drucken oder drucken lassen.
-			</p>
-			<p>
-				<a class="knopf-schwarz" href={shopStart} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv="frage">Zum Shop</a>
-			</p>
-		</details>
-	</div>
-
-	<h2 id="motive">Unsere Motive</h2>
-
-	<ul class="motive">
+	<!-- Vorschau: alle Motive als kleine Bilder (später nur die neuesten), alles Weitere auf /motive/ -->
+	<h2>Unsere Motive</h2>
+	<p class="vorschau-text">Noch sind es wenige, aber bald werden es mehr, denn Demokratie ist vielfältig.</p>
+	<ul class="vorschau">
 		{motive.map((motiv) => (
-			<li id={`motiv-${motiv.nr}`}>
-				{/* mehrere Fassungen: Knöpfe wechseln zwischen ihnen; ohne JavaScript stehen alle untereinander */}
-				{motiv.fassungen.map((f, i) => (
-					<div class="fassung" data-fassung={i}>
-						<Image
-							src={f.bild!}
-							alt={motiv.alt}
-							width={240}
-							widths={[240, 480]}
-							sizes="200px"
-							class:list={{ 'auf-farbe': motiv.fassungen.length > 1 }}
-							style={f.stoff ?? stoff[f.endung] ? `background: ${f.stoff ?? stoff[f.endung]}` : undefined}
-						/>
-						<div>
-							<h3>Motiv {motiv.nr}: {motiv.name}</h3>
-							{motiv.fassungen.length > 1 && (
-								<div class="fassung-knoepfe" role="group" aria-label="Fassung wählen" hidden>
-									{motiv.fassungen.map((g, k) => (
-										<button type="button" data-zu={k} aria-pressed={k === i ? 'true' : 'false'}>{g.name}</button>
-									))}
-								</div>
-							)}
-							{f.text && <p class="fassung-text">{f.name && <strong class="ohne-js">{f.name}: </strong>}{f.text}</p>}
-							<ul class="links">
-								<li>
-									<a href={f.bild!.src} download={`d-wie-demokratie-motiv-${motiv.nr}${f.endung}.png`} data-umami-event="download-png" data-umami-event-motiv={`${motiv.nr}${f.endung}`}>
-										Motiv {motiv.nr} als PNG herunterladen
-									</a>
-								</li>
-								{pdfLink(motiv.nr, f.endung) && (
-									<li>
-										<a href={pdfLink(motiv.nr, f.endung)} download data-umami-event="download-pdf" data-umami-event-motiv={`${motiv.nr}${f.endung}`}>
-											Motiv {motiv.nr} als PDF für Druckereien
-										</a>
-									</li>
-								)}
-								{(f.shop ?? motiv.shop) && (
-									<li>
-										{shopAktiv ? (
-											<a href={f.shop ?? motiv.shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv={motiv.nr}>
-												Zum Shop
-											</a>
-										) : (
-											<span class="aus">Zum Shop</span>
-										)}
-									</li>
-								)}
-							</ul>
-						</div>
-					</div>
-				))}
+			<li>
+				<a href={`/motive/#motiv-${motiv.nr}`}>
+					<Image src={motiv.fassungen[0].bild!} alt={motiv.alt} width={300} widths={[300, 600]} sizes="(max-width: 540px) 45vw, 300px" />
+					<span>{motiv.name}</span>
+				</a>
 			</li>
 		))}
 	</ul>
-
-	<p class="mehr-motive">
-		Weitere Motive kommen bald. <a href="#neuigkeiten">Wir informieren dich gerne.</a>
-	</p>
 </Layout>
+
+<!-- alte Links auf Motive und Fragen von der Startseite (z. B. /#motiv-2, /#shop) gehen jetzt auf /motive/ -->
+<script is:inline>
+	if (/^#(motiv-\d+|motive|herunterladen|shop)$/.test(location.hash)) location.replace('/motive/' + (location.hash === '#motive' ? '' : location.hash));
+</script>
 
 <script>
 	const slider = document.querySelector<HTMLElement>('.slider');
@@ -454,13 +271,6 @@ const shopStart = 'https://d-wie-demokratie.myspreadshop.de/';
 		});
 	}
 
-	// Links wie /#herunterladen oder /#shop klappen die passende Frage gleich auf.
-	function aufklappen() {
-		const ziel = location.hash && document.querySelector(location.hash);
-		if (ziel instanceof HTMLDetailsElement) ziel.open = true;
-	}
-	addEventListener('hashchange', aufklappen);
-	aufklappen();
 </script>
 
 <style>
@@ -687,11 +497,6 @@ const shopStart = 'https://d-wie-demokratie.myspreadshop.de/';
 		border-radius: 4px;
 	}
 
-	/* in der Shop-Frage steht der Knopf in einem Absatz */
-	.fragen .knopf-schwarz {
-		display: inline-block;
-	}
-
 	.knopf-schwarz:hover {
 		background: var(--schwarz);
 		color: var(--gold);
@@ -785,193 +590,53 @@ const shopStart = 'https://d-wie-demokratie.myspreadshop.de/';
 		}
 	}
 
-	/* Ziehharmonika: Fragen zum Aufklappen, mit Schwarz-Rot-Gold links wie die Kästen auf „Mitmachen“ */
-	.fragen {
-		margin-top: 2em;
-	}
-
-	details {
-		margin-top: 0.8em;
-		padding-left: 12px;
-		background:
-			linear-gradient(
-				to right,
-				var(--schwarz) 0 33.33%,
-				var(--rot) 33.33% 66.66%,
-				var(--gold) 66.66% 100%
-			) left / 12px 100% no-repeat,
-			#fafafa;
-	}
-
-	summary {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 1em;
-		padding: 1em 1.2em;
-		font-size: 1.1rem;
-		font-weight: bold;
-		cursor: pointer;
-		list-style: none;
-	}
-
-	summary::-webkit-details-marker {
-		display: none;
-	}
-
-	summary::after {
-		content: '+';
-		flex-shrink: 0;
-		font-size: 1.5rem;
-		line-height: 1;
-	}
-
-	details[open] summary::after {
-		content: '–';
-	}
-
-	details > :not(summary) {
-		margin-right: 1.2em;
-		margin-left: 1.2em;
-	}
-
-	details > :last-child {
-		margin-bottom: 0;
-		padding-bottom: 1.2em;
-	}
-
-	/* Motive untereinander: Bild links, Links rechts; auf dem Handy Bild oben */
+	/* Vorschau der Motive: kleine Bilder nebeneinander, Name darunter */
 	h2 {
 		margin-top: 2em;
 		font-size: 1.4rem;
 	}
 
-	.motive {
+	/* Satz direkt unter der Überschrift, mit Abstand zu den Bildern */
+	.vorschau-text {
+		margin: -0.3em 0 1em;
+	}
+
+	.vorschau {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+		gap: 1em;
 		margin: 0;
 		padding: 0;
 		list-style: none;
 	}
 
-	/* Hinweis unter dem letzten Motiv, mit derselben Trennlinie wie zwischen den Motiven */
-	.mehr-motive {
-		margin: 0;
-		padding-top: 1.2em;
-		border-top: 1px solid #e5e5e5;
-	}
-
-	.motive > li {
-		padding: 1.2em 0;
-		border-top: 1px solid #e5e5e5;
-	}
-
-	.fassung {
-		display: flex;
-		align-items: center;
-		gap: 1.5em;
-	}
-
-	/* ohne JavaScript stehen die Fassungen untereinander */
-	.fassung + .fassung {
-		margin-top: 1.2em;
-	}
-
-	.fassung[hidden] {
-		display: none;
-	}
-
-	/* Motive mit mehreren Fassungen: jede Vorschau auf dem Stoff, für den sie gedacht ist (Farbe pro Fassung im Bild-Stil) */
-	.motive img.auf-farbe {
-		border-radius: 6px;
-		/* heller Stoffton wie ein graumeliertes Shirt: Weiß ist darauf noch zu erkennen */
-		background: #c3c7cd;
-	}
-
-	.fassung-knoepfe {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.4em;
-		margin-bottom: 0.5em;
-	}
-
-	.fassung-knoepfe button {
-		padding: 0.25em 0.7em;
-		border: 1px solid #c4c4c4;
-		border-radius: 999px;
-		background: #ffffff;
+	.vorschau a {
+		display: block;
 		color: var(--text);
-		font: inherit;
-		font-size: 0.85rem;
-		cursor: pointer;
+		text-decoration: none;
 	}
 
-	.fassung-knoepfe button[aria-pressed='true'] {
-		border-color: var(--schwarz);
-		background: var(--schwarz);
-		color: var(--gold);
-	}
-
-	.fassung-text {
-		margin: 0 0 0.4em;
-		color: var(--grau);
-		font-size: 0.9rem;
-	}
-
-	.motive img {
-		flex-shrink: 0;
-		width: 200px;
+	.vorschau img {
+		display: block;
+		width: 100%;
 		height: auto;
+		aspect-ratio: 3 / 2;
+		object-fit: contain;
+		padding: 0.8em;
+		box-sizing: border-box;
+		border-radius: 6px;
+		background: #f2f2f2;
 	}
 
-	h3 {
-		margin: 0 0 0.4em;
-		font-size: 1.1rem;
+	.vorschau span {
+		display: block;
+		margin-top: 0.4em;
+		font-weight: bold;
 	}
 
-	.links {
-		margin: 0;
-		padding: 0;
-		list-style: none;
+	.vorschau a:hover span {
+		color: var(--rot);
 	}
 
-	.links li + li {
-		margin-top: 0.3em;
-	}
-
-	/* abgeschalteter Link: grau, nicht klickbar */
-	.links .aus {
-		color: var(--grau);
-	}
-
-	@media (max-width: 540px) {
-		.fassung {
-			flex-direction: column;
-			align-items: flex-start;
-			gap: 0.8em;
-		}
-
-		.motive img {
-			width: 100%;
-			max-width: 320px;
-		}
-	}
 </style>
 
-<script>
-	// Fassungen eines Motivs: nur die gewählte zeigen; die Knöpfe gibt es in jeder Fassung, damit sie neben dem Bild stehen
-	for (const motiv of document.querySelectorAll<HTMLElement>('.motive > li')) {
-		const fassungen = [...motiv.querySelectorAll<HTMLElement>('.fassung')];
-		if (fassungen.length < 2) continue;
-		const zeigen = (nr: number) => fassungen.forEach((f, i) => (f.hidden = i !== nr));
-		motiv.querySelectorAll<HTMLElement>('.fassung-knoepfe').forEach((k) => (k.hidden = false));
-		motiv.querySelectorAll<HTMLElement>('.ohne-js').forEach((e) => e.remove());
-		motiv.addEventListener('click', (e) => {
-			const knopf = (e.target as Element).closest<HTMLButtonElement>('button[data-zu]');
-			if (!knopf) return;
-			const nr = Number(knopf.dataset.zu);
-			zeigen(nr);
-			// Fokus auf denselben Knopf in der nun sichtbaren Fassung, damit Tastaturbedienung nicht verloren geht
-			fassungen[nr].querySelector<HTMLButtonElement>(`button[data-zu="${nr}"]`)?.focus();
-		});
-		zeigen(0);
-	}
-</script>
