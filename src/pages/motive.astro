@@ -107,24 +107,26 @@ import { motive, pdfLink, shopAktiv, shopStart, stoff } from '../data/motive';
 							<ul class="links">
 								<li>
 									<a href={f.bild!.src} download={`d-wie-demokratie-motiv-${motiv.nr}${f.endung}.png`} data-umami-event="download-png" data-umami-event-motiv={`${motiv.nr}${f.endung}`}>
-										Motiv {motiv.nr} als PNG herunterladen
+										Motiv {motiv.nr} als PNG{f.name ? ` ${f.name.replace(/^Für /, 'für ')}` : ' herunterladen'}
 									</a>
 								</li>
 								{pdfLink(motiv.nr, f.endung) && (
 									<li>
 										<a href={pdfLink(motiv.nr, f.endung)} download data-umami-event="download-pdf" data-umami-event-motiv={`${motiv.nr}${f.endung}`}>
-											Motiv {motiv.nr} als PDF für Druckereien
+											Motiv {motiv.nr} als PDF{f.name ? ` ${f.name.replace(/^Für /, 'für ')}` : ' für Druckereien'}
 										</a>
 									</li>
 								)}
 								{(f.shop ?? motiv.shop) && (
-									<li>
+									<li class="shop-link">
 										{shopAktiv ? (
-											<a href={f.shop ?? motiv.shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv={motiv.nr}>
-												Zum Shop
+											<a class="shop-knopf" href={f.shop ?? motiv.shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv={motiv.nr}>
+												{motiv.nr === 2 ? `Zum Shop für Motiv 2 ${f.name?.replace(/^Für /, 'für ') ?? ''}` : 'Zum Shop'}
 											</a>
 										) : (
-											<span class="aus">Zum Shop</span>
+											<span class="aus">
+												{motiv.nr === 2 ? `Zum Shop für Motiv 2 ${f.name?.replace(/^Für /, 'für ') ?? ''}` : 'Zum Shop'}
+											</span>
 										)}
 									</li>
 								)}
@@ -337,6 +339,28 @@ import { motive, pdfLink, shopAktiv, shopStart, stoff } from '../data/motive';
 
 	.links li + li {
 		margin-top: 0.3em;
+	}
+
+	.links li.shop-link {
+		margin-top: 0.9em;
+	}
+
+	.shop-knopf {
+		display: inline-block;
+		padding: 0.35em 0.8em;
+		border-radius: 999px;
+		background: #f0f0f0;
+		color: var(--text);
+		text-decoration: none;
+	}
+
+	.shop-knopf:hover {
+		background: #e0e0e0;
+	}
+
+	.shop-knopf:focus-visible {
+		outline: 2px solid var(--schwarz);
+		outline-offset: 3px;
 	}
 
 	/* abgeschalteter Link: grau, nicht klickbar */
