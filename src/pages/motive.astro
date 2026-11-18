@@ -107,13 +107,13 @@ import { motive, pdfLink, shopAktiv, shopStart, stoff } from '../data/motive';
 							<ul class="links">
 								<li>
 									<a href={f.bild!.src} download={`d-wie-demokratie-motiv-${motiv.nr}${f.endung}.png`} data-umami-event="download-png" data-umami-event-motiv={`${motiv.nr}${f.endung}`}>
-										Motiv {motiv.nr} als PNG{f.name ? ` ${f.name.replace(/^Für /, 'für ')}` : ' herunterladen'}
+										PNG{f.name ? ` ${f.name.replace(/^Für /, 'für ')}` : ' herunterladen'}
 									</a>
 								</li>
 								{pdfLink(motiv.nr, f.endung) && (
 									<li>
 										<a href={pdfLink(motiv.nr, f.endung)} download data-umami-event="download-pdf" data-umami-event-motiv={`${motiv.nr}${f.endung}`}>
-											Motiv {motiv.nr} als PDF{f.name ? ` ${f.name.replace(/^Für /, 'für ')}` : ' für Druckereien'}
+											PDF{f.name ? ` ${f.name.replace(/^Für /, 'für ')}` : ' für Druckereien'}
 										</a>
 									</li>
 								)}
@@ -121,11 +121,11 @@ import { motive, pdfLink, shopAktiv, shopStart, stoff } from '../data/motive';
 									<li class="shop-link">
 										{shopAktiv ? (
 											<a class="shop-knopf" href={f.shop ?? motiv.shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv={motiv.nr}>
-												{motiv.nr === 2 ? `Zum Shop für Motiv 2 ${f.name?.replace(/^Für /, 'für ') ?? ''}` : 'Zum Shop'}
+												{motiv.nr === 2 ? `Zum Shop ${f.name?.replace(/^Für /, 'für ') ?? ''}` : 'Zum Shop'}
 											</a>
 										) : (
 											<span class="aus">
-												{motiv.nr === 2 ? `Zum Shop für Motiv 2 ${f.name?.replace(/^Für /, 'für ') ?? ''}` : 'Zum Shop'}
+												{motiv.nr === 2 ? `Zum Shop ${f.name?.replace(/^Für /, 'für ') ?? ''}` : 'Zum Shop'}
 											</span>
 										)}
 									</li>
