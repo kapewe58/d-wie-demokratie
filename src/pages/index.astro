@@ -24,7 +24,8 @@ const liste = [
 		nr: 1,
 		name: 'D wie Demokratie',
 		alt: 'Ein großes D in Schwarz-Rot-Gold, darunter „wie Demokratie“ und die Adresse d-wie-demokratie.de, rechts ein QR-Code, in einem Oval wie beim Länderkennzeichen am Auto.',
-		// shop: 'https://…' zeigt „Zum Shop“ bei diesem Motiv
+		// shop: „Zum Shop“ bei diesem Motiv (Design im Spreadshop, Nummer = mainDesignId); eine Fassung kann ein eigenes shop haben
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360830677',
 		// weitere Fassungen: Dateien wie oben, nur mit Endung, z. B. d-wie-demokratie-motiv-1-qr-weiss.png / .pdf
 		varianten: [
 			// mittlerer Ton, damit man das weiße Oval sieht (wie ein Aufkleber auf einem Laptop)
@@ -52,12 +53,14 @@ const liste = [
 		name: 'Drei Entchen für die Demokratie',
 		alt: 'Drei Badeenten nebeneinander, gezeichnet in Schwarz, Rot und Gold, darunter die Adresse d-wie-demokratie.de.',
 		// eine Fassung erscheint erst, wenn ihr PNG da ist (die schwarze folgt noch)
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360826940',
 		varianten: [
 			{ endung: '', name: 'Für helle Untergründe', text: 'Schrift und Augen schwarz. Für Papier, Aufkleber und helle Textilien.' },
 			{ endung: '-farbig', name: 'Für mittlere Untergründe', versteckt: true, text: 'Schrift und Augen weiß. Für farbige Textilien wie Blau, Grün oder Grau.' },
 			{
 				endung: '-dunkel',
 				name: 'Für dunkle Untergründe',
+				shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360830490',
 				text: 'Schrift und Augen weiß, dazu ein feiner weißer Rand um die schwarze Ente. Für mittlere und dunkle Farben wie Blau, Grün, Grau oder Schwarz.',
 			},
 		],
@@ -91,7 +94,7 @@ const sekunden = 5;
 
 // stoff: Hintergrund der Vorschau, sonst je nach Endung (dunkel/schwarz) bzw. ein heller Stoffton
 // versteckt: true blendet die Fassung aus (Dateien bleiben liegen, zum Zurückholen nur die Zeile löschen)
-type Variante = { endung: string; name?: string; text?: string; stoff?: string; versteckt?: boolean };
+type Variante = { endung: string; name?: string; text?: string; stoff?: string; versteckt?: boolean; shop?: string };
 const stoff: Record<string, string> = { '-farbig': '#5a7aa3', '-dunkel': '#3d3d3d' };
 const pngs = import.meta.glob<{ default: ImageMetadata }>('../assets/motive/d-wie-demokratie-motiv-*.png', { eager: true });
 // je Motiv die Fassungen, deren PNG da ist; ohne Angabe nur die eine Standardfassung
@@ -150,15 +153,16 @@ const zitate = [
 ];
 const zitatSekunden = 8;
 
-// Der Shop liegt bei Spreadshop (Spreadshirt) und wird nur verlinkt (pro Motiv), nicht eingebettet,
+// Der Shop liegt bei Spreadshop (Spreadshirt, Non-Profit-Shop: Marge 0) und wird nur verlinkt (pro Motiv bzw. Fassung), nicht eingebettet,
 // damit diese Website frei von Cookies und Inhalten Dritter bleibt.
 // false: „Zum Shop“ steht bei den Motiven grau und ohne Link da (Shop vorübergehend abgeschaltet)
 const shopAktiv = true;
+const shopStart = 'https://d-wie-demokratie.myspreadshop.de/';
 ---
 
 <Layout
 	title="D wie Demokratie"
-	description="Wir zeigen Flagge für unsere Demokratie und das Grundgesetz: Motive kostenlos herunterladen."
+	description="Wir zeigen Flagge für unsere Demokratie und das Grundgesetz: Motive kostenlos herunterladen oder im Shop bestellen."
 >
 	<!-- Fotos liegen übereinander und werden nacheinander eingeblendet; ohne JavaScript bleibt das erste stehen -->
 	<div class="slider" data-sekunden={sekunden}>
@@ -268,13 +272,25 @@ const shopAktiv = true;
 		<details id="shop">
 			<summary>Kann ich fertige Produkte mit den Motiven kaufen?</summary>
 			<p>
-				Bald. Wir arbeiten gerade an einem Shop, der zu unserem Anliegen passt: Textilien aus Bio-Baumwolle, fair
-				hergestellt und erst bedruckt, wenn du bestellst.
+				<strong>Ja.</strong> In unserem Shop bei Spreadshirt gibt es T-Shirts, Hoodies und eine Kappe mit unseren
+				Motiven, alle aus Bio-Baumwolle. Bei jedem Motiv weiter unten führt „Zum Shop“ direkt zu den passenden
+				Produkten.
+			</p>
+			<p>
+				Spreadshirt aus Leipzig druckt erst, wenn du bestellst, verschickt und rechnet ab und ist dein
+				Vertragspartner. Passt etwas nicht, kannst du es innerhalb von 30 Tagen zurückschicken oder umtauschen. Bei
+				Fragen zu Bestellung oder Lieferung hilft dir der Kundenservice von Spreadshirt.
+			</p>
+			<p>
+				<strong>Wir verdienen daran nichts.</strong> Unser Shop ist als Non-Profit-Shop eingerichtet: Du zahlst nur
+				den Preis von Spreadshirt, ohne Aufschlag für uns.
 			</p>
 			<p>
 				Unabhängig davon kannst du alle Motive jederzeit <a href="#herunterladen">kostenlos herunterladen</a> und
-				selbst drucken oder drucken lassen. Wenn du erfahren möchtest, sobald der Shop da ist, melde dich für unsere
-				<a href="#neuigkeiten">Neuigkeiten per E-Mail</a> an.
+				selbst drucken oder drucken lassen.
+			</p>
+			<p>
+				<a class="knopf-schwarz" href={shopStart} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv="frage">Zum Shop</a>
 			</p>
 		</details>
 	</div>
@@ -319,10 +335,10 @@ const shopAktiv = true;
 										</a>
 									</li>
 								)}
-								{motiv.shop && (
+								{(f.shop ?? motiv.shop) && (
 									<li>
 										{shopAktiv ? (
-											<a href={motiv.shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv={motiv.nr}>
+											<a href={f.shop ?? motiv.shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv={motiv.nr}>
 												Zum Shop
 											</a>
 										) : (
