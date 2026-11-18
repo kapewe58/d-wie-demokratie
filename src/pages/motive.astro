@@ -108,12 +108,14 @@ import { motive, pdfLink, shopAktiv, shopStart, stoff } from '../data/motive';
 								<li>
 									<a href={f.bild!.src} download={`d-wie-demokratie-motiv-${motiv.nr}${f.endung}.png`} data-umami-event="download-png" data-umami-event-motiv={`${motiv.nr}${f.endung}`}>
 										PNG{f.name ? ` ${f.name.replace(/^Für /, 'für ')}` : ' herunterladen'}
+										<span class="download-pfeil" aria-hidden="true">↓</span>
 									</a>
 								</li>
 								{pdfLink(motiv.nr, f.endung) && (
 									<li>
 										<a href={pdfLink(motiv.nr, f.endung)} download data-umami-event="download-pdf" data-umami-event-motiv={`${motiv.nr}${f.endung}`}>
 											PDF{f.name ? ` ${f.name.replace(/^Für /, 'für ')}` : ' für Druckereien'}
+											<span class="download-pfeil" aria-hidden="true">↓</span>
 										</a>
 									</li>
 								)}
@@ -339,6 +341,13 @@ import { motive, pdfLink, shopAktiv, shopStart, stoff } from '../data/motive';
 
 	.links li + li {
 		margin-top: 0.3em;
+	}
+
+	.download-pfeil {
+		display: inline-block;
+		margin-left: 0.3em;
+		color: var(--grau);
+		font-size: 0.9em;
 	}
 
 	.links li.shop-link {
