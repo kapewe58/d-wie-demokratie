@@ -24,7 +24,7 @@ const liste = [
 		nr: 1,
 		name: 'D wie Demokratie',
 		alt: 'Ein großes D in Schwarz-Rot-Gold, darunter „wie Demokratie“ und die Adresse d-wie-demokratie.de, rechts ein QR-Code, in einem Oval wie beim Länderkennzeichen am Auto.',
-		shop: 'https://biotshirt.de/collections/d-wie-demokratie',
+		// shop: 'https://…' zeigt „Zum Shop“ bei diesem Motiv
 		// weitere Fassungen: Dateien wie oben, nur mit Endung, z. B. d-wie-demokratie-motiv-1-qr-weiss.png / .pdf
 		varianten: [
 			// mittlerer Ton, damit man das weiße Oval sieht (wie ein Aufkleber auf einem Laptop)
@@ -51,7 +51,6 @@ const liste = [
 		nr: 2,
 		name: 'Drei Entchen für die Demokratie',
 		alt: 'Drei Badeenten nebeneinander, gezeichnet in Schwarz, Rot und Gold, darunter die Adresse d-wie-demokratie.de.',
-		shop: 'https://biotshirt.de/collections/d-wie-demokratie',
 		// eine Fassung erscheint erst, wenn ihr PNG da ist (die schwarze folgt noch)
 		varianten: [
 			{ endung: '', name: 'Für helle Untergründe', text: 'Schrift und Augen schwarz. Für Papier, Aufkleber und helle Textilien.' },
@@ -158,7 +157,7 @@ const shopAktiv = true;
 
 <Layout
 	title="D wie Demokratie"
-	description="Wir zeigen Flagge für unsere Demokratie und das Grundgesetz: Motive kostenlos herunterladen oder im Shop bestellen."
+	description="Wir zeigen Flagge für unsere Demokratie und das Grundgesetz: Motive kostenlos herunterladen."
 >
 	<!-- Fotos liegen übereinander und werden nacheinander eingeblendet; ohne JavaScript bleibt das erste stehen -->
 	<div class="slider" data-sekunden={sekunden}>
@@ -268,24 +267,13 @@ const shopAktiv = true;
 		<details id="shop">
 			<summary>Kann ich fertige Produkte mit den Motiven kaufen?</summary>
 			<p>
-				<strong>Ja, ganz neu!</strong> Bei unserem Partner biotshirt gibt es T-Shirts, Hoodies, Taschen und mehr mit
-				unseren Motiven, zum Beispiel vorne die Entchen und hinten „D wie Demokratie“. Der Shop steht noch ganz am
-				Anfang, weitere Produkte und Motive folgen.
+				Bald. Wir arbeiten gerade an einem Shop, der zu unserem Anliegen passt: Textilien aus Bio-Baumwolle, fair
+				hergestellt und erst bedruckt, wenn du bestellst.
 			</p>
 			<p>
-				Du möchtest ein anderes Produkt oder ein Produkt anders gestalten? Dann lade ein Motiv
-				herunter, klicke in unserem Shop links oben auf „Produktauswahl“ und beim Produkt auf „Produkt gestalten“.
-			</p>
-			<p>
-				<strong>Wir verdienen daran nichts.</strong> Du zahlst nur den normalen Preis von biotshirt, ohne Aufschlag.
-				Kaufvertrag, Rechnung und Versand laufen direkt über biotshirt.
-			</p>
-			<p>
-				Die Textilien stammen von Stanley/Stella und sind aus GOTS-zertifizierter Bio-Baumwolle. Bedruckt werden sie bei
-				biotshirt in Düsseldorf, mit wasserbasierten Farben und erst, wenn du bestellst.
-			</p>
-			<p>
-				<a class="knopf-schwarz" href="https://biotshirt.de/collections/d-wie-demokratie" target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv="frage">Zum Shop</a>
+				Bis dahin kannst du alle Motive <a href="#herunterladen">kostenlos herunterladen</a> und selbst drucken oder
+				drucken lassen. Wenn du erfahren möchtest, sobald der Shop da ist, melde dich für unsere
+				<a href="#neuigkeiten">Neuigkeiten per E-Mail</a> an.
 			</p>
 		</details>
 	</div>
