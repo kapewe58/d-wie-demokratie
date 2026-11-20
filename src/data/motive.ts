@@ -72,6 +72,13 @@ const liste = [
 		bald: true,
 		vorschau: 'motiv-4-vorschau.png',
 	},
+	{
+		nr: 5,
+		name: 'Entchen gut, alles gut',
+		alt: 'Drei flauschige Entenküken in Schwarz, Rot und Gold sitzen dicht nebeneinander und schnattern fröhlich, gezeichnet im Stil eines alten Kupferstichs. Darüber im Bogen „Entchen gut, alles gut“, darunter d-wie-demokratie.de, in einem Oval.',
+		bald: true,
+		vorschau: 'motiv-5-vorschau.png',
+	},
 ];
 
 // stoff: Hintergrund der Vorschau, sonst je nach Endung (dunkel/schwarz) bzw. ein heller Stoffton
