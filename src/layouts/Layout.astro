@@ -259,6 +259,15 @@ const aktuell: { href: string; text: string; kurz?: string; handy?: string } | u
 		line-height: 1.2;
 	}
 
+	/* Überschriftengrößen für alle Seiten; Seiten legen sie nicht selbst fest */
+	h1 {
+		font-size: clamp(1.85rem, 7.5vw, 2.75rem);
+	}
+
+	h2 {
+		font-size: 1.4rem;
+	}
+
 	a {
 		color: var(--text);
 		text-decoration-color: currentColor;

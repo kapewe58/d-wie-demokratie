@@ -43,6 +43,39 @@ const alleStellen: Stelle[] = [
 		betreff: 'Ehrenamt: Design',
 	},
 	{
+		id: 'shop',
+		titel: 'Wir suchen eine Kuratorin oder einen Kurator für unseren Shop!',
+		kurz: 'jemanden, der aus unseren Motiven schöne Produkte macht',
+		eckdaten: ['Ehrenamtlich', 'Zeitlich flexibel', 'Ortsunabhängig'],
+		einleitung: [
+			'd-wie-demokratie.de ist eine junge, unabhängige Initiative. Wir möchten möglichst viele Menschen ermutigen, sich sichtbar zu unserer Demokratie und ihren Werten zu bekennen.',
+			'Am schönsten gelingt das, wenn man unsere Motive auf der Straße sieht: auf einem T-Shirt in der Bahn, einem Hoodie im Hörsaal oder einer Tasche auf dem Wochenmarkt. Dafür haben wir einen eigenen Shop bei Spreadshirt, mit Kleidung aus Bio-Baumwolle. Gedruckt wird erst, wenn jemand bestellt, und wir verdienen daran keinen Cent.',
+			'Regelmäßig bekommen wir neue Motive, von Designerinnen und Designern, von Künstlern, manchmal auch von Kindern. Wir suchen jemanden, der aus diesen Motiven Produkte macht, die man gern trägt.',
+		],
+		aufgaben: [
+			{
+				punkte: [
+					'Neue Motive von uns bekommen und im Spreadshop daraus Produkte erstellen: T-Shirts, Hoodies, Taschen und was sonst passt',
+					'Für jedes Motiv die passenden Produkte, Stofffarben und Druckpositionen auswählen',
+					'Kurze, einladende Produkttexte schreiben',
+					'Den Shop übersichtlich halten, damit man gern darin stöbert',
+					'Ab und zu ein Muster bestellen und prüfen, ob Druck und Stoff halten, was sie versprechen',
+					'Eigene Ideen einbringen, wie unsere Motive noch besser zur Geltung kommen',
+				],
+			},
+		],
+		wichtig: [
+			'Du hast ein Gespür für Farben, Formen und schöne Dinge und stehst aus Überzeugung hinter unserer freiheitlichen Demokratie.',
+			'Erfahrung mit Onlineshops oder Mode ist willkommen, aber keine Voraussetzung. Spreadshirt ist einfach zu bedienen, und wir helfen dir beim Einstieg.',
+		],
+		bieten: [
+			'Freie Hand bei der Gestaltung unseres Shops. Du entscheidest, wie unsere Motive in die Welt kommen, und siehst sie hinterher vielleicht auf der Straße wieder.',
+			'Die Tätigkeit ist ehrenamtlich, zeitlich flexibel und vollständig ortsunabhängig. Wie viel Zeit es braucht, hängt davon ab, wie viele neue Motive kommen. Für ein neues Motiv reicht meist eine gute Stunde.',
+		],
+		interesse: 'Schreib uns, was dir an unserem <a href="https://d-wie-demokratie.myspreadshop.de/" target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv="mitmachen">Shop</a> gefällt und was du anders machen würdest.',
+		betreff: 'Ehrenamt: Shop',
+	},
+	{
 		id: 'instagram',
 		titel: 'Wir suchen ein Social-Media-Team für Instagram, TikTok und YouTube!',
 		kurz: 'ein Social-Media-Team für Instagram, TikTok und YouTube',
@@ -251,10 +284,6 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 		font-weight: bold;
 	}
 
-	h1 {
-		font-size: clamp(1.85rem, 7.5vw, 2.75rem);
-	}
-
 	.lead {
 		font-size: 1.3rem;
 	}
@@ -282,10 +311,6 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 		}
 	}
 
-	h2 {
-		font-size: 1.4rem;
-	}
-
 	.eckdaten {
 		margin-top: -0.4em;
 		color: var(--grau);
@@ -296,7 +321,6 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 		margin: 1.6em 0 0.4em;
 		font-size: 1.1rem;
 	}
-
 
 	h3 + p,
 	h3 + ul,
