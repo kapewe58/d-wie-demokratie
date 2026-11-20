@@ -21,7 +21,7 @@ const einreichenAktiv = import.meta.env.DEV;
 		bedruckte Produkte in unserem Shop bestellen.
 	</p>
 	<p>
-		Bisher sind es nur zwei verschiedene Motive, aber das wird sich ändern: Bald kommen neue Motive, von Kindern und Jugendlichen,
+		Bisher sind es nur wenige Motive, aber das wird sich ändern: Bald kommen neue Motive, von Kindern und Jugendlichen,
 		von Künstlerinnen und Künstlern, und von allen, die Lust haben, mitzumachen.
 		{einreichenAktiv && <a href="/motiv-einreichen/">Motiv einreichen</a>}
 	</p>
@@ -107,6 +107,12 @@ const einreichenAktiv = import.meta.env.DEV;
 								</div>
 							)}
 							{f.text && <p class="fassung-text">{f.name && <strong class="ohne-js">{f.name}: </strong>}{f.text}</p>}
+							{motiv.bald ? (
+								<p class="bald">
+									<span class="bald-marke">Kommt bald</span>
+									Wir bereiten das Motiv gerade für den Druck vor. Bald kannst du es hier herunterladen und im Shop bestellen.
+								</p>
+							) : (
 							<ul class="links">
 								<li>
 									<a href={f.bild!.src} download={`d-wie-demokratie-motiv-${motiv.nr}${f.endung}.png`} data-umami-event="download-png" data-umami-event-motiv={`${motiv.nr}${f.endung}`}>
@@ -136,6 +142,7 @@ const einreichenAktiv = import.meta.env.DEV;
 									</li>
 								)}
 							</ul>
+							)}
 						</div>
 					</div>
 				))}
@@ -334,6 +341,23 @@ const einreichenAktiv = import.meta.env.DEV;
 	.motive h2 {
 		margin: 0 0 0.4em;
 		font-size: 1.1rem;
+	}
+
+	/* Motiv „Kommt bald“: noch ohne Download und Shop */
+	.bald {
+		margin: 0.2em 0 0;
+		color: var(--grau);
+	}
+
+	.bald-marke {
+		display: inline-block;
+		margin: 0 0.5em 0.3em 0;
+		padding: 0.1em 0.55em;
+		border-radius: 4px;
+		background: var(--gold);
+		color: var(--schwarz);
+		font-size: 0.85rem;
+		font-weight: bold;
 	}
 
 	.links {

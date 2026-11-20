@@ -55,6 +55,23 @@ const liste = [
 			},
 		],
 	},
+	// bald: Motiv wird schon gezeigt, aber noch ohne Download und Shop („Kommt bald“); Vorschaubild in
+	// src/assets/motive/bald/<vorschau>. Sobald PNG (und PDF) fertig sind: bald und vorschau löschen.
+	// Auf der Startseite erscheinen diese Motive noch nicht.
+	{
+		nr: 3,
+		name: 'Keine Angst, Hasen!',
+		alt: 'Drei Hasen in Schwarz, Rot und Gold sitzen eng beieinander, der schwarze zeigt den Daumen hoch, der rote zwinkert, der gelbe streckt die Zunge heraus. Darüber „Keine Angst, Hasen!“, darunter d-wie-demokratie.de, in einem runden Abzeichen.',
+		bald: true,
+		vorschau: 'motiv-3-vorschau.png',
+	},
+	{
+		nr: 4,
+		name: 'Alles wird Hut',
+		alt: 'Drei Hüte in Schwarz, Rot und Gold: ein schwarzer Zylinder mit rotem Band, eine rote Baskenmütze und ein gelber Hut mit schwarzem Band. Darüber „Alles wird Hut“, darunter d-wie-demokratie.de, in einem runden Abzeichen.',
+		bald: true,
+		vorschau: 'motiv-4-vorschau.png',
+	},
 ];
 
 // stoff: Hintergrund der Vorschau, sonst je nach Endung (dunkel/schwarz) bzw. ein heller Stoffton
@@ -62,16 +79,23 @@ const liste = [
 type Variante = { endung: string; name?: string; text?: string; stoff?: string; versteckt?: boolean; shop?: string };
 export const stoff: Record<string, string> = { '-farbig': '#5a7aa3', '-dunkel': '#3d3d3d' };
 const pngs = import.meta.glob<{ default: ImageMetadata }>('../assets/motive/d-wie-demokratie-motiv-*.png', { eager: true });
+const vorschauen = import.meta.glob<{ default: ImageMetadata }>('../assets/motive/bald/*.png', { eager: true });
 
 // je Motiv die Fassungen, deren PNG da ist; ohne Angabe nur die eine Standardfassung
 export const motive = liste
-	.map((motiv) => ({
-		...motiv,
-		fassungen: ((motiv as { varianten?: Variante[] }).varianten ?? [{ endung: '' }])
-			.map((v: Variante) => ({ ...v, bild: pngs[`../assets/motive/d-wie-demokratie-motiv-${motiv.nr}${v.endung}.png`]?.default }))
-			.filter((v) => v.bild && !v.versteckt),
-	}))
-	.filter((motiv) => motiv.fassungen.length > 0);
+	.map((motiv) => {
+		const { bald, vorschau } = motiv as { bald?: boolean; vorschau?: string };
+		return {
+			...motiv,
+			bald: bald ?? false,
+			fassungen: bald
+				? [{ endung: '', bild: vorschauen[`../assets/motive/bald/${vorschau}`]?.default } as Variante & { bild?: ImageMetadata }]
+				: ((motiv as { varianten?: Variante[] }).varianten ?? [{ endung: '' }])
+						.map((v: Variante) => ({ ...v, bild: pngs[`../assets/motive/d-wie-demokratie-motiv-${motiv.nr}${v.endung}.png`]?.default }))
+						.filter((v) => v.bild && !v.versteckt),
+		};
+	})
+	.filter((motiv) => motiv.fassungen.length > 0 && motiv.fassungen[0].bild);
 
 // ?v= mit einem Fingerabdruck der Datei: ändert sich das PDF, ist es eine neue Adresse und kein Browser zeigt die alte
 // Fassung aus seinem Zwischenspeicher (der Server erlaubt dort einen Tag)

@@ -161,7 +161,7 @@ const zitatSekunden = 8;
 	<h2>Unsere Motive</h2>
 	<p class="vorschau-text">Bald werden es mehr, denn Demokratie bedeutet Vielfalt.</p>
 	<ul class="vorschau">
-		{motive.map((motiv) => (
+		{motive.filter((motiv) => !motiv.bald).map((motiv) => (
 			<li>
 				<a href={`/motive/#motiv-${motiv.nr}`}>
 					<Image src={motiv.fassungen[0].bild!} alt={motiv.alt} width={300} widths={[300, 600]} sizes="(max-width: 540px) 45vw, 300px" />
