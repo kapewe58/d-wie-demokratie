@@ -15,6 +15,10 @@ type Stelle = {
 	einleitung: string[];
 	aufgaben?: { rolle?: string; punkte: string[] }[];
 	wichtig: string[];
+	// true: „Was wichtig ist“ als Aufzählung statt als Absätze
+	wichtigListe?: boolean;
+	// Absatz unter der Aufzählung „Was wichtig ist“ (nur mit wichtigListe)
+	wichtigZusatz?: string;
 	bieten: string[];
 	interesse?: string;
 	betreff: string;
@@ -59,20 +63,20 @@ const alleStellen: Stelle[] = [
 				punkte: [
 					'Neue Motive von uns bekommen und im Spreadshop daraus Produkte erstellen: T-Shirts, Hoodies, Taschen und was sonst passt',
 					'Für jedes Motiv die passenden Produkte, Stofffarben und Druckpositionen auswählen',
-					'Kurze, einladende Produkttexte schreiben',
-					'Den Shop übersichtlich halten, damit man gern darin stöbert',
-					'Ab und zu ein Muster bestellen und prüfen, ob Druck und Stoff halten, was sie versprechen',
 					'Eigene Ideen einbringen, wie unsere Motive noch besser zur Geltung kommen',
 				],
 			},
 		],
 		wichtig: [
-			'Du hast ein Gespür für Farben, Formen und schöne Dinge und stehst aus Überzeugung hinter unserer freiheitlichen Demokratie.',
-			'Erfahrung mit Onlineshops oder Mode ist willkommen, aber keine Voraussetzung. Spreadshirt ist einfach zu bedienen, und wir helfen dir beim Einstieg.',
+			'Du hast Spaß am Stöbern, Kombinieren und Ausprobieren und freust dich, wenn aus einem Motiv ein Lieblingsstück wird.',
+			'Du magst den Gedanken, dass bald Menschen in ganz Deutschland mit deinen Produkten Flagge zeigen.',
+			'Du stehst aus Überzeugung hinter unserer freiheitlichen Demokratie.',
 		],
+		wichtigListe: true,
+		wichtigZusatz: 'Erfahrung mit Onlineshops oder Mode ist willkommen, aber keine Voraussetzung. Spreadshirt ist einfach zu bedienen, und wir helfen dir beim Einstieg.',
 		bieten: [
 			'Freie Hand bei der Gestaltung unseres Shops. Du entscheidest, wie unsere Motive in die Welt kommen, und siehst sie hinterher vielleicht auf der Straße wieder.',
-			'Die Tätigkeit ist ehrenamtlich, zeitlich flexibel und vollständig ortsunabhängig. Wie viel Zeit es braucht, hängt davon ab, wie viele neue Motive kommen. Für ein neues Motiv reicht meist eine gute Stunde.',
+			'Die Tätigkeit ist ehrenamtlich, zeitlich flexibel und vollständig ortsunabhängig.',
 		],
 		interesse: 'Schreib uns, was dir an unserem <a href="https://d-wie-demokratie.myspreadshop.de/" target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv="mitmachen">Shop</a> gefällt und was du anders machen würdest.',
 		betreff: 'Ehrenamt: Shop',
@@ -254,8 +258,17 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 				</>
 			))}
 
-			<h3>Was uns wichtig ist</h3>
-			{stelle.wichtig.map((absatz) => <p>{absatz}</p>)}
+			<h3>Was wichtig ist</h3>
+			{stelle.wichtigListe ? (
+				<>
+					<ul>
+						{stelle.wichtig.map((punkt) => <li>{punkt}</li>)}
+					</ul>
+					{stelle.wichtigZusatz && <p>{stelle.wichtigZusatz}</p>}
+				</>
+			) : (
+				stelle.wichtig.map((absatz) => <p>{absatz}</p>)
+			)}
 
 			<h3>Was wir bieten</h3>
 			{stelle.bieten.map((absatz) => <p>{absatz}</p>)}
