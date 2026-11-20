@@ -93,6 +93,13 @@ const liste = [
 		bald: true,
 		vorschau: 'motiv-7-vorschau.png',
 	},
+	{
+		nr: 8,
+		name: 'Oh Ei, oh Ei!',
+		alt: 'Eine schwarze Amsel singt mit offenem Schnabel, vor ihr liegen ein rotes Ei und ein zerbrochenes Ei mit auslaufendem goldgelbem Eigelb, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Oh Ei, oh Ei!“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
+		bald: true,
+		vorschau: 'motiv-8-vorschau.png',
+	},
 ];
 
 // stoff: Hintergrund der Vorschau, sonst je nach Endung (dunkel/schwarz) bzw. ein heller Stoffton
