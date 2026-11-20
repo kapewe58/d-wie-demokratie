@@ -81,8 +81,8 @@ const liste = [
 	},
 	{
 		nr: 6,
-		name: 'Wo eine Chili ist, da ist auch ein Weg',
-		alt: 'Drei gezeichnete Chilischoten in Schwarz, Rot und Gelb liegen schräg und gestaffelt nebeneinander. Oben im Bogen „Wo eine Chili ist, da ist auch ein Weg“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
+		name: 'Demokratie braucht Schärfe',
+		alt: 'Drei Chilischoten in Schwarz, Rot und Gelb liegen schräg und gestaffelt nebeneinander, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Demokratie braucht Schärfe“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 		bald: true,
 		vorschau: 'motiv-6-vorschau.png',
 	},
