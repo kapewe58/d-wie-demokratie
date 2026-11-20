@@ -27,11 +27,12 @@ const menue = [
 	{ href: '/motive/', text: 'Motive' },
 	{ href: '/mitmachen/', text: 'Mitmachen' },
 	{ href: '/unterstuetzen/', text: 'Unterstützen' },
-	{ href: '/motiv-einreichen/', text: 'Motiv einreichen', handy: 'Einreichen' },
+	// entwurf: nur lokal mit „npm run dev“ im Menü (Motiv einreichen pausiert seit 2026-11-20)
+	{ href: '/motiv-einreichen/', text: 'Motiv einreichen', handy: 'Einreichen', entwurf: true },
 	{ href: '/geschichte-unserer-flagge/', text: 'Kleine Geschichte unserer Flagge', kurz: 'Flaggengeschichte', handy: 'Geschichte' },
 	// Anmeldung steht unten auf jeder Seite mit Teilen-Kasten; auf den anderen (Impressum usw.) zur Startseite
 	{ href: teilen ? '#neuigkeiten' : '/#neuigkeiten', text: 'Neuigkeiten per E-Mail' },
-];
+].filter((m) => !('entwurf' in m && m.entwurf) || import.meta.env.DEV);
 const menueKlein = [
 	{ href: '/impressum/', text: 'Impressum' },
 	{ href: '/datenschutz/', text: 'Datenschutz' },

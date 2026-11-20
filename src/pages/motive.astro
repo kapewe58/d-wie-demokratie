@@ -5,6 +5,9 @@
 import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import { motive, pdfLink, shopAktiv, shopStart, stoff } from '../data/motive';
+// „Motiv einreichen“ pausiert seit 2026-11-20: Links nur lokal mit „npm run dev“. Zum Wiedereinschalten auf true setzen
+// (dazu entwurf in motiv-einreichen.astro, im Menü in Layout.astro und den Sitemap-Filter in astro.config.mjs).
+const einreichenAktiv = import.meta.env.DEV;
 ---
 
 <Layout
@@ -20,7 +23,7 @@ import { motive, pdfLink, shopAktiv, shopStart, stoff } from '../data/motive';
 	<p>
 		Bisher sind es nur zwei verschiedene Motive, aber das wird sich ändern: Bald kommen neue Motive, von Kindern und Jugendlichen,
 		von Künstlerinnen und Künstlern, und von allen, die Lust haben, mitzumachen.
-		<a href="/motiv-einreichen/">Motiv einreichen</a>
+		{einreichenAktiv && <a href="/motiv-einreichen/">Motiv einreichen</a>}
 	</p>
 
 	<div class="fragen">
@@ -142,7 +145,7 @@ import { motive, pdfLink, shopAktiv, shopStart, stoff } from '../data/motive';
 
 	<p class="mehr-motive">
 		Weitere Motive kommen bald. <a href="#neuigkeiten">Wir informieren dich gerne.</a>
-		Oder gestalte selbst eins: <a href="/motiv-einreichen/">Motiv einreichen</a>.
+		{einreichenAktiv && <>Oder gestalte selbst eins: <a href="/motiv-einreichen/">Motiv einreichen</a>.</>}
 	</p>
 </Layout>
 

@@ -3,6 +3,11 @@ import Layout from '../layouts/Layout.astro';
 
 // Richtet sich an Gestalter, deshalb „du“ wie auf „Mitmachen“. Früher stand der Inhalt dort unter #vorgaben;
 // /mitmachen/#vorgaben leitet hierher weiter.
+// pausiert seit 2026-11-20: nur lokal mit „npm run dev“ sichtbar, veröffentlicht leitet die Seite zu /motive/ weiter.
+// Zum Wiederveröffentlichen entwurf auf false setzen (und die anderen Stellen, siehe motive.astro).
+const entwurf = true;
+if (entwurf && !import.meta.env.DEV) return Astro.redirect('/motive/');
+
 const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${encodeURIComponent(betreff)}`;
 ---
 
