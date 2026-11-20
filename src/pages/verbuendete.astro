@@ -12,14 +12,15 @@ type Verbuendeter = {
 	url?: string;
 	// kurzer Satz des Verbündeten, warum er dabei ist (ohne Anführungszeichen eintragen)
 	zitat?: string;
-	// Ehrenverbündete stehen in ihrem Bereich oben, abgesetzt (nur mit ausdrücklicher Zustimmung eintragen)
-	ehren?: boolean;
 	// Logo (meist bei Organisationen), Datei in src/assets/verbuendete/
 	logo?: ImageMetadata;
 };
 
 // Neue Einträge erst nach Prüfung und schriftlicher Einwilligung aufnehmen
-const verbuendete: Verbuendeter[] = [];
+const verbuendete: Verbuendeter[] = [
+	{ name: 'Heinz Krimmer', art: 'person', zusatz: 'Autor und Journalist, Berlin', url: 'https://heinzkrimmer.com' },
+	{ name: 'EduStock', art: 'organisation', zusatz: 'Bilder für Bildung, Berlin', url: 'https://edustock.org' },
+];
 
 const gruppen = [
 	{ art: 'person', titel: 'Personen' },
@@ -113,26 +114,14 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 
 	{gruppen.map((g) => {
 		const eintraege = verbuendete.filter((v) => v.art === g.art);
-		const ehren = eintraege.filter((v) => v.ehren);
-		const weitere = eintraege.filter((v) => !v.ehren);
 		// lokal auch leere Bereiche zeigen, damit man das Aussehen sieht
 		const leerZeigen = import.meta.env.DEV;
 		return (
 			(eintraege.length > 0 || leerZeigen) && (
 				<section aria-labelledby={`gruppe-${g.art}`}>
 					<h2 id={`gruppe-${g.art}`}>{g.titel}</h2>
-					{(ehren.length > 0 || leerZeigen) && (
-						<div class="ehren">
-							<h3>Ehrenverbündete</h3>
-							{ehren.length > 0 ? (
-								<ul class="liste">{ehren.map((v) => <Eintrag v={v} />)}</ul>
-							) : (
-								<p class="leer">Noch leer (nur lokal sichtbar)</p>
-							)}
-						</div>
-					)}
-					{weitere.length > 0 ? (
-						<ul class="liste">{weitere.map((v) => <Eintrag v={v} />)}</ul>
+					{eintraege.length > 0 ? (
+						<ul class="liste">{eintraege.map((v) => <Eintrag v={v} />)}</ul>
 					) : (
 						leerZeigen && <p class="leer">Noch leer (nur lokal sichtbar)</p>
 					)}
@@ -253,21 +242,6 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 	.liste {
 		padding: 0;
 		list-style: none;
-	}
-
-	/* Ehrenverbündete oben im Bereich, mit goldenem Rand abgesetzt */
-	.ehren {
-		margin-bottom: 1.2em;
-		padding: 0.2em 1em 0.4em;
-		border-left: 4px solid var(--gold);
-		background: #fffbea;
-	}
-
-	.ehren h3 {
-		margin: 0.5em 0 0;
-		font-size: 1rem;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
 	}
 
 	.leer {

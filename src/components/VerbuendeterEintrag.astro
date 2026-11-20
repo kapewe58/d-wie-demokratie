@@ -8,7 +8,7 @@ const { v } = Astro.props;
 <li>
 	{v.logo && <Image class="logo" src={v.logo} alt="" width={240} />}
 	<div>
-		{v.url ? <a href={v.url} rel="noopener">{v.name}</a> : <strong>{v.name}</strong>}
+		{v.url ? <a href={v.url} target="_blank" rel="noopener">{v.name}</a> : <strong>{v.name}</strong>}
 		{v.zusatz && <span class="zusatz">{v.zusatz}</span>}
 		{v.zitat && <q class="zitat">{v.zitat}</q>}
 	</div>
