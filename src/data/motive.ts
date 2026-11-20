@@ -79,6 +79,13 @@ const liste = [
 		bald: true,
 		vorschau: 'motiv-5-vorschau.png',
 	},
+	{
+		nr: 6,
+		name: 'Wo eine Chili ist, da ist auch ein Weg',
+		alt: 'Drei gezeichnete Chilischoten in Schwarz, Rot und Gelb liegen schräg und gestaffelt nebeneinander. Oben im Bogen „Wo eine Chili ist, da ist auch ein Weg“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
+		bald: true,
+		vorschau: 'motiv-6-vorschau.png',
+	},
 ];
 
 // stoff: Hintergrund der Vorschau, sonst je nach Endung (dunkel/schwarz) bzw. ein heller Stoffton
