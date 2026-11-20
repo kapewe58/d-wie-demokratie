@@ -2,12 +2,23 @@
 // Reiter „Motive“: alle Motive mit Fassungen, Download (PNG, PDF) und Shop-Link, dazu die Fragen zum Herunterladen
 // und zum Shop. Die Motive selbst stehen in src/data/motive.ts (auch für die Vorschau auf der Startseite).
 // /#motiv-<nr>, /#herunterladen und /#shop von früher leitet die Startseite hierher weiter.
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import { motive, pdfLink, shopAktiv, shopStart, stoff } from '../data/motive';
 // „Motiv einreichen“ pausiert seit 2026-11-20: Links nur lokal mit „npm run dev“. Zum Wiedereinschalten auf true setzen
 // (dazu entwurf in motiv-einreichen.astro, im Menü in Layout.astro und den Sitemap-Filter in astro.config.mjs).
 const einreichenAktiv = import.meta.env.DEV;
+
+// Großansicht: Klick auf ein Motiv öffnet es groß in einem Fenster (<dialog> unten), ohne JavaScript das Bild allein.
+// Je Fassung ein großes Bild, Schlüssel „<nr><endung>“; Stoffton wie in der kleinen Vorschau.
+const gross = new Map<string, string>();
+for (const motiv of motive) {
+	for (const f of motiv.fassungen) {
+		const bild = await getImage({ src: f.bild!, width: Math.min(1400, f.bild!.width), format: 'webp' });
+		gross.set(`${motiv.nr}${f.endung}`, bild.src);
+	}
+}
+const grundStoff = '#c3c7cd';
 ---
 
 <Layout
@@ -88,15 +99,23 @@ const einreichenAktiv = import.meta.env.DEV;
 				{/* mehrere Fassungen: Knöpfe wechseln zwischen ihnen; ohne JavaScript stehen alle untereinander */}
 				{motiv.fassungen.map((f, i) => (
 					<div class="fassung" data-fassung={i}>
-						<Image
-							src={f.bild!}
-							alt={motiv.alt}
-							width={240}
-							widths={[240, 480]}
-							sizes="200px"
-							class:list={{ 'auf-farbe': motiv.fassungen.length > 1 }}
-							style={f.stoff ?? stoff[f.endung] ? `background: ${f.stoff ?? stoff[f.endung]}` : undefined}
-						/>
+						<a
+							class="gross-link"
+							href={gross.get(`${motiv.nr}${f.endung}`)}
+							data-titel={`Motiv ${motiv.nr}: ${motiv.name}${motiv.fassungen.length > 1 && f.name ? ` – ${f.name}` : ''}`}
+							data-stoff={motiv.fassungen.length > 1 ? (f.stoff ?? stoff[f.endung] ?? grundStoff) : ''}
+						>
+							<Image
+								src={f.bild!}
+								alt={motiv.alt}
+								width={240}
+								widths={[240, 480]}
+								sizes="200px"
+								class:list={{ 'auf-farbe': motiv.fassungen.length > 1 }}
+								style={f.stoff ?? stoff[f.endung] ? `background: ${f.stoff ?? stoff[f.endung]}` : undefined}
+							/>
+							<span class="lupe" aria-hidden="true">⤢</span>
+						</a>
 						<div>
 							<h2>Motiv {motiv.nr}: {motiv.name}</h2>
 							{motiv.fassungen.length > 1 && (
@@ -150,6 +169,12 @@ const einreichenAktiv = import.meta.env.DEV;
 		))}
 	</ul>
 
+	<dialog class="gross-ansicht" aria-label="Motiv in groß">
+		<button type="button" class="schliessen" aria-label="Schließen">×</button>
+		<img alt="" />
+		<p class="gross-titel"></p>
+	</dialog>
+
 	<p class="mehr-motive">
 		Weitere Motive kommen bald. <a href="#neuigkeiten">Wir informieren dich gerne.</a>
 		{einreichenAktiv && <>Oder gestalte selbst eins: <a href="/motiv-einreichen/">Motiv einreichen</a>.</>}
@@ -181,6 +206,25 @@ const einreichenAktiv = import.meta.env.DEV;
 			fassungen[nr].querySelector<HTMLButtonElement>(`button[data-zu="${nr}"]`)?.focus();
 		});
 		zeigen(0);
+	}
+
+	// Großansicht: Klick aufs Motiv öffnet das Fenster; jeder Klick darin, × oder Esc schließt es wieder
+	const fenster = document.querySelector<HTMLDialogElement>('.gross-ansicht');
+	if (fenster?.showModal) {
+		const bild = fenster.querySelector('img')!;
+		const titel = fenster.querySelector('.gross-titel')!;
+		for (const link of document.querySelectorAll<HTMLAnchorElement>('.gross-link')) {
+			link.addEventListener('click', (e) => {
+				e.preventDefault();
+				bild.src = link.href;
+				bild.alt = link.querySelector('img')?.alt ?? '';
+				bild.style.background = link.dataset.stoff || '#fff';
+				titel.textContent = link.dataset.titel ?? '';
+				fenster.showModal();
+			});
+		}
+		fenster.addEventListener('click', () => fenster.close());
+		fenster.addEventListener('close', () => bild.removeAttribute('src'));
 	}
 </script>
 
@@ -333,9 +377,83 @@ const einreichenAktiv = import.meta.env.DEV;
 	}
 
 	.motive img {
-		flex-shrink: 0;
+		display: block;
 		width: 200px;
 		height: auto;
+	}
+
+	/* Bild als Link zur Großansicht, mit kleinem Zeichen rechts unten */
+	.gross-link {
+		position: relative;
+		flex-shrink: 0;
+		cursor: zoom-in;
+	}
+
+	.lupe {
+		position: absolute;
+		right: 6px;
+		bottom: 6px;
+		width: 1.6em;
+		height: 1.6em;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.85);
+		color: var(--schwarz);
+		font-size: 0.95rem;
+		line-height: 1.6em;
+		text-align: center;
+		opacity: 0.8;
+	}
+
+	.gross-link:hover .lupe {
+		opacity: 1;
+	}
+
+	/* Großansicht */
+	.gross-ansicht {
+		width: min(92vw, 720px);
+		max-height: 94vh;
+		padding: 0;
+		border: none;
+		border-radius: 8px;
+		background: #fff;
+		overflow: hidden;
+		cursor: zoom-out;
+	}
+
+	.gross-ansicht::backdrop {
+		background: rgba(0, 0, 0, 0.75);
+	}
+
+	.gross-ansicht img {
+		display: block;
+		width: 100%;
+		max-height: calc(94vh - 3.5em);
+		object-fit: contain;
+	}
+
+	.gross-titel {
+		margin: 0;
+		padding: 0.8em 1em;
+		font-weight: bold;
+	}
+
+	.schliessen {
+		position: absolute;
+		top: 8px;
+		right: 8px;
+		width: 2.2em;
+		height: 2.2em;
+		border: none;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.9);
+		color: var(--schwarz);
+		font-size: 1.2rem;
+		line-height: 1;
+		cursor: pointer;
+	}
+
+	:global(html:has(dialog[open])) {
+		overflow: hidden;
 	}
 
 	.motive h2 {
@@ -411,9 +529,13 @@ const einreichenAktiv = import.meta.env.DEV;
 			gap: 0.8em;
 		}
 
-		.motive img {
+		.gross-link {
 			width: 100%;
 			max-width: 320px;
+		}
+
+		.motive img {
+			width: 100%;
 		}
 	}
 </style>

@@ -123,7 +123,7 @@ const aktuell: { href: string; text: string; kurz?: string; handy?: string } | u
 					start = null;
 					// Start am Bildschirmrand gehört dem „Zurück“ des Browsers, die Reiterleiste wischt selbst
 					if (e.touches.length !== 1 || t.clientX < 30 || t.clientX > innerWidth - 30) return;
-					if (e.target.closest('nav, .menue, input, textarea')) return;
+					if (e.target.closest('nav, .menue, input, textarea, dialog')) return;
 					start = { x: t.clientX, y: t.clientY, zeit: Date.now() };
 				},
 				{ passive: true }
