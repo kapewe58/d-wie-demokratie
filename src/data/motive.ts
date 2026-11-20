@@ -86,6 +86,13 @@ const liste = [
 		bald: true,
 		vorschau: 'motiv-6-vorschau.png',
 	},
+	{
+		nr: 7,
+		name: 'Dackel lieben Demokratie',
+		alt: 'Ein fröhlicher Dackel mit heraushängender Zunge und Ringelschwanz, sein Fell in Schwarz, Rot und Gold gestreift, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Dackel lieben Demokratie“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
+		bald: true,
+		vorschau: 'motiv-7-vorschau.png',
+	},
 ];
 
 // stoff: Hintergrund der Vorschau, sonst je nach Endung (dunkel/schwarz) bzw. ein heller Stoffton
