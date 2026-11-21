@@ -112,6 +112,7 @@ const liste = [
 	{
 		nr: 12,
 		name: 'Hinschauen. Zuhören. Mund aufmachen.',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360861872',
 		alt: 'Drei Schimpansen mit Halstüchern in Schwarz, Rot und Gold, gezeichnet im Stil eines alten Kupferstichs: Der linke formt mit den Händen ein Fernglas vor den Augen, der mittlere legt die Hände hinter die Ohren, der rechte ruft mit den Händen am Mund. Oben im Bogen „Hinschauen. Zuhören. Mund aufmachen.“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	// Entwürfe („Kommt bald“): noch ohne Nummer, Download und Shop; stehen unter den fertigen Motiven.
@@ -119,12 +120,6 @@ const liste = [
 	// Regel: Eine Nummer bekommt ein Motiv erst, wenn es fertig ist (Druck-PNG da), und zwar die nächste freie,
 	// egal in welcher Reihenfolge die Entwürfe fertig werden. Dann bald und id löschen, nr eintragen, PNG ablegen.
 	// Auf der Startseite erscheinen Entwürfe nicht.
-	{
-		id: 'amsel',
-		name: 'Oh Ei, oh Ei!',
-		alt: 'Eine schwarze Amsel singt mit offenem Schnabel, vor ihr liegen ein rotes Ei und ein zerbrochenes Ei mit auslaufendem goldgelbem Eigelb, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Oh Ei, oh Ei!“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
-		bald: true,
-	},
 ];
 
 // stoff: Hintergrund der Vorschau, sonst je nach Endung (dunkel/schwarz) bzw. ein heller Stoffton
