@@ -173,7 +173,11 @@ const grundStoff = '#c3c7cd';
 	<dialog class="gross-ansicht" aria-label="Motiv in groß">
 		<button type="button" class="schliessen" aria-label="Schließen">×</button>
 		<img alt="" />
-		<p class="gross-titel"></p>
+		<div class="gross-leiste">
+			<button type="button" class="pfeil zurueck" aria-label="Vorheriges Motiv">‹</button>
+			<p class="gross-titel"></p>
+			<button type="button" class="pfeil weiter" aria-label="Nächstes Motiv">›</button>
+		</div>
 	</dialog>
 
 	<p class="mehr-motive">
@@ -209,23 +213,61 @@ const grundStoff = '#c3c7cd';
 		zeigen(0);
 	}
 
-	// Großansicht: Klick aufs Motiv öffnet das Fenster; jeder Klick darin, × oder Esc schließt es wieder
+	// Großansicht: Klick aufs Motiv öffnet das Fenster; Pfeile, Pfeiltasten oder Wischen blättern durch alle Motive
+	// und Fassungen; jeder andere Klick darin, × oder Esc schließt es wieder
 	const fenster = document.querySelector<HTMLDialogElement>('.gross-ansicht');
 	if (fenster?.showModal) {
 		const bild = fenster.querySelector('img')!;
 		const titel = fenster.querySelector('.gross-titel')!;
+		// alle Fassungen der Reihe nach, jede wie ein eigenes Motiv (Motiv 1 mit allen Untergründen, dann Motiv 2 …)
+		const alle = [...document.querySelectorAll<HTMLAnchorElement>('.gross-link')];
+		let nr = 0;
+		const zeigen = (link: HTMLAnchorElement) => {
+			bild.src = link.href;
+			bild.alt = link.querySelector('img')?.alt ?? '';
+			bild.style.background = link.dataset.stoff || '#fff';
+			titel.textContent = link.dataset.titel ?? '';
+		};
+		const blaettern = (schritt: number) => {
+			nr = (nr + schritt + alle.length) % alle.length;
+			zeigen(alle[nr]);
+		};
 		for (const link of document.querySelectorAll<HTMLAnchorElement>('.gross-link')) {
 			link.addEventListener('click', (e) => {
 				e.preventDefault();
-				bild.src = link.href;
-				bild.alt = link.querySelector('img')?.alt ?? '';
-				bild.style.background = link.dataset.stoff || '#fff';
-				titel.textContent = link.dataset.titel ?? '';
+				nr = alle.indexOf(link);
+				zeigen(link);
 				fenster.showModal();
 			});
 		}
-		fenster.addEventListener('click', () => fenster.close());
-		fenster.addEventListener('close', () => bild.removeAttribute('src'));
+		fenster.addEventListener('click', (e) => {
+			const pfeil = (e.target as Element).closest<HTMLElement>('.pfeil');
+			if (pfeil) blaettern(pfeil.classList.contains('weiter') ? 1 : -1);
+			else fenster.close();
+		});
+		fenster.addEventListener('keydown', (e) => {
+			if (e.key === 'ArrowRight') blaettern(1);
+			if (e.key === 'ArrowLeft') blaettern(-1);
+		});
+		// Wischen auf dem Handy: nach links = nächstes, nach rechts = vorheriges Motiv
+		let startX = 0;
+		fenster.addEventListener('touchstart', (e) => (startX = e.touches[0].clientX), { passive: true });
+		fenster.addEventListener('touchend', (e) => {
+			const dx = e.changedTouches[0].clientX - startX;
+			if (Math.abs(dx) > 50) blaettern(dx < 0 ? 1 : -1);
+		});
+		// Beim Schließen dorthin, wo man in der Großansicht zuletzt war: Motiv in die Mitte holen und dessen Fassung zeigen
+		fenster.addEventListener('close', () => {
+			bild.removeAttribute('src');
+			const link = alle[nr];
+			const fassung = link.closest<HTMLElement>('.fassung');
+			if (fassung?.hidden) {
+				const k = fassung.dataset.fassung;
+				link.closest('li')?.querySelector<HTMLButtonElement>(`.fassung:not([hidden]) button[data-zu="${k}"]`)?.click();
+			}
+			link.focus({ preventScroll: true });
+			link.closest('li')?.scrollIntoView({ block: 'center' });
+		});
 	}
 </script>
 
@@ -428,7 +470,7 @@ const grundStoff = '#c3c7cd';
 	.gross-ansicht img {
 		display: block;
 		width: 100%;
-		max-height: calc(94vh - 3.5em);
+		max-height: calc(94vh - 4.5em);
 		object-fit: contain;
 	}
 
@@ -436,6 +478,39 @@ const grundStoff = '#c3c7cd';
 		margin: 0;
 		padding: 0.8em 1em;
 		font-weight: bold;
+	}
+
+	/* Leiste unter dem Bild: Pfeile zum Blättern links und rechts, dazwischen der Titel */
+	.gross-leiste {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+		padding: 0.4em 0.5em;
+	}
+
+	.gross-leiste .gross-titel {
+		flex: 1;
+		padding: 0;
+		text-align: center;
+	}
+
+	.pfeil {
+		flex-shrink: 0;
+		width: 44px;
+		height: 44px;
+		padding: 0 0 4px;
+		border: none;
+		border-radius: 50%;
+		background: #f0f0f0;
+		color: var(--schwarz);
+		font-size: 2.2rem;
+		font-weight: bold;
+		line-height: 1;
+		cursor: pointer;
+	}
+
+	.pfeil:hover {
+		background: #e0e0e0;
 	}
 
 	.schliessen {
