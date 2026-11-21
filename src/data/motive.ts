@@ -97,17 +97,17 @@ const liste = [
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360861530',
 		alt: 'Drei Hüte in Schwarz, Rot und Gold: ein schwarzer Zylinder mit rotem Band, eine rote Baskenmütze und ein gelber Hut mit schwarzem Band. Darüber „Alles wird Hut“, darunter d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
+	{
+		nr: 10,
+		name: 'Keine Angst, Hasen!',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360861648',
+		alt: 'Drei Hasen in Schwarz, Rot und Gold sitzen eng beieinander, der schwarze zeigt den Daumen hoch, der rote zwinkert, der gelbe streckt die Zunge heraus. Darüber „Keine Angst, Hasen!“, darunter d-wie-demokratie.de, in einem runden Abzeichen.',
+	},
 	// Entwürfe („Kommt bald“): noch ohne Nummer, Download und Shop; stehen unter den fertigen Motiven.
 	// id = Sprungmarke (/motive/#<id>), Vorschaubild src/assets/motive/bald/<id>.png.
 	// Regel: Eine Nummer bekommt ein Motiv erst, wenn es fertig ist (Druck-PNG da), und zwar die nächste freie,
 	// egal in welcher Reihenfolge die Entwürfe fertig werden. Dann bald und id löschen, nr eintragen, PNG ablegen.
 	// Auf der Startseite erscheinen Entwürfe nicht.
-	{
-		id: 'hasen',
-		name: 'Keine Angst, Hasen!',
-		alt: 'Drei Hasen in Schwarz, Rot und Gold sitzen eng beieinander, der schwarze zeigt den Daumen hoch, der rote zwinkert, der gelbe streckt die Zunge heraus. Darüber „Keine Angst, Hasen!“, darunter d-wie-demokratie.de, in einem runden Abzeichen.',
-		bald: true,
-	},
 	{
 		id: 'entchen',
 		name: 'Entchen gut, alles gut',
