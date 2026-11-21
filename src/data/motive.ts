@@ -85,6 +85,12 @@ const liste = [
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360861459',
 		alt: 'Ein fröhlicher Dackel mit heraushängender Zunge und Ringelschwanz, sein Fell in Schwarz, Rot und Gold gestreift, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Dackel lieben Demokratie“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
+	{
+		nr: 8,
+		name: 'Farbe bekennen!',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360861486',
+		alt: 'Ein fröhlicher Dackel hat drei Farbeimer umgeworfen und sich selbst in Schwarz, Rot und Gold angemalt, um ihn herum laufen schwarze, rote und gelbe Farbpfützen aus. Oben im Bogen „Farbe bekennen!“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
+	},
 	// Entwürfe („Kommt bald“): noch ohne Nummer, Download und Shop; stehen unter den fertigen Motiven.
 	// id = Sprungmarke (/motive/#<id>), Vorschaubild src/assets/motive/bald/<id>.png.
 	// Regel: Eine Nummer bekommt ein Motiv erst, wenn es fertig ist (Druck-PNG da), und zwar die nächste freie,
