@@ -1,40 +1,28 @@
 ---
 import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import { motive } from '../data/motive';
 import Werte from '../components/Werte.astro';
 import Layout from '../layouts/Layout.astro';
-import laptop from '../assets/slider/02-laptop.png';
-import tassen from '../assets/slider/04-tassen.png';
-import tshirt from '../assets/slider/05-tshirtmaedchen.png';
 // Wasserzeichen im Zitat-Kasten (Nachweis unter dem Kasten)
 import fotoReichstag from '../assets/flagge/1990-reichstag.jpg';
 
 // Startseite: Fotos, Werte aus dem Grundgesetz, Zitate und eine Vorschau unserer Motive (alle Motive: /motive/,
 // Daten in src/data/motive.ts). Alte Links wie /#motiv-1, /#herunterladen, /#shop leitet das Skript unten auf /motive/ weiter.
 
-// Fotos oben, wechseln alle paar Sekunden; ein Klick springt zum gezeigten Motiv auf /motive/. Neues Foto = nach
-// src/assets/slider/ legen (1800 × 1200 Pixel, JPEG), oben importieren und hier eintragen.
-// „foto: true“ blendet beim Bild den Hinweis „KI-generiert“ ein (Kennzeichnung nach Art. 50 KI-Verordnung, muss sichtbar bleiben).
-const bilder = [
-	{
-		src: laptop,
-		motiv: 1,
-		foto: true,
-		alt: 'Fünf lächelnde Menschen unterschiedlichen Alters und unterschiedlicher Herkunft an einem Tisch vor dem Reichstagsgebäude, auf ihren Laptops der Aufkleber „D wie Demokratie“.',
-	},
-	{
-		src: tassen,
-		motiv: 1,
-		foto: true,
-		alt: 'Fünf lächelnde Menschen, darunter eine Frau mit Kopftuch, halten vor dem Reichstagsgebäude Tassen mit dem Aufdruck „D wie Demokratie“ hoch.',
-	},
-	{
-		src: tshirt,
-		motiv: 1,
-		foto: true,
-		alt: 'Eine junge Frau in einem weißen T-Shirt mit dem Aufdruck „D wie Demokratie“, im Hintergrund der Berliner Fernsehturm im Abendlicht.',
-	},
-];
+// Bilder oben, wechseln alle paar Sekunden; ein Klick springt zum gezeigten Motiv auf /motive/.
+// Je fertigem Motiv ein Querformat src/assets/slider/motiv-<nr>.jpg (1800 × 1200, Motiv auf Stoffton mit Text,
+// von Claude aus der Druck-PNG erzeugt); ein Motiv ohne solches Bild wird einfach übersprungen.
+// „foto: true“ blendet beim Bild den Hinweis „KI-generiert“ ein (Pflicht nach Art. 50 KI-Verordnung für KI-Fotos;
+// seit 2026-11-21 gibt es keine KI-Fotos mehr, später echte Fotos von Shirts usw. hier ergänzen).
+const querformate = import.meta.glob<{ default: ImageMetadata }>('../assets/slider/motiv-*.jpg', { eager: true });
+const bilder: { src: ImageMetadata; motiv: number; foto?: boolean; alt: string }[] = motive
+	.filter((m) => !m.bald && querformate[`../assets/slider/motiv-${m.nr}.jpg`])
+	.map((m) => ({
+		src: querformate[`../assets/slider/motiv-${m.nr}.jpg`].default,
+		motiv: m.nr,
+		alt: `Motiv ${m.nr} „${m.name}“, daneben: Zeig, wofür du stehst.`,
+	}));
 const sekunden = 5;
 
 // Zitate im Flaggen-Kasten, wechseln alle paar Sekunden. Neues Zitat = neuer Eintrag.
