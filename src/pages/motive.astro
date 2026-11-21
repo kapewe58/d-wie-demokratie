@@ -15,7 +15,7 @@ const gross = new Map<string, string>();
 for (const motiv of motive) {
 	for (const f of motiv.fassungen) {
 		const bild = await getImage({ src: f.bild!, width: Math.min(1400, f.bild!.width), format: 'webp' });
-		gross.set(`${motiv.nr}${f.endung}`, bild.src);
+		gross.set(`${motiv.anker}${f.endung}`, bild.src);
 	}
 }
 const grundStoff = '#c3c7cd';
@@ -95,14 +95,14 @@ const grundStoff = '#c3c7cd';
 
 	<ul class="motive">
 		{motive.map((motiv) => (
-			<li id={`motiv-${motiv.nr}`}>
+			<li id={motiv.anker}>
 				{/* mehrere Fassungen: Knöpfe wechseln zwischen ihnen; ohne JavaScript stehen alle untereinander */}
 				{motiv.fassungen.map((f, i) => (
 					<div class="fassung" data-fassung={i}>
 						<a
 							class="gross-link"
-							href={gross.get(`${motiv.nr}${f.endung}`)}
-							data-titel={`Motiv ${motiv.nr}: ${motiv.name}${motiv.fassungen.length > 1 && f.name ? ` – ${f.name}` : ''}`}
+							href={gross.get(`${motiv.anker}${f.endung}`)}
+							data-titel={`${motiv.bald ? '' : `Motiv ${motiv.nr}: `}${motiv.name}${motiv.fassungen.length > 1 && f.name ? ` – ${f.name}` : ''}`}
 							data-stoff={motiv.fassungen.length > 1 ? (f.stoff ?? stoff[f.endung] ?? grundStoff) : ''}
 						>
 							<Image
@@ -117,7 +117,7 @@ const grundStoff = '#c3c7cd';
 							<span class="lupe" aria-hidden="true">⤢</span>
 						</a>
 						<div>
-							<h2>Motiv {motiv.nr}: {motiv.name}</h2>
+							<h2>{!motiv.bald && <>Motiv {motiv.nr}: </>}{motiv.name}</h2>
 							{motiv.fassungen.length > 1 && (
 								<div class="fassung-knoepfe" role="group" aria-label="Fassung wählen" hidden>
 									{motiv.fassungen.map((g, k) => (

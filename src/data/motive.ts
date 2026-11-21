@@ -55,50 +55,51 @@ const liste = [
 			},
 		],
 	},
-	// bald: Motiv wird schon gezeigt, aber noch ohne Download und Shop („Kommt bald“); Vorschaubild in
-	// src/assets/motive/bald/<vorschau>. Sobald PNG (und PDF) fertig sind: bald und vorschau löschen.
-	// Auf der Startseite erscheinen diese Motive noch nicht.
 	{
 		nr: 3,
+		name: 'Vitamin D',
+		alt: 'Schwarze Johannisbeeren, rote Erdbeeren mit Blüte und goldgelbe Aprikosen mit Blättern, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Vitamin D“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
+	},
+	// Entwürfe („Kommt bald“): noch ohne Nummer, Download und Shop; stehen unter den fertigen Motiven.
+	// id = Sprungmarke (/motive/#<id>), Vorschaubild src/assets/motive/bald/<id>.png.
+	// Regel: Eine Nummer bekommt ein Motiv erst, wenn es fertig ist (Druck-PNG da), und zwar die nächste freie,
+	// egal in welcher Reihenfolge die Entwürfe fertig werden. Dann bald und id löschen, nr eintragen, PNG ablegen.
+	// Auf der Startseite erscheinen Entwürfe nicht.
+	{
+		id: 'hasen',
 		name: 'Keine Angst, Hasen!',
 		alt: 'Drei Hasen in Schwarz, Rot und Gold sitzen eng beieinander, der schwarze zeigt den Daumen hoch, der rote zwinkert, der gelbe streckt die Zunge heraus. Darüber „Keine Angst, Hasen!“, darunter d-wie-demokratie.de, in einem runden Abzeichen.',
 		bald: true,
-		vorschau: 'motiv-3-vorschau.png',
 	},
 	{
-		nr: 4,
+		id: 'hut',
 		name: 'Alles wird Hut',
 		alt: 'Drei Hüte in Schwarz, Rot und Gold: ein schwarzer Zylinder mit rotem Band, eine rote Baskenmütze und ein gelber Hut mit schwarzem Band. Darüber „Alles wird Hut“, darunter d-wie-demokratie.de, in einem runden Abzeichen.',
 		bald: true,
-		vorschau: 'motiv-4-vorschau.png',
 	},
 	{
-		nr: 5,
+		id: 'entchen',
 		name: 'Entchen gut, alles gut',
 		alt: 'Drei flauschige Entenküken in Schwarz, Rot und Gold sitzen dicht nebeneinander und schnattern fröhlich, gezeichnet im Stil eines alten Kupferstichs. Darüber im Bogen „Entchen gut, alles gut“, darunter d-wie-demokratie.de, in einem Oval.',
 		bald: true,
-		vorschau: 'motiv-5-vorschau.png',
 	},
 	{
-		nr: 6,
+		id: 'chili',
 		name: 'Demokratie braucht Schärfe',
 		alt: 'Drei Chilischoten in Schwarz, Rot und Gelb liegen schräg und gestaffelt nebeneinander, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Demokratie braucht Schärfe“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 		bald: true,
-		vorschau: 'motiv-6-vorschau.png',
 	},
 	{
-		nr: 7,
+		id: 'dackel',
 		name: 'Dackel lieben Demokratie',
 		alt: 'Ein fröhlicher Dackel mit heraushängender Zunge und Ringelschwanz, sein Fell in Schwarz, Rot und Gold gestreift, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Dackel lieben Demokratie“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 		bald: true,
-		vorschau: 'motiv-7-vorschau.png',
 	},
 	{
-		nr: 8,
+		id: 'amsel',
 		name: 'Oh Ei, oh Ei!',
 		alt: 'Eine schwarze Amsel singt mit offenem Schnabel, vor ihr liegen ein rotes Ei und ein zerbrochenes Ei mit auslaufendem goldgelbem Eigelb, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Oh Ei, oh Ei!“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 		bald: true,
-		vorschau: 'motiv-8-vorschau.png',
 	},
 ];
 
@@ -112,12 +113,15 @@ const vorschauen = import.meta.glob<{ default: ImageMetadata }>('../assets/motiv
 // je Motiv die Fassungen, deren PNG da ist; ohne Angabe nur die eine Standardfassung
 export const motive = liste
 	.map((motiv) => {
-		const { bald, vorschau } = motiv as { bald?: boolean; vorschau?: string };
+		const { bald, id, nr } = motiv as { bald?: boolean; id?: string; nr?: number };
 		return {
 			...motiv,
+			nr: nr ?? 0,
+			// Sprungmarke: fertige Motive #motiv-<nr>, Entwürfe #<id>
+			anker: bald ? id! : `motiv-${nr}`,
 			bald: bald ?? false,
 			fassungen: bald
-				? [{ endung: '', bild: vorschauen[`../assets/motive/bald/${vorschau}`]?.default } as Variante & { bild?: ImageMetadata }]
+				? [{ endung: '', bild: vorschauen[`../assets/motive/bald/${id}.png`]?.default } as Variante & { bild?: ImageMetadata }]
 				: ((motiv as { varianten?: Variante[] }).varianten ?? [{ endung: '' }])
 						.map((v: Variante) => ({ ...v, bild: pngs[`../assets/motive/d-wie-demokratie-motiv-${motiv.nr}${v.endung}.png`]?.default }))
 						.filter((v) => v.bild && !v.versteckt),
