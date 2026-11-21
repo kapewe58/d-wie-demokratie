@@ -57,9 +57,8 @@ const liste = [
 	},
 	{
 		nr: 3,
-		name: 'Vitamin D',
-		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360859901',
-		alt: 'Schwarze Johannisbeeren, rote Erdbeeren mit Blüte und goldgelbe Aprikosen mit Blättern, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Vitamin D“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
+		name: 'Gesunde Vielfalt',
+		alt: 'Schwarze Johannisbeeren, rote Erdbeeren mit Blüte und goldgelbe Aprikosen mit Blättern, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Gesunde Vielfalt“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 4,
