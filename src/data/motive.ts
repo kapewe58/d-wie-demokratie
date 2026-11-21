@@ -91,6 +91,12 @@ const liste = [
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360861486',
 		alt: 'Ein fröhlicher Dackel hat drei Farbeimer umgeworfen und sich selbst in Schwarz, Rot und Gold angemalt, um ihn herum laufen schwarze, rote und gelbe Farbpfützen aus. Oben im Bogen „Farbe bekennen!“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
+	{
+		nr: 9,
+		name: 'Alles wird Hut',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360861530',
+		alt: 'Drei Hüte in Schwarz, Rot und Gold: ein schwarzer Zylinder mit rotem Band, eine rote Baskenmütze und ein gelber Hut mit schwarzem Band. Darüber „Alles wird Hut“, darunter d-wie-demokratie.de, in einem runden Abzeichen.',
+	},
 	// Entwürfe („Kommt bald“): noch ohne Nummer, Download und Shop; stehen unter den fertigen Motiven.
 	// id = Sprungmarke (/motive/#<id>), Vorschaubild src/assets/motive/bald/<id>.png.
 	// Regel: Eine Nummer bekommt ein Motiv erst, wenn es fertig ist (Druck-PNG da), und zwar die nächste freie,
@@ -100,12 +106,6 @@ const liste = [
 		id: 'hasen',
 		name: 'Keine Angst, Hasen!',
 		alt: 'Drei Hasen in Schwarz, Rot und Gold sitzen eng beieinander, der schwarze zeigt den Daumen hoch, der rote zwinkert, der gelbe streckt die Zunge heraus. Darüber „Keine Angst, Hasen!“, darunter d-wie-demokratie.de, in einem runden Abzeichen.',
-		bald: true,
-	},
-	{
-		id: 'hut',
-		name: 'Alles wird Hut',
-		alt: 'Drei Hüte in Schwarz, Rot und Gold: ein schwarzer Zylinder mit rotem Band, eine rote Baskenmütze und ein gelber Hut mit schwarzem Band. Darüber „Alles wird Hut“, darunter d-wie-demokratie.de, in einem runden Abzeichen.',
 		bald: true,
 	},
 	{
