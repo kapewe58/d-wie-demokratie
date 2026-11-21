@@ -67,6 +67,12 @@ const liste = [
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360860640',
 		alt: 'Eine Schildkröte, deren Panzer in Schwarz, Rot und Gold gestreift ist, blickt wachsam nach vorn, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Demokratie braucht Schutz“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
+	{
+		nr: 5,
+		name: 'Demokratie braucht Stacheln',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360860935',
+		alt: 'Ein Igel, dessen Stacheln von Schwarz über Rot zu Gold übergehen, blickt wachsam nach vorn, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Demokratie braucht Stacheln“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
+	},
 	// Entwürfe („Kommt bald“): noch ohne Nummer, Download und Shop; stehen unter den fertigen Motiven.
 	// id = Sprungmarke (/motive/#<id>), Vorschaubild src/assets/motive/bald/<id>.png.
 	// Regel: Eine Nummer bekommt ein Motiv erst, wenn es fertig ist (Druck-PNG da), und zwar die nächste freie,
