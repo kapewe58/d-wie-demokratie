@@ -124,6 +124,15 @@ const liste = [
 			{ endung: '', name: 'Für helle Untergründe', text: 'Freigestellt. Für Papier, Aufkleber und helle Textilien.' },
 		],
 	},
+	{
+		nr: 14,
+		name: 'Schnurren war gestern',
+		alt: 'Ein brüllender Tigerkopf von vorn im Holzschnitt-Stil, gelb mit schwarzen Streifen, die rote Zunge im weit geöffneten Maul. Darüber „SCHNURREN WAR GESTERN“, darunter d-wie-demokratie.de.',
+		varianten: [
+			{ endung: '', name: 'Für helle Untergründe', text: 'Schrift schwarz. Für Papier, Aufkleber und helle Textilien.' },
+			{ endung: '-dunkel', name: 'Für dunkle Untergründe', text: 'Schrift weiß. Für mittlere und dunkle Farben, auch Schwarz.' },
+		],
+	},
 	// Entwürfe („Kommt bald“): noch ohne Nummer, Download und Shop; stehen unter den fertigen Motiven.
 	// id = Sprungmarke (/motive/#<id>), Vorschaubild src/assets/motive/bald/<id>.png.
 	// Regel: Eine Nummer bekommt ein Motiv erst, wenn es fertig ist (Druck-PNG da), und zwar die nächste freie,

@@ -18,7 +18,7 @@ for (const motiv of motive) {
 		gross.set(`${motiv.anker}${f.endung}`, bild.src);
 	}
 }
-const grundStoff = '#c3c7cd';
+const grundStoff = '#fff';
 ---
 
 <Layout
@@ -367,8 +367,8 @@ const grundStoff = '#c3c7cd';
 		gap: 1.5em;
 	}
 
-	/* ohne JavaScript stehen die Fassungen untereinander */
-	.fassung + .fassung {
+	/* ohne JavaScript stehen die Fassungen untereinander; nur zwischen sichtbaren Abstand, sonst rutscht eine gewählte spätere Fassung nach unten */
+	.fassung:not([hidden]) ~ .fassung:not([hidden]) {
 		margin-top: 1.2em;
 	}
 
@@ -382,8 +382,9 @@ const grundStoff = '#c3c7cd';
 		box-sizing: border-box;
 		padding: 10px;
 		border-radius: 6px;
-		/* heller Stoffton wie ein graumeliertes Shirt: Weiß ist darauf noch zu erkennen */
-		background: #c3c7cd;
+		/* helle Fassungen auf Weiß; feiner Rand, damit man die Fläche auf der weißen Seite sieht */
+		background: #fff;
+		box-shadow: 0 0 0 1px #e2e2e2;
 	}
 
 	.fassung-knoepfe {
