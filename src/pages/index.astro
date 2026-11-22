@@ -11,17 +11,19 @@ import fotoReichstag from '../assets/flagge/1990-reichstag.jpg';
 // Daten in src/data/motive.ts). Alte Links wie /#motiv-1, /#herunterladen, /#shop leitet das Skript unten auf /motive/ weiter.
 
 // Bilder oben, wechseln alle paar Sekunden; ein Klick springt zum gezeigten Motiv auf /motive/.
-// Je fertigem Motiv ein Querformat src/assets/slider/motiv-<nr>.jpg (1800 × 1200, Motiv groß auf Weiß, darunter „Motiv <nr> · im Shop“,
-// von Claude aus der Druck-PNG erzeugt); ein Motiv ohne solches Bild wird einfach übersprungen.
+// Je fertigem Motiv ein Querformat src/assets/slider/motiv-<nr>.jpg (1800 × 1200, Motiv groß auf Weiß, ohne Text,
+// erzeugt mit scripts/slider-querformate.py aus der Druck-PNG); ein Motiv ohne solches Bild wird einfach übersprungen.
+// text: Zeile unter dem Bild (gehört zum Link, wechselt mit dem Bild)
 // „foto: true“ blendet beim Bild den Hinweis „KI-generiert“ ein (Pflicht nach Art. 50 KI-Verordnung für KI-Fotos;
 // seit 2026-11-21 gibt es keine KI-Fotos mehr, später echte Fotos von Shirts usw. hier ergänzen).
 const querformate = import.meta.glob<{ default: ImageMetadata }>('../assets/slider/motiv-*.jpg', { eager: true });
-const bilder: { src: ImageMetadata; motiv: number; foto?: boolean; alt: string }[] = motive
+const bilder: { src: ImageMetadata; motiv: number; foto?: boolean; alt: string; text: string }[] = motive
 	.filter((m) => !m.bald && querformate[`../assets/slider/motiv-${m.nr}.jpg`])
 	.map((m) => ({
 		src: querformate[`../assets/slider/motiv-${m.nr}.jpg`].default,
 		motiv: m.nr,
-		alt: `Motiv ${m.nr} „${m.name}“, daneben: Zeig, wofür du stehst.`,
+		alt: m.alt,
+		text: `Motiv ${m.nr} von ${motive.filter((x) => !x.bald).length}`,
 	}));
 const sekunden = 5;
 
@@ -80,6 +82,7 @@ const zitatSekunden = 8;
 					sizes="(max-width: 680px) 100vw, 680px"
 					loading={i === 0 ? 'eager' : 'lazy'}
 				/>
+				<span class="folie-text">{bild.text}</span>
 			</a>
 		))}
 	</div>
@@ -262,10 +265,9 @@ const zitatSekunden = 8;
 </script>
 
 <style>
-	/* feste Höhe aus dem Seitenverhältnis der Bilder, damit beim Wechsel nichts springt */
+	/* alle Folien liegen in derselben Rasterzelle übereinander; die Höhe richtet sich nach der höchsten, damit beim Wechsel nichts springt */
 	.slider {
-		position: relative;
-		aspect-ratio: 3 / 2;
+		display: grid;
 		/* zusammen mit dem Innenabstand von main (36,8px) genau 40px bis zur Kopfzeile */
 		margin-top: 3.2px;
 	}
@@ -279,8 +281,10 @@ const zitatSekunden = 8;
 
 	/* nur das sichtbare Foto ist anklickbar */
 	.folie {
-		position: absolute;
-		inset: 0;
+		grid-area: 1 / 1;
+		display: block;
+		color: var(--schwarz);
+		text-decoration: none;
 		opacity: 0;
 		pointer-events: none;
 		transition: opacity 1s ease;
@@ -291,12 +295,25 @@ const zitatSekunden = 8;
 		pointer-events: auto;
 	}
 
-	/* Fotos füllen die Fläche; Bilder in anderem Seitenverhältnis werden am Rand beschnitten */
+	/* Bilder im Format 3:2; andere Seitenverhältnisse werden am Rand beschnitten */
 	.folie img {
 		display: block;
 		width: 100%;
-		height: 100%;
+		height: auto;
+		aspect-ratio: 3 / 2;
 		object-fit: cover;
+	}
+
+	/* Zeile unter dem Bild, z. B. „Motiv 1 · im Shop“ */
+	.folie-text {
+		display: block;
+		margin-top: 0.3em;
+		font-weight: bold;
+		text-align: center;
+	}
+
+	.folie:hover .folie-text {
+		text-decoration: underline;
 	}
 
 	/* Zeile unter den Bildern: Punkte in der Mitte, Hinweis rechts; feste Höhe, auch ohne Punkte */
