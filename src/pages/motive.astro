@@ -377,7 +377,10 @@ const grundStoff = '#c3c7cd';
 	}
 
 	/* Motive mit mehreren Fassungen: jede Vorschau auf dem Stoff, für den sie gedacht ist (Farbe pro Fassung im Bild-Stil) */
+	/* etwas Stoff rundherum, damit Fassungen mit eigener Fläche (weißes Oval, weißes Schild) nicht bis an den Rand gehen */
 	.motive img.auf-farbe {
+		box-sizing: border-box;
+		padding: 10px;
 		border-radius: 6px;
 		/* heller Stoffton wie ein graumeliertes Shirt: Weiß ist darauf noch zu erkennen */
 		background: #c3c7cd;
@@ -463,6 +466,8 @@ const grundStoff = '#c3c7cd';
 
 	.gross-ansicht img {
 		display: block;
+		box-sizing: border-box;
+		padding: 1.2em;
 		width: 100%;
 		max-height: calc(94vh - 4.5em);
 		object-fit: contain;

@@ -114,6 +114,15 @@ const liste = [
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360861872',
 		alt: 'Drei Schimpansen mit Halstüchern in Schwarz, Rot und Gold, gezeichnet im Stil eines alten Kupferstichs: Der linke formt mit den Händen ein Fernglas vor den Augen, der mittlere legt die Hände hinter die Ohren, der rechte ruft mit den Händen am Mund. Oben im Bogen „Hinschauen. Zuhören. Mund aufmachen.“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
+	{
+		nr: 13,
+		name: 'DEMO',
+		alt: 'Die Buchstaben K, R, A, T, I, E in Schwarz, Rot und Gold laufen auf Armen und Beinen in Turnschuhen nebeneinander her und tragen ein Banner mit der Aufschrift „DEMO“, zusammen „DEMOKRATIE“; ganz links ruft einer durch ein Megafon. Darunter d-wie-demokratie.de.',
+		varianten: [
+			{ endung: '', name: 'Für helle Untergründe', text: 'Freigestellt. Für Papier, Aufkleber und helle Textilien.' },
+			{ endung: '-dunkel', name: 'Für dunkle Untergründe', text: 'Auf einem weißen Schild mit runden Ecken. Für alle Farben, auch Schwarz.' },
+		],
+	},
 	// Entwürfe („Kommt bald“): noch ohne Nummer, Download und Shop; stehen unter den fertigen Motiven.
 	// id = Sprungmarke (/motive/#<id>), Vorschaubild src/assets/motive/bald/<id>.png.
 	// Regel: Eine Nummer bekommt ein Motiv erst, wenn es fertig ist (Druck-PNG da), und zwar die nächste freie,
