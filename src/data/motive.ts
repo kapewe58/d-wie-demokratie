@@ -58,6 +58,7 @@ const liste = [
 	{
 		nr: 3,
 		name: 'Gesunde Vielfalt',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360875074',
 		alt: 'Schwarze Johannisbeeren, rote Erdbeeren mit Blüte und goldgelbe Aprikosen mit Blättern, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Gesunde Vielfalt“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
