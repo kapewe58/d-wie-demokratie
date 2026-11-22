@@ -2,6 +2,11 @@
 import Eintrag from '../components/VerbuendeterEintrag.astro';
 import Werte from '../components/Werte.astro';
 import Layout from '../layouts/Layout.astro';
+import { getImage } from 'astro:assets';
+import reichstag from '../assets/flagge/1990-reichstag.jpg';
+
+// Reichstag-Foto als Struktur im goldenen Knopf oben (wie bei den Knöpfen in „Bitte weitersagen“; Nachweis dort)
+const wasserzeichen = await getImage({ src: reichstag, width: 1000, format: 'webp' });
 
 type Verbuendeter = {
 	name: string;
@@ -110,6 +115,9 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 		})();
 	</script>
 
+	<!-- Einladung gleich oben, springt zum Formular weiter unten (bei vielen Verbündeten sonst weit weg) -->
+	<p class="einladung"><a href="#eintragen" class="einladung-knopf" style={`--wz-url: url(${wasserzeichen.src})`}>Ja, ich verbünde mich!</a></p>
+
 	{verbuendete.length === 0 && (
 		<p class="neu">
 			<strong>Diese Seite ist ganz neu.</strong> Noch stehen hier keine Namen. Sei unter den Ersten, die mit uns
@@ -136,7 +144,7 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 	})}
 
 	<section class="kasten" id="eintragen" aria-labelledby="eintragen-titel">
-		<h2 id="eintragen-titel" class="vor-dem-senden">Verbünde dich mit uns!</h2>
+		<h2 id="eintragen-titel" class="vor-dem-senden">Ja, ich verbünde mich!</h2>
 		<p class="vor-dem-senden">
 			Es entstehen keine Verpflichtungen, und es kostet nichts. Wir prüfen jeden
 			Eintrag, bevor er hier erscheint. Ob wir einen Eintrag veröffentlichen, entscheiden wir.
@@ -204,7 +212,7 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 			</label>
 
 			<p class="fehler" role="alert" hidden></p>
-			<button type="submit" class="absenden">Ja, ich verbünde mich</button>
+			<button type="submit" class="absenden">Ja, ich verbünde mich!</button>
 		</form>
 
 		<div class="danke" role="status" hidden>
@@ -313,7 +321,7 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 					zeigeFehler('Das hat leider nicht geklappt. Bitte versuch es später noch einmal oder schreib uns an info@d-wie-demokratie.de.');
 				} finally {
 					knopf.disabled = false;
-					knopf.textContent = 'Ja, ich verbünde mich';
+					knopf.textContent = 'Ja, ich verbünde mich!';
 				}
 			});
 		}
@@ -440,6 +448,47 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 
 	.mehr {
 		margin-top: 2em;
+	}
+
+	.einladung {
+		margin: 1.5em 0 2em;
+	}
+
+	/* gold über die ganze Breite, mit dem Reichstag-Foto als Struktur (wie „Link kopieren“ unten) */
+	.einladung-knopf {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		display: block;
+		padding: 0.6em 0.8em;
+		border-radius: 6px;
+		background: var(--gold);
+		color: var(--schwarz);
+		/* groß, wächst mit der Breite: auf dem Handy so, dass es in eine Zeile passt (ab 320 px), am Rechner bis 1,7rem */
+		font-size: clamp(1.15rem, 5vw, 1.7rem);
+		font-weight: bold;
+		line-height: 1.25;
+		white-space: nowrap;
+		text-align: center;
+		text-decoration: none;
+	}
+
+	.einladung-knopf::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: var(--wz-url) center 85% / max(100%, 435px) auto no-repeat;
+		filter: grayscale(1) contrast(1.1);
+		opacity: 0.25;
+		mix-blend-mode: luminosity;
+		pointer-events: none;
+	}
+
+	@media (hover: hover) {
+		.einladung-knopf:hover {
+			filter: brightness(1.15);
+		}
 	}
 
 	/* Einladung groß, fast wie die Seitenüberschrift */
