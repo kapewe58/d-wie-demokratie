@@ -120,8 +120,8 @@ const liste = [
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360870008',
 		alt: 'Die Buchstaben K, R, A, T, I, E in Schwarz, Rot und Gold laufen auf Armen und Beinen in Turnschuhen nebeneinander her und tragen ein Banner mit der Aufschrift „DEMO“, zusammen „DEMOKRATIE“; ganz links ruft einer durch ein Megafon. Darunter d-wie-demokratie.de.',
 		varianten: [
+			{ endung: '-dunkel', name: 'Für alle Untergründe', shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360869973', text: 'Auf einem weißen Schild mit runden Ecken. Für alle Farben, auch Schwarz.' },
 			{ endung: '', name: 'Für helle Untergründe', text: 'Freigestellt. Für Papier, Aufkleber und helle Textilien.' },
-			{ endung: '-dunkel', name: 'Für dunkle Untergründe', shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360869973', text: 'Auf einem weißen Schild mit runden Ecken. Für alle Farben, auch Schwarz.' },
 		],
 	},
 	// Entwürfe („Kommt bald“): noch ohne Nummer, Download und Shop; stehen unter den fertigen Motiven.

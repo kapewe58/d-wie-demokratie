@@ -441,10 +441,13 @@ const grundStoff = '#c3c7cd';
 		font-size: 0.95rem;
 		line-height: 1.6em;
 		text-align: center;
-		opacity: 0.8;
+		/* erst beim Darüberfahren mit der Maus, sonst deckt es Teile des Motivs zu (z. B. die Adresse) */
+		opacity: 0;
+		transition: opacity 0.2s;
 	}
 
-	.gross-link:hover .lupe {
+	.gross-link:hover .lupe,
+	.gross-link:focus-visible .lupe {
 		opacity: 1;
 	}
 
