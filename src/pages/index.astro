@@ -75,16 +75,19 @@ const zitatSekunden = 8;
 	     Pfeile links und rechts der Zeile „Motiv 3 von 14“ blättern und halten den Wechsel an (auch Pfeiltasten). -->
 	<div class="slider" data-sekunden={sekunden} role="region" aria-roledescription="Karussell" aria-label="Unsere Motive">
 		{bilder.map((bild, i) => (
-			<a href={`/motive/#motiv-${bild.motiv}`} class:list={['folie', { sichtbar: i === 0 }]} data-foto={bild.foto ? '' : undefined} tabindex={i === 0 ? undefined : -1}>
-				<Image
+			<div class:list={['folie', { sichtbar: i === 0 }]} data-foto={bild.foto ? '' : undefined}>
+				{/* nur das Bild ist ein Link; die Zeile darunter nicht, damit man neben den Pfeilen nicht versehentlich zu den Motiven springt */}
+				<a href={`/motive/#motiv-${bild.motiv}`} tabindex={i === 0 ? undefined : -1}>
+					<Image
 					src={bild.src}
 					alt={bild.alt}
 					widths={[400, 700, 1360]}
 					sizes="(max-width: 680px) 100vw, 680px"
-					loading={i === 0 ? 'eager' : 'lazy'}
-				/>
-				<span class="folie-text">{bild.text}</span>
-			</a>
+						loading={i === 0 ? 'eager' : 'lazy'}
+					/>
+				</a>
+				<p class="folie-text">{bild.text}</p>
+			</div>
 		))}
 		<div class="pfeile" hidden>
 			<button type="button" class="pfeil zurueck" aria-label="Vorheriges Motiv">‹</button>
@@ -172,17 +175,18 @@ const zitatSekunden = 8;
 	const pfeile = document.querySelector<HTMLElement>('.slider .pfeile');
 	if (slider && pfeile) {
 		const folien = [...slider.querySelectorAll<HTMLElement>('.folie')];
+		const links = folien.map((f) => f.querySelector('a')!);
 		const hinweis = document.querySelector<HTMLElement>('.ki-hinweis');
 		let aktuell = 0;
 
 		const zeige = (n: number) => {
-			const fokusDrin = folien[aktuell] === document.activeElement;
+			const fokusDrin = links[aktuell] === document.activeElement;
 			folien[aktuell].classList.remove('sichtbar');
-			folien[aktuell].tabIndex = -1;
+			links[aktuell].tabIndex = -1;
 			aktuell = (n + folien.length) % folien.length;
 			folien[aktuell].classList.add('sichtbar');
-			folien[aktuell].removeAttribute('tabindex');
-			if (fokusDrin) folien[aktuell].focus();
+			links[aktuell].removeAttribute('tabindex');
+			if (fokusDrin) links[aktuell].focus();
 			if (hinweis) hinweis.hidden = !('foto' in folien[aktuell].dataset);
 		};
 
@@ -286,9 +290,6 @@ const zitatSekunden = 8;
 	/* nur das sichtbare Foto ist anklickbar */
 	.folie {
 		grid-area: 1 / 1;
-		display: block;
-		color: var(--schwarz);
-		text-decoration: none;
 		opacity: 0;
 		pointer-events: none;
 		transition: opacity 1s ease;
@@ -297,6 +298,10 @@ const zitatSekunden = 8;
 	.folie.sichtbar {
 		opacity: 1;
 		pointer-events: auto;
+	}
+
+	.folie a {
+		display: block;
 	}
 
 	/* Bilder im Format 3:2; andere Seitenverhältnisse werden am Rand beschnitten */
@@ -308,18 +313,13 @@ const zitatSekunden = 8;
 		object-fit: cover;
 	}
 
-	/* Zeile unter dem Bild, z. B. „Motiv 1 · im Shop“ */
+	/* Zeile unter dem Bild, z. B. „Motiv 3 von 14“ (kein Link) */
 	.folie-text {
-		display: block;
+		margin: 0.3em 0 0;
 		/* so hoch wie die Pfeile daneben */
 		line-height: 40px;
-		margin-top: 0.3em;
 		font-weight: bold;
 		text-align: center;
-	}
-
-	.folie:hover .folie-text {
-		text-decoration: underline;
 	}
 
 	/* Zeile unter den Bildern: Punkte in der Mitte, Hinweis rechts; feste Höhe, auch ohne Punkte */
@@ -423,6 +423,7 @@ const zitatSekunden = 8;
 	}
 
 	.pfeil {
+		position: relative;
 		width: 40px;
 		height: 40px;
 		padding: 0 0 4px;
@@ -439,6 +440,14 @@ const zitatSekunden = 8;
 
 	.pfeil:hover {
 		background: #e0e0e0;
+	}
+
+	/* unsichtbar größere Trefferfläche, reicht auch ein Stück in den weißen Rand unten im Bild:
+	   wer knapp danebentippt, blättert trotzdem und landet nicht auf der Motive-Seite */
+	.pfeil::before {
+		content: '';
+		position: absolute;
+		inset: -22px -16px -8px;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
