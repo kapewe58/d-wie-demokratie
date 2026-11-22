@@ -3,13 +3,17 @@
 import { Image } from 'astro:assets';
 
 const { v } = Astro.props;
+// Website kurz anzeigen: ohne https:// und www., ohne Schrägstrich am Ende
+const kurz = v.url ? v.url.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '') : '';
 ---
 
 <li>
 	{v.logo && <Image class="logo" src={v.logo} alt="" width={240} />}
 	<div>
-		{v.url ? <a href={v.url} target="_blank" rel="noopener">{v.name}</a> : <strong>{v.name}</strong>}
+		{/* Name immer fett und nicht verlinkt, damit alle Einträge gleich aussehen; die Website steht darunter */}
+		<strong>{v.name}</strong>
 		{v.zusatz && <span class="zusatz">{v.zusatz}</span>}
+		{v.url && <a class="website" href={v.url} target="_blank" rel="noopener">{kurz}<span aria-hidden="true"> ↗</span></a>}
 		{v.zitat && <q class="zitat">{v.zitat}</q>}
 	</div>
 </li>
@@ -42,6 +46,11 @@ const { v } = Astro.props;
 	.zusatz {
 		display: block;
 		color: #555555;
+		font-size: 0.95rem;
+	}
+
+	.website {
+		display: inline-block;
 		font-size: 0.95rem;
 	}
 </style>

@@ -48,8 +48,9 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 	<h1>Wir sind Verbündete</h1>
 
 	<p class="lead">
-		Wir teilen
-		<button type="button" class="aufklappen" aria-expanded="false" aria-controls="werte-ziele" hidden>Werte und Ziele</button><span class="aufklappen-text">Werte und Ziele</span>.
+		Menschen und Organisationen, die unsere
+		<button type="button" class="aufklappen" aria-expanded="false" aria-controls="werte-ziele" hidden>Werte und Ziele</button><span class="aufklappen-text">Werte und Ziele</span>
+		teilen und mit uns Flagge zeigen für Demokratie und Grundgesetz.
 	</p>
 
 	<!-- ohne JavaScript gleich offen; …/verbuendete/#werte öffnet den Abschnitt -->
@@ -132,7 +133,7 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 		return (
 			(eintraege.length > 0 || leerZeigen) && (
 				<section aria-labelledby={`gruppe-${g.art}`}>
-					<h2 id={`gruppe-${g.art}`}>{g.titel}</h2>
+					<h2 id={`gruppe-${g.art}`}>{g.titel}{eintraege.length > 0 && <span class="anzahl"> ({eintraege.length})</span>}</h2>
 					{eintraege.length > 0 ? (
 						<ul class="liste">{eintraege.map((v) => <Eintrag v={v} />)}</ul>
 					) : (
@@ -414,6 +415,12 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 		font-size: 1.3rem;
 	}
 
+	/* Zahl hinter „Personen“ und „Organisationen“, etwas zurückhaltender */
+	.anzahl {
+		color: var(--grau);
+		font-weight: normal;
+	}
+
 	.liste {
 		padding: 0;
 		list-style: none;
@@ -450,8 +457,9 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 		margin-top: 2em;
 	}
 
+	/* der Satz darüber bringt schon Abstand mit (der zugeklappte Bereich „Werte und Ziele“ dazwischen verhindert, dass die Abstände zusammenfallen) */
 	.einladung {
-		margin: 1.5em 0 2em;
+		margin: 0.3em 0 2em;
 	}
 
 	/* gold über die ganze Breite, mit dem Reichstag-Foto als Struktur (wie „Link kopieren“ unten) */
