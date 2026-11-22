@@ -71,8 +71,9 @@ const zitatSekunden = 8;
 	title="D wie Demokratie"
 	description="Wir zeigen Flagge für unsere Demokratie und das Grundgesetz: Motive kostenlos herunterladen oder im Shop bestellen."
 >
-	<!-- Fotos liegen übereinander und werden nacheinander eingeblendet; ohne JavaScript bleibt das erste stehen -->
-	<div class="slider" data-sekunden={sekunden}>
+	<!-- Bilder liegen übereinander und werden nacheinander eingeblendet; ohne JavaScript bleibt das erste stehen.
+	     Pfeile links und rechts der Zeile „Motiv 3 von 14“ blättern und halten den Wechsel an (auch Pfeiltasten). -->
+	<div class="slider" data-sekunden={sekunden} role="region" aria-roledescription="Karussell" aria-label="Unsere Motive">
 		{bilder.map((bild, i) => (
 			<a href={`/motive/#motiv-${bild.motiv}`} class:list={['folie', { sichtbar: i === 0 }]} data-foto={bild.foto ? '' : undefined} tabindex={i === 0 ? undefined : -1}>
 				<Image
@@ -85,15 +86,13 @@ const zitatSekunden = 8;
 				<span class="folie-text">{bild.text}</span>
 			</a>
 		))}
+		<div class="pfeile" hidden>
+			<button type="button" class="pfeil zurueck" aria-label="Vorheriges Motiv">‹</button>
+			<button type="button" class="pfeil weiter" aria-label="Nächstes Motiv">›</button>
+		</div>
 	</div>
 
 	<div class="unter-slider">
-		<!-- Punkte zum Weiterschalten; ein Klick hält den automatischen Wechsel an -->
-		<div class="punkte" hidden>
-			{bilder.map((_, i) => (
-				<button type="button" aria-label={`Bild ${i + 1} von ${bilder.length}`} aria-current={i === 0 ? 'true' : undefined}></button>
-			))}
-		</div>
 		<!-- Kennzeichnung nach Art. 50 KI-Verordnung -->
 		<p class="ki-hinweis" hidden={!bilder[0].foto}>KI-Bilder, bald ersetzen wir sie durch echte.</p>
 	</div>
@@ -170,22 +169,21 @@ const zitatSekunden = 8;
 
 <script>
 	const slider = document.querySelector<HTMLElement>('.slider');
-	const punkte = document.querySelector<HTMLElement>('.punkte');
-	if (slider && punkte) {
+	const pfeile = document.querySelector<HTMLElement>('.slider .pfeile');
+	if (slider && pfeile) {
 		const folien = [...slider.querySelectorAll<HTMLElement>('.folie')];
 		const hinweis = document.querySelector<HTMLElement>('.ki-hinweis');
-		const knoepfe = [...punkte.querySelectorAll('button')];
 		let aktuell = 0;
 
 		const zeige = (n: number) => {
+			const fokusDrin = folien[aktuell] === document.activeElement;
 			folien[aktuell].classList.remove('sichtbar');
 			folien[aktuell].tabIndex = -1;
-			knoepfe[aktuell].removeAttribute('aria-current');
-			aktuell = n;
+			aktuell = (n + folien.length) % folien.length;
 			folien[aktuell].classList.add('sichtbar');
 			folien[aktuell].removeAttribute('tabindex');
+			if (fokusDrin) folien[aktuell].focus();
 			if (hinweis) hinweis.hidden = !('foto' in folien[aktuell].dataset);
-			knoepfe[aktuell].setAttribute('aria-current', 'true');
 		};
 
 		// wer Bewegung abgeschaltet hat, schaltet nur selbst weiter
@@ -194,13 +192,19 @@ const zitatSekunden = 8;
 			? undefined
 			: setInterval(() => zeige((aktuell + 1) % folien.length), Number(slider.dataset.sekunden) * 1000);
 
-		knoepfe.forEach((knopf, i) =>
-			knopf.addEventListener('click', () => {
-				clearInterval(takt);
-				zeige(i);
-			})
-		);
-		punkte.hidden = false;
+		const blaettern = (schritt: number) => {
+			clearInterval(takt);
+			zeige(aktuell + schritt);
+		};
+		pfeile.addEventListener('click', (e) => {
+			const pfeil = (e.target as Element).closest('.pfeil');
+			if (pfeil) blaettern(pfeil.classList.contains('weiter') ? 1 : -1);
+		});
+		slider.addEventListener('keydown', (e) => {
+			if (e.key === 'ArrowRight') blaettern(1);
+			else if (e.key === 'ArrowLeft') blaettern(-1);
+		});
+		if (folien.length > 1) pfeile.hidden = false;
 	}
 
 	// Zitate im Flaggen-Kasten: wechseln wie die Fotos, ein Klick auf einen Punkt hält an
@@ -307,6 +311,8 @@ const zitatSekunden = 8;
 	/* Zeile unter dem Bild, z. B. „Motiv 1 · im Shop“ */
 	.folie-text {
 		display: block;
+		/* so hoch wie die Pfeile daneben */
+		line-height: 40px;
 		margin-top: 0.3em;
 		font-weight: bold;
 		text-align: center;
@@ -321,12 +327,6 @@ const zitatSekunden = 8;
 		position: relative;
 		min-height: 28px;
 		margin: 0.4em 0 1.4em;
-	}
-
-	.punkte {
-		display: flex;
-		justify-content: center;
-		gap: 0.2em;
 	}
 
 	/* auf dem Handy eigene Zeile unter den Punkten; bei Bildern ohne Hinweis bleibt der Platz frei, damit nichts springt */
@@ -365,6 +365,13 @@ const zitatSekunden = 8;
 		}
 	}
 
+	/* Punkte unter dem Zitat-Kasten */
+	.punkte {
+		display: flex;
+		justify-content: center;
+		gap: 0.2em;
+	}
+
 	.punkte[hidden] {
 		display: none;
 	}
@@ -392,6 +399,46 @@ const zitatSekunden = 8;
 
 	.punkte button[aria-current='true']::before {
 		background: var(--schwarz);
+	}
+
+	/* Pfeile links und rechts neben der Zeile unter dem Bild („‹ Motiv 3 von 14 ›“), wie in der Großansicht auf /motive/ */
+	.slider {
+		position: relative;
+	}
+
+	.pfeile {
+		position: absolute;
+		left: 50%;
+		bottom: 0;
+		width: 17em;
+		max-width: 100%;
+		display: flex;
+		justify-content: space-between;
+		transform: translateX(-50%);
+		pointer-events: none;
+	}
+
+	.pfeile[hidden] {
+		display: none;
+	}
+
+	.pfeil {
+		width: 40px;
+		height: 40px;
+		padding: 0 0 4px;
+		border: none;
+		border-radius: 50%;
+		background: #f0f0f0;
+		color: var(--schwarz);
+		font-size: 2rem;
+		font-weight: bold;
+		line-height: 1;
+		cursor: pointer;
+		pointer-events: auto;
+	}
+
+	.pfeil:hover {
+		background: #e0e0e0;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
