@@ -27,6 +27,11 @@ const gruppen = [
 	{ art: 'organisation', titel: 'Organisationen' },
 ] as const;
 
+// Selbsteintrag: Formular schickt an die Lead Capture „Verbündete“ im Intranet (EspoCRM, Interessenten);
+// EspoCRM schickt die Bestätigungsmail (Double-Opt-in), erst danach erscheint die Anfrage im Intranet.
+// Veröffentlicht wird nichts automatisch: Klaus prüft, dann wird der Eintrag oben in `verbuendete` ergänzt.
+const anfrageUrl = 'https://intranet.d-wie-demokratie.de/api/v1/LeadCapture/4435a859ed72ba5381cf9ff1a3124127';
+
 const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${encodeURIComponent(betreff)}`;
 ---
 
@@ -131,25 +136,188 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 	})}
 
 	<section class="kasten" id="eintragen" aria-labelledby="eintragen-titel">
-		<h2 id="eintragen-titel">Du bist gleichgesinnt? Dann verbünde dich mit uns!</h2>
-		<p>
-			Ob als Person oder Organisation: Schreib uns eine E-Mail an
-			<a href={mailto('Wir sind Verbündete')} data-umami-event="email-verbuendete">info@d-wie-demokratie.de</a>, Betreff
-			„Wir sind Verbündete“. Schick uns dazu:
-		</p>
-		<ul>
-			<li>den Namen bzw. die Bezeichnung, die wir nennen sollen</li>
-			<li>Tätigkeit, Ort, Website</li>
-			<li>sehr gerne einen kurzen Satz</li>
-		</ul>
-		<p>
-			Verbündete teilen unsere Werte. Verpflichtungen entstehen dadurch keine, und es kostet nichts. Wir prüfen jeden
+		<h2 id="eintragen-titel" class="vor-dem-senden">Verbünde dich mit uns!</h2>
+		<p class="vor-dem-senden">
+			Es entstehen keine Verpflichtungen, und es kostet nichts. Wir prüfen jeden
 			Eintrag, bevor er hier erscheint. Ob wir einen Eintrag veröffentlichen, entscheiden wir.
 		</p>
-		<p>
+
+		<!-- erscheint nur mit JavaScript (schickt die Angaben als JSON ans Intranet); sonst bleibt der Weg per E-Mail -->
+		<form class="formular" data-ziel={anfrageUrl} hidden novalidate>
+			<fieldset class="art">
+				<legend>Ich verbünde mich als</legend>
+				<label><input type="radio" name="art" value="Person" checked /> Person</label>
+				<label><input type="radio" name="art" value="Organisation" /> Organisation</label>
+			</fieldset>
+
+			<div class="nur-person">
+				<div class="zeile">
+					<label class="titel-feld"><span>Titel <span class="frei">(freiwillig)</span></span>
+						<input name="titel" maxlength="30" autocomplete="honorific-prefix" />
+					</label>
+					<label>Vorname
+						<input name="vorname" maxlength="100" autocomplete="given-name" data-pflicht-person />
+					</label>
+				</div>
+				<label>Nachname
+					<input name="nachname" maxlength="100" autocomplete="family-name" data-pflicht-person />
+				</label>
+			</div>
+
+			<div class="nur-organisation" hidden>
+				<label>Name der Organisation
+					<input name="organisation" maxlength="150" autocomplete="organization" data-pflicht-organisation />
+				</label>
+			</div>
+
+			<label>Tätigkeit und Ort
+				<span class="hinweis nur-person">z. B. „Lehrerin, Kassel“</span>
+				<span class="hinweis nur-organisation" hidden>z. B. „Sportverein, Leipzig“</span>
+				<input name="taetigkeit" maxlength="150" required />
+			</label>
+
+			<label><span>Website <span class="frei">(freiwillig)</span></span>
+				<!-- kein type="url": der verlangt „https://“; das ergänzt das Skript beim Absenden selbst -->
+				<input name="website" inputmode="url" maxlength="200" placeholder="z. B. meine-seite.de" autocomplete="url" />
+			</label>
+
+			<label><span>Warum bist du dabei? Ein Satz genügt. <span class="frei">(freiwillig)</span></span>
+				<textarea name="satz" rows="1" maxlength="300"></textarea>
+			</label>
+
+			<label>Deine E-Mail-Adresse
+				<span class="hinweis">Nur für die Bestätigung und für Rückfragen, wird nicht veröffentlicht.</span>
+				<input name="email" type="email" maxlength="150" autocomplete="email" required />
+			</label>
+
+			<!-- Falle für Spam-Programme, für Menschen unsichtbar -->
+			<input class="falle" name="webseite2" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+			<label class="haken">
+				<input type="checkbox" name="einwilligung" required />
+				<span>Ich bin einverstanden, dass Name, Tätigkeit und Ort, Website und mein Satz auf d-wie-demokratie.de
+				veröffentlicht werden. Ich kann das jederzeit per E-Mail widerrufen. Mehr in der <a href="/datenschutz/">Datenschutzerklärung</a>.</span>
+			</label>
+			<label class="haken nur-organisation" hidden>
+				<input type="checkbox" name="vertretung" data-pflicht-organisation />
+				<span>Ich darf für diese Organisation sprechen.</span>
+			</label>
+
+			<p class="fehler" role="alert" hidden></p>
+			<button type="submit" class="absenden">Ja, ich verbünde mich</button>
+		</form>
+
+		<div class="danke" role="status" hidden>
+			<p><strong>Fast geschafft!</strong> Wir haben dir eine E-Mail geschickt. Bitte klick auf den Link darin, erst dann
+			erreicht uns deine Anfrage. Schau notfalls auch im Spam-Ordner nach.</p>
+		</div>
+
+		<p class="per-mail vor-dem-senden">
+			<span class="mit-formular" hidden>Lieber per E-Mail?</span> Schreib uns an
+			<a href={mailto('Wir sind Verbündete')} data-umami-event="email-verbuendete">info@d-wie-demokratie.de</a>, Betreff
+			„Wir sind Verbündete“, mit dem Namen, den wir nennen sollen, Tätigkeit, Ort, Website und gern einem kurzen Satz.
+		</p>
+		<p class="vor-dem-senden">
 			Du kannst deinen Eintrag jederzeit mit einer kurzen E-Mail wieder entfernen lassen.
 		</p>
 	</section>
+
+	<script>
+		const formular = document.querySelector<HTMLFormElement>('.formular');
+		if (formular) {
+			const geladen = Date.now();
+			const fehler = formular.querySelector<HTMLElement>('.fehler')!;
+			const knopf = formular.querySelector<HTMLButtonElement>('.absenden')!;
+			formular.hidden = false;
+			document.querySelector<HTMLElement>('.mit-formular')!.hidden = false;
+
+			// Person oder Organisation: passende Felder zeigen und zur Pflicht machen
+			const umschalten = () => {
+				const org = (formular.elements.namedItem('art') as RadioNodeList).value === 'Organisation';
+				formular.querySelectorAll<HTMLElement>('.nur-person').forEach((e) => (e.hidden = org));
+				formular.querySelectorAll<HTMLElement>('.nur-organisation').forEach((e) => (e.hidden = !org));
+				formular.querySelectorAll<HTMLInputElement>('[data-pflicht-person]').forEach((e) => (e.required = !org));
+				formular.querySelectorAll<HTMLInputElement>('[data-pflicht-organisation]').forEach((e) => (e.required = org));
+			};
+			formular.addEventListener('change', (e) => {
+				if ((e.target as HTMLInputElement).name === 'art') umschalten();
+			});
+			umschalten();
+
+			// Satz-Feld wächst mit dem Text (für Browser ohne field-sizing)
+			const satz = formular.querySelector<HTMLTextAreaElement>('textarea[name="satz"]')!;
+			if (!CSS.supports('field-sizing', 'content')) {
+				const anpassen = () => {
+					satz.style.height = 'auto';
+					satz.style.height = satz.scrollHeight + 2 + 'px';
+				};
+				satz.addEventListener('input', anpassen);
+				anpassen();
+			}
+
+			// nach dem Absenden nur noch Überschrift und „Fast geschafft“ zeigen
+			const fertig = () => {
+				formular.hidden = true;
+				formular.closest('.kasten')?.classList.add('gesendet');
+				document.querySelectorAll<HTMLElement>('.vor-dem-senden').forEach((e) => (e.hidden = true));
+				const danke = document.querySelector<HTMLElement>('.danke')!;
+				danke.hidden = false;
+				return danke;
+			};
+
+			const zeigeFehler = (text: string) => {
+				fehler.textContent = text;
+				fehler.hidden = false;
+			};
+
+			formular.addEventListener('submit', async (e) => {
+				e.preventDefault();
+				fehler.hidden = true;
+				if (!formular.checkValidity()) {
+					formular.reportValidity();
+					return;
+				}
+				const d = new FormData(formular);
+				const wert = (n: string) => String(d.get(n) ?? '').trim();
+				// Spam-Programme füllen die Falle aus oder schicken in Sekunden ab: so tun, als hätte es geklappt
+				if (wert('webseite2') || Date.now() - geladen < 4000) {
+					fertig();
+					return;
+				}
+				const org = wert('art') === 'Organisation';
+				let website = wert('website');
+				if (website && !/^https?:\/\//i.test(website)) website = 'https://' + website;
+				const daten = {
+					cArt: wert('art'),
+					cTitel: org ? '' : wert('titel'),
+					firstName: org ? '' : wert('vorname'),
+					lastName: org ? wert('organisation') : wert('nachname'),
+					emailAddress: wert('email'),
+					website,
+					cTaetigkeit: wert('taetigkeit'),
+					cSatz: wert('satz'),
+					cVertretung: org && d.get('vertretung') === 'on',
+				};
+				knopf.disabled = true;
+				knopf.textContent = 'Wird gesendet …';
+				try {
+					const antwort = await fetch(formular.dataset.ziel!, {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify(daten),
+					});
+					if (!antwort.ok) throw new Error(String(antwort.status));
+					window.umami?.track('verbuendete-formular');
+					fertig().scrollIntoView({ block: 'center', behavior: 'smooth' });
+				} catch {
+					zeigeFehler('Das hat leider nicht geklappt. Bitte versuch es später noch einmal oder schreib uns an info@d-wie-demokratie.de.');
+				} finally {
+					knopf.disabled = false;
+					knopf.textContent = 'Ja, ich verbünde mich';
+				}
+			});
+		}
+	</script>
 
 	<p class="mehr">
 		Du möchtest mehr tun? Dann schau bei <a href="/mitmachen/">„Mitmachen“</a> und <a href="/unterstuetzen/">„Unterstützen“</a> vorbei.
@@ -272,5 +440,143 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 
 	.mehr {
 		margin-top: 2em;
+	}
+
+	/* Einladung groß, fast wie die Seitenüberschrift */
+	#eintragen-titel {
+		margin: 0.7em 0 0.5em;
+		font-size: 2rem;
+		line-height: 1.2;
+	}
+
+	/* Formular zum Selbsteintrag */
+	.formular {
+		display: grid;
+		gap: 1em;
+		margin: 1.2em 0;
+	}
+
+	/* !important, weil die Feld-Stile unten (display: grid/flex) sonst stärker sind */
+	.formular[hidden],
+	.formular [hidden] {
+		display: none !important;
+	}
+
+	.danke[hidden],
+	.mit-formular[hidden] {
+		display: none;
+	}
+
+	.formular label {
+		display: grid;
+		gap: 0.3em;
+		font-weight: bold;
+	}
+
+	.formular input:not([type='radio'], [type='checkbox']),
+	.formular textarea {
+		width: 100%;
+		box-sizing: border-box;
+		padding: 0.6em 0.8em;
+		border: 1px solid #999999;
+		border-radius: 6px;
+		background: #ffffff;
+		font: inherit;
+		font-weight: normal;
+	}
+
+	/* eine Zeile; wächst beim Schreiben mit (field-sizing, sonst per Skript) */
+	.formular textarea {
+		resize: none;
+		overflow: hidden;
+		field-sizing: content;
+	}
+
+	.art {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4em 1.5em;
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+
+	.formular .art legend {
+		width: 100%;
+		margin-bottom: 0.3em;
+		padding: 0;
+		font-weight: bold;
+	}
+
+	.formular .art label,
+	.formular .haken {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.5em;
+		font-weight: normal;
+	}
+
+	.haken input {
+		margin-top: 0.3em;
+		flex-shrink: 0;
+	}
+
+	.zeile {
+		display: grid;
+		grid-template-columns: 7em 1fr;
+		gap: 1em;
+		margin-bottom: 1em;
+	}
+
+	.frei,
+	.hinweis {
+		color: var(--grau);
+		font-size: 0.9rem;
+		font-weight: normal;
+	}
+
+	/* für Menschen unsichtbar, für Programme ein normales Feld */
+	.falle {
+		position: absolute;
+		left: -9999px;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+	}
+
+	.fehler {
+		margin: 0;
+		color: var(--rot);
+		font-weight: bold;
+	}
+
+	.absenden {
+		justify-self: start;
+		padding: 0.75em 1.4em;
+		border: 0;
+		border-radius: 6px;
+		background: var(--schwarz);
+		color: #ffffff;
+		font: inherit;
+		font-weight: bold;
+		cursor: pointer;
+	}
+
+	.absenden:disabled {
+		opacity: 0.6;
+		cursor: wait;
+	}
+
+	/* nach dem Absenden: ganzer Kasten hellgelb, nur noch „Fast geschafft“ */
+	.kasten.gesendet {
+		background-color: #fff8d6;
+	}
+
+	.danke {
+		margin: 1.2em 0;
+	}
+
+	.danke p {
+		margin: 0;
 	}
 </style>
