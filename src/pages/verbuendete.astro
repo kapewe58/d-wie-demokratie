@@ -3,7 +3,8 @@ import Eintrag from '../components/VerbuendeterEintrag.astro';
 import Werte from '../components/Werte.astro';
 import Ziele from '../components/Ziele.astro';
 import Layout from '../layouts/Layout.astro';
-import { getImage } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
+import hasen from '../assets/motive/d-wie-demokratie-motiv-10.png';
 import reichstag from '../assets/flagge/1990-reichstag.jpg';
 
 // Reichstag-Foto als Struktur im goldenen Knopf oben (wie bei den Knöpfen in „Bitte weitersagen“; Nachweis dort)
@@ -116,6 +117,13 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 	</script>
 
 	<!-- Einladung gleich oben, springt zum Formular weiter unten (bei vielen Verbündeten sonst weit weg) -->
+	<!-- Motiv 10 „Keine Angst, Hasen!“ nimmt mit einem Augenzwinkern die Angst vor dem Eintragen -->
+	<div class="mut">
+		<a href="/motive/#motiv-10" class="mut-bild">
+			<Image src={hasen} alt="Motiv 10: drei Hasen in Schwarz, Rot und Gold, „Keine Angst, Hasen!“" widths={[240, 360, 540]} sizes="(min-width: 700px) 180px, 120px" />
+		</a>
+		<p class="mut-text">Ergreif die Chance und gehöre zu den Ersten. Bald sind wir viele.</p>
+	</div>
 	<p class="einladung"><a href="#eintragen" class="einladung-knopf" style={`--wz-url: url(${wasserzeichen.src})`}>Ja, ich verbünde mich!</a></p>
 
 	{verbuendete.length === 0 && (
@@ -505,6 +513,42 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 	/* der Satz darüber bringt schon Abstand mit (der zugeklappte Bereich „Werte und Ziele“ dazwischen verhindert, dass die Abstände zusammenfallen) */
 	.einladung {
 		margin: 0.3em 0 2em;
+	}
+
+	/* Hasen-Motiv mit Satz über dem gelben Knopf: auch am Handy nebeneinander (Bild kleiner) */
+	.mut {
+		display: flex;
+		align-items: center;
+		gap: 0.9em;
+		margin: 0.6em 0 0.5em;
+	}
+
+	.mut-bild {
+		flex: none;
+		width: 120px;
+		line-height: 0;
+	}
+
+	.mut-bild img {
+		width: 100%;
+		height: auto;
+	}
+
+	.mut-text {
+		margin: 0;
+		font-size: 1.15rem;
+		font-weight: bold;
+		line-height: 1.3;
+	}
+
+	@media (min-width: 700px) {
+		.mut-bild {
+			width: 180px;
+		}
+
+		.mut-text {
+			font-size: 1.5rem;
+		}
 	}
 
 	/* gold über die ganze Breite, mit dem Reichstag-Foto als Struktur (wie „Link kopieren“ unten) */
