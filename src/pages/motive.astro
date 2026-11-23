@@ -18,7 +18,15 @@ for (const motiv of motive) {
 		gross.set(`${motiv.anker}${f.endung}`, bild.src);
 	}
 }
-const grundStoff = '#fff';
+// helle Fassungen: dezentes Schachbrett, damit man sieht, was durchsichtig ist (wie in Grafikprogrammen)
+const grundStoff = 'repeating-conic-gradient(#eeeeee 0% 25%, #ffffff 0% 50%) 0 0 / 16px 16px';
+// Motive mit nur einer Fassung (die runden 3–12) zeigen den Hintergrund „für alle Untergründe“ (blaugrau, wie Motiv 1 und 13)
+const einzelStoff = (m: { fassungen: unknown[] }) => (m.fassungen.length === 1 ? '#71839b' : undefined);
+// farbige Stoffe (dunkle Fassungen usw.): Schachbrett im Stoffton, das zweite Feld etwas heller
+const karo = (farbe: string) => {
+	const hell = '#' + [1, 3, 5].map((i) => Math.min(255, parseInt(farbe.slice(i, i + 2), 16) + 14).toString(16).padStart(2, '0')).join('');
+	return `repeating-conic-gradient(${farbe} 0% 25%, ${hell} 0% 50%) 0 0 / 16px 16px`;
+};
 ---
 
 <Layout
@@ -98,7 +106,7 @@ const grundStoff = '#fff';
 							class="gross-link"
 							href={gross.get(`${motiv.anker}${f.endung}`)}
 							data-titel={`${motiv.bald ? '' : `Motiv ${motiv.nr}: `}${motiv.name}${motiv.fassungen.length > 1 && f.name ? ` – ${f.name}` : ''}`}
-							data-stoff={motiv.fassungen.length > 1 ? (f.stoff ?? stoff[f.endung] ?? grundStoff) : ''}
+							data-stoff={(f.stoff ?? stoff[f.endung] ?? einzelStoff(motiv)) ? karo((f.stoff ?? stoff[f.endung] ?? einzelStoff(motiv))!) : grundStoff}
 						>
 							<Image
 								src={f.bild!}
@@ -106,8 +114,8 @@ const grundStoff = '#fff';
 								width={240}
 								widths={[240, 480]}
 								sizes="200px"
-								class:list={{ 'auf-farbe': motiv.fassungen.length > 1 }}
-								style={f.stoff ?? stoff[f.endung] ? `background: ${f.stoff ?? stoff[f.endung]}` : undefined}
+								class="auf-farbe"
+								style={(f.stoff ?? stoff[f.endung] ?? einzelStoff(motiv)) ? `background: ${karo((f.stoff ?? stoff[f.endung] ?? einzelStoff(motiv))!)}` : undefined}
 							/>
 							<span class="lupe" aria-hidden="true">⤢</span>
 						</a>
@@ -382,8 +390,8 @@ const grundStoff = '#fff';
 		box-sizing: border-box;
 		padding: 10px;
 		border-radius: 6px;
-		/* helle Fassungen auf Weiß; feiner Rand, damit man die Fläche auf der weißen Seite sieht */
-		background: #fff;
+		/* helle Fassungen auf dezentem Schachbrett (zeigt, was durchsichtig ist); feiner Rand gegen die weiße Seite */
+		background: repeating-conic-gradient(#eeeeee 0% 25%, #ffffff 0% 50%) 0 0 / 16px 16px;
 		box-shadow: 0 0 0 1px #e2e2e2;
 	}
 
