@@ -120,7 +120,7 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 	<!-- Motiv 10 „Keine Angst, Hasen!“ nimmt mit einem Augenzwinkern die Angst vor dem Eintragen -->
 	<div class="mut">
 		<a href="/motive/#motiv-10" class="mut-bild">
-			<Image src={hasen} alt="Motiv 10: drei Hasen in Schwarz, Rot und Gold, „Keine Angst, Hasen!“" widths={[240, 360, 540]} sizes="(min-width: 700px) 180px, 120px" />
+			<Image src={hasen} alt="Motiv 10: drei Hasen in Schwarz, Rot und Gold, „Keine Angst, Hasen!“" widths={[240, 360, 540]} sizes="(min-width: 700px) 200px, 42vw" />
 		</a>
 		<p class="mut-text">Ergreif die Chance und gehöre zu den Ersten. Bald sind wir viele.</p>
 	</div>
@@ -525,7 +525,8 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 
 	.mut-bild {
 		flex: none;
-		width: 120px;
+		/* am Handy mit der Breite wachsend: 134 px bei 320 px, 164 px bei 390 px */
+		width: clamp(120px, 42vw, 180px);
 		line-height: 0;
 	}
 
@@ -543,7 +544,7 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 
 	@media (min-width: 700px) {
 		.mut-bild {
-			width: 180px;
+			width: 200px;
 		}
 
 		.mut-text {
