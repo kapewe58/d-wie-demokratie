@@ -1,0 +1,92 @@
+---
+// Seite je Gestalter/in: Foto, Text, Link zur eigenen Homepage und alle Motive dieser Person.
+// Vorerst nur lokal (gestalterAktiv in src/data/gestalter.ts); im Build entstehen ohne gestalterAktiv keine Seiten.
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import { gestalter, gestalterAktiv, type Gestalter } from '../../data/gestalter';
+import { motive } from '../../data/motive';
+
+export function getStaticPaths() {
+	return gestalterAktiv ? gestalter.map((g) => ({ params: { id: g.id }, props: { g } })) : [];
+}
+
+const { g } = Astro.props as { g: Gestalter };
+const seineMotive = motive.filter((m) => (m as { gestalter?: string }).gestalter === g.id && !m.bald);
+const host = g.url ? new URL(g.url).host.replace(/^www\./, '') : '';
+---
+
+<Layout title={`${g.name} – D wie Demokratie`} description={`Motive von ${g.name} für d-wie-demokratie.de`}>
+	<h1>{g.name}</h1>
+	{g.kurz && <p class="lead">{g.kurz}</p>}
+
+	<div class="person">
+		{g.bild && <Image src={g.bild} alt={`Porträtfoto von ${g.name}`} class="portrait" width={300} />}
+		<div>
+			{g.text?.map((t) => <p>{t}</p>)}
+			{g.url && <p><a href={g.url} target="_blank" rel="noopener">{host} ↗</a></p>}
+		</div>
+	</div>
+
+	<h2>Motive von {g.name} ({seineMotive.length})</h2>
+	<ul class="motive">
+		{seineMotive.map((m) => (
+			<li>
+				<a href={`/motive/#${m.anker}`}>
+					<Image src={m.fassungen[0].bild!} alt={m.alt} width={240} widths={[240, 480]} sizes="200px" />
+					<span>Motiv {m.nr}: {m.name}</span>
+				</a>
+			</li>
+		))}
+	</ul>
+</Layout>
+
+<style>
+	.lead {
+		font-size: 1.3rem;
+	}
+
+	.person {
+		display: flex;
+		gap: 1.5em;
+		align-items: flex-start;
+	}
+
+	.portrait {
+		flex: none;
+		width: 160px;
+		height: auto;
+		border-radius: 6px;
+	}
+
+	@media (max-width: 540px) {
+		.person {
+			flex-direction: column;
+		}
+	}
+
+	.motive {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+		gap: 1.2em;
+		padding: 0;
+		list-style: none;
+	}
+
+	.motive a {
+		display: block;
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.motive img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.motive span {
+		display: block;
+		margin-top: 0.4em;
+		font-weight: bold;
+	}
+</style>

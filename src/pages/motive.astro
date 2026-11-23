@@ -4,6 +4,11 @@
 // /#motiv-<nr>, /#herunterladen und /#shop von früher leitet die Startseite hierher weiter.
 import { Image, getImage } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
+import Werte from '../components/Werte.astro';
+import Ziele from '../components/Ziele.astro';
+import { gestalterAktiv, gestalterVon } from '../data/gestalter';
+// „Über dieses Motiv“ (kleines i am Titel): nur wenn ein persönlicher Text da ist und gestalterAktiv (vorerst nur lokal)
+const zeigeInfo = (m: unknown) => gestalterAktiv && !!(m as { warum?: string[] }).warum;
 import { motive, pdfLink, shopAktiv, shopStart, stoff } from '../data/motive';
 // „Motiv einreichen“ pausiert seit 2026-11-20: Links nur lokal mit „npm run dev“. Zum Wiedereinschalten auf true setzen
 // (dazu entwurf in motiv-einreichen.astro, im Menü in Layout.astro und den Sitemap-Filter in astro.config.mjs).
@@ -40,6 +45,41 @@ const karo = (farbe: string) => {
 	</p>
 
 	<div class="fragen">
+		<details id="beisteuern">
+			<summary>Kann ich selbst Motive beisteuern?</summary>
+			<p>
+				<strong>Ja!</strong> Wir wünschen uns viele Motive von kleinen und großen Künstlern. Gemalt,
+				gezeichnet, fotografiert oder am Computer entworfen, alles ist erlaubt.
+			</p>
+			<p>
+				Es muss nicht perfekt sein. Eine gute Idee oder eine Skizze genügt für den Anfang. Gemeinsam machen wir daraus
+				ein Motiv, das sich gut drucken lässt.
+			</p>
+			<p>
+				Wichtig ist nur: Dein Motiv passt zu unseren
+				<button type="button" class="aufklappen" aria-expanded="false" aria-controls="werte-ziele" hidden>Werten und Zielen</button><span class="aufklappen-text">Werten und Zielen</span>
+				und stammt von dir.
+			</p>
+			<!-- wie auf /verbuendete/: ohne JavaScript gleich offen -->
+			<div class="werte-ziele" id="werte-ziele">
+				<div class="werte-ziele-innen">
+					<p><strong>Unsere Werte</strong> sind die zentralen Werte unseres Grundgesetzes:</p>
+					<Werte />
+					<p><strong>Unsere Ziele:</strong></p>
+					<Ziele />
+				</div>
+			</div>
+			<p>
+				Wenn wir dein Motiv aufnehmen, nennen wir dich als Gestalterin oder Gestalter. Wie alle unsere Motive darf es
+				dann jeder kostenlos drucken und teilen. Die Einzelheiten besprechen wir gemeinsam mit dir.
+			</p>
+			<p>
+				Nimm einfach Kontakt auf: Schreib uns an
+				<a href="mailto:info@d-wie-demokratie.de?subject=Mein%20Motiv%20f%C3%BCr%20D%20wie%20Demokratie" data-umami-event="email-design" data-umami-event-seite="motive">info@d-wie-demokratie.de</a>
+				und erzähl uns von deiner Idee, gern mit einem Foto oder einer Skizze.
+			</p>
+		</details>
+
 		<details id="herunterladen">
 			<summary>Kann ich die Motive herunterladen und selbst drucken (lassen)?</summary>
 			<p>
@@ -120,7 +160,23 @@ const karo = (farbe: string) => {
 							<span class="lupe" aria-hidden="true">⤢</span>
 						</a>
 						<div>
-							<h2>{!motiv.bald && <>Motiv {motiv.nr}: </>}{motiv.name}</h2>
+							<h2>
+								{!motiv.bald && <>Motiv {motiv.nr}: </>}{motiv.name}
+								{zeigeInfo(motiv) && <button type="button" class="info-knopf" aria-expanded="false" aria-label="Über dieses Motiv" title="Über dieses Motiv" hidden>i</button>}
+							</h2>
+							{zeigeInfo(motiv) && (
+								<div class="info-text">
+									{gestalterVon((motiv as { gestalter?: string }).gestalter) && (
+										<p>
+											<strong>Idee und Gestaltung:</strong>{' '}
+											<a href={`/gestalter/${(motiv as { gestalter?: string }).gestalter}/`}>{gestalterVon((motiv as { gestalter?: string }).gestalter)!.name}</a>.
+											{' '}{(motiv as { entstehung?: string }).entstehung}
+										</p>
+									)}
+									<p class="info-titel"><strong>Was ich bei diesem Motiv gefühlt und gedacht habe</strong></p>
+									{(motiv as { warum?: string[] }).warum!.map((t) => <p>{t}</p>)}
+								</div>
+							)}
 							{motiv.fassungen.length > 1 && (
 								<div class="fassung-knoepfe" role="group" aria-label="Fassung wählen" hidden>
 									{motiv.fassungen.map((g, k) => (
@@ -196,6 +252,48 @@ const karo = (farbe: string) => {
 	}
 	addEventListener('hashchange', aufklappen);
 	aufklappen();
+
+	// „Werten und Zielen“ in der Frage zum Beisteuern: klappt auf wie auf /verbuendete/
+	{
+		const knopf = document.querySelector<HTMLButtonElement>('.aufklappen');
+		const bereich = document.getElementById('werte-ziele');
+		const innen = bereich?.firstElementChild as HTMLElement | null;
+		if (knopf && bereich && innen) {
+			knopf.hidden = false;
+			document.querySelector('.aufklappen-text')?.remove();
+			bereich.classList.add('zu');
+			innen.setAttribute('hidden', 'until-found');
+			const oeffnen = () => {
+				knopf.setAttribute('aria-expanded', 'true');
+				innen.hidden = false;
+				bereich.offsetHeight;
+				bereich.classList.remove('zu');
+			};
+			knopf.addEventListener('click', () => {
+				if (knopf.getAttribute('aria-expanded') === 'true') {
+					knopf.setAttribute('aria-expanded', 'false');
+					bereich.classList.add('zu');
+					setTimeout(() => {
+						if (bereich.classList.contains('zu')) innen.setAttribute('hidden', 'until-found');
+					}, 300);
+				} else oeffnen();
+			});
+			innen.addEventListener('beforematch', oeffnen);
+		}
+	}
+
+	// „Über dieses Motiv“: kleines i am Titel klappt den Text auf und zu (ohne JavaScript steht er immer da)
+	for (const knopf of document.querySelectorAll<HTMLButtonElement>('.info-knopf')) {
+		const text = knopf.closest('.fassung')?.querySelector<HTMLElement>('.info-text');
+		if (!text) continue;
+		knopf.hidden = false;
+		text.hidden = true;
+		knopf.addEventListener('click', () => {
+			const auf = knopf.getAttribute('aria-expanded') !== 'true';
+			knopf.setAttribute('aria-expanded', String(auf));
+			text.hidden = !auf;
+		});
+	}
 
 	// Fassungen eines Motivs: nur die gewählte zeigen; die Knöpfe gibt es in jeder Fassung, damit sie neben dem Bild stehen
 	for (const motiv of document.querySelectorAll<HTMLElement>('.motive > li')) {
@@ -417,6 +515,115 @@ const karo = (farbe: string) => {
 		border-color: var(--schwarz);
 		background: var(--schwarz);
 		color: var(--gold);
+	}
+
+	/* „Werten und Zielen“ als Knopf, der wie ein Link aussieht (wie auf /verbuendete/) */
+	.aufklappen {
+		padding: 0;
+		border: 0;
+		background: none;
+		color: inherit;
+		font: inherit;
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 3px;
+		cursor: pointer;
+	}
+
+	.aufklappen[hidden] {
+		display: none;
+	}
+
+	.aufklappen::after {
+		content: '▾';
+		display: inline-block;
+		margin-left: 0.25em;
+		font-size: 0.8em;
+		transition: transform 0.3s;
+	}
+
+	.aufklappen[aria-expanded='true']::after {
+		transform: rotate(180deg);
+	}
+
+	@media (hover: hover) {
+		.aufklappen:hover {
+			color: var(--rot);
+		}
+	}
+
+	.werte-ziele {
+		display: grid;
+		grid-template-rows: 1fr;
+		transition: grid-template-rows 0.3s ease;
+	}
+
+	.werte-ziele.zu {
+		grid-template-rows: 0fr;
+	}
+
+	.werte-ziele-innen {
+		min-height: 0;
+		overflow: hidden;
+		margin-left: -1em;
+		padding-left: 1em;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.werte-ziele,
+		.aufklappen::after {
+			transition: none;
+		}
+	}
+
+	/* kleines i am Titel öffnet „Über dieses Motiv“ */
+	.info-knopf {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.3em;
+		height: 1.3em;
+		margin-left: 0.35em;
+		padding: 0;
+		border: 1.5px solid currentColor;
+		border-radius: 50%;
+		background: none;
+		color: var(--grau);
+		font: italic bold 0.75em Georgia, serif;
+		vertical-align: 0.15em;
+		cursor: pointer;
+	}
+
+	.info-knopf[hidden] {
+		display: none;
+	}
+
+	.info-knopf[aria-expanded='true'],
+	.info-knopf:hover {
+		background: var(--schwarz);
+		border-color: var(--schwarz);
+		color: #ffffff;
+	}
+
+	/* direkt unter dem Titel, vor den Fassungs-Knöpfen */
+	.info-text {
+		margin: -0.2em 0 1em;
+		padding: 0.6em 0.9em;
+		border-left: 3px solid var(--gold);
+		background: #fafafa;
+		font-size: 0.95rem;
+	}
+
+	.info-text[hidden] {
+		display: none;
+	}
+
+	.info-text p {
+		margin: 0.4em 0;
+	}
+
+	.info-titel {
+		margin-top: 0.9em !important;
 	}
 
 	.fassung-text {

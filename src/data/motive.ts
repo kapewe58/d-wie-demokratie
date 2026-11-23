@@ -13,6 +13,14 @@ const liste = [
 	{
 		nr: 1,
 		name: 'D wie Demokratie',
+		// Über dieses Motiv (vorerst nur lokal sichtbar, siehe src/data/gestalter.ts):
+		// gestalter = id aus gestalter.ts, entstehung = wie es entstanden ist, warum = persönlicher Text (Absätze)
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Gezeichnet als Vektorgrafik in Affinity, damit das Motiv in jeder Größe gestochen scharf bleibt, vom kleinen Aufkleber bis zum Banner.',
+		warum: [
+			'ENTWURF, bitte durch deinen eigenen Text ersetzen: Ich bin mit dem D-Oval am Auto aufgewachsen. Für mich war es immer ein Zeichen von Zugehörigkeit, ganz selbstverständlich und ohne Pathos.',
+			'Genau so wünsche ich mir den Umgang mit unseren Farben: selbstverständlich, offen und demokratisch. Darum steht das D hier für das, was uns verbindet: Demokratie.',
+		],
 		alt: 'Ein großes D in Schwarz-Rot-Gold, darunter „wie Demokratie“ und die Adresse d-wie-demokratie.de, rechts ein QR-Code, in einem Oval wie beim Länderkennzeichen am Auto.',
 		// shop: „Zum Shop“ bei diesem Motiv (Design im Spreadshop, Nummer = mainDesignId); eine Fassung kann ein eigenes shop haben
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360830677',
