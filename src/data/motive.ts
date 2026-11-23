@@ -66,49 +66,49 @@ const liste = [
 	{
 		nr: 3,
 		name: 'Gesunde Vielfalt',
-		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360875074',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885813',
 		alt: 'Schwarze Johannisbeeren, rote Erdbeeren mit Blüte und goldgelbe Aprikosen mit Blättern, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Gesunde Vielfalt“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 4,
 		name: 'Demokratie braucht Schutz',
-		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360860640',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885974',
 		alt: 'Eine Schildkröte, deren Panzer in Schwarz, Rot und Gold gestreift ist, blickt wachsam nach vorn, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Demokratie braucht Schutz“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 5,
 		name: 'Demokratie braucht Stacheln',
-		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360860935',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885979',
 		alt: 'Ein Igel, dessen Stacheln von Schwarz über Rot zu Gold übergehen, blickt wachsam nach vorn, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Demokratie braucht Stacheln“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 6,
 		name: 'Demokratie braucht Schärfe',
-		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360861120',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885892',
 		alt: 'Drei Chilischoten in Schwarz, Rot und Gelb liegen schräg und gestaffelt nebeneinander, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Demokratie braucht Schärfe“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 7,
 		name: 'Dackel lieben Demokratie',
-		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360861459',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885982',
 		alt: 'Ein fröhlicher Dackel mit heraushängender Zunge und Ringelschwanz, sein Fell in Schwarz, Rot und Gold gestreift, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Dackel lieben Demokratie“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 8,
 		name: 'Farbe bekennen!',
-		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360861486',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360886012',
 		alt: 'Ein fröhlicher Dackel hat drei Farbeimer umgeworfen und sich selbst in Schwarz, Rot und Gold angemalt, um ihn herum laufen schwarze, rote und gelbe Farbpfützen aus. Oben im Bogen „Farbe bekennen!“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 9,
 		name: 'Alles wird Hut',
-		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360861530',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885891',
 		alt: 'Drei Hüte in Schwarz, Rot und Gold: ein schwarzer Zylinder mit rotem Band, eine rote Baskenmütze und ein gelber Hut mit schwarzem Band. Darüber „Alles wird Hut“, darunter d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 10,
 		name: 'Keine Angst, Hasen!',
-		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360861648',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360886023',
 		alt: 'Drei Hasen in Schwarz, Rot und Gold sitzen eng beieinander, der schwarze zeigt den Daumen hoch, der rote zwinkert, der gelbe streckt die Zunge heraus. Darüber „Keine Angst, Hasen!“, darunter d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
@@ -120,7 +120,7 @@ const liste = [
 	{
 		nr: 12,
 		name: 'Hinschauen. Zuhören. Mund aufmachen.',
-		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360861872',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360886052',
 		alt: 'Drei Schimpansen mit Halstüchern in Schwarz, Rot und Gold, gezeichnet im Stil eines alten Kupferstichs: Der linke formt mit den Händen ein Fernglas vor den Augen, der mittlere legt die Hände hinter die Ohren, der rechte ruft mit den Händen am Mund. Oben im Bogen „Hinschauen. Zuhören. Mund aufmachen.“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
