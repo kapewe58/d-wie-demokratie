@@ -244,7 +244,7 @@ const karo = (farbe: string) => {
 
 	<p class="mehr-motive">
 		Weitere Motive kommen bald. <a href="#neuigkeiten">Wir informieren dich gerne.</a>
-		{einreichenAktiv && <>Oder gestalte selbst eins: <a href="/motiv-einreichen/">Motiv einreichen</a>.</>}
+		{einreichenAktiv && <>Oder gestalte selbst eins: <a href="/motiv-einreichen/">Motiv einreichen</a>. <span class="entwurf">nur lokal</span></>}
 	</p>
 </Layout>
 
@@ -376,6 +376,16 @@ const karo = (farbe: string) => {
 </script>
 
 <style>
+	/* Hinweis, solange die Seite verborgen ist (nur lokal sichtbar) */
+	.entwurf {
+		display: inline;
+		margin: 0;
+		padding: 0.2em 0.6em;
+		background: var(--rot);
+		color: #ffffff;
+		font-size: 0.8rem;
+		font-weight: bold;
+	}
 	.lead {
 		font-size: 1.3rem;
 	}

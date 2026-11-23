@@ -170,13 +170,18 @@ const aktuell: { href: string; text: string; kurz?: string; handy?: string } | u
 				<!-- Menü mit allen Seiten; <details> klappt auch ohne JavaScript auf -->
 				<details class:list={['menue', { hier: ohneReiter && !aktuell }]}>
 					<summary aria-label="Menü">
-						<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
-							<path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+						<!-- drei Striche in Schwarz, Rot, Gold (auffälliger als ein graues ☰); am Rechner daneben das Wort „Menü“ -->
+						<svg class="menue-striche" viewBox="0 0 28 24" width="28" height="24" aria-hidden="true">
+							<path d="M3 4h22" stroke="#000000" stroke-width="5.6" stroke-linecap="round" />
+							<path d="M3 12h22" stroke="#dd0000" stroke-width="5.6" stroke-linecap="round" />
+							<!-- Gold minimal dicker, weil es auf Weiß am schwächsten wirkt -->
+							<path class="gold" d="M3 20h22" stroke="#ffce00" stroke-width="6.2" stroke-linecap="round" />
 						</svg>
+						<span class="menue-wort" aria-hidden="true">Menü</span>
 					</summary>
 					<div class="menue-liste">
 						{menue.map((m) => (
-							<a href={m.href} aria-current={pfad === m.href ? 'page' : undefined}>{m.text}</a>
+							<a href={m.href} aria-current={pfad === m.href ? 'page' : undefined}>{m.text}{'entwurf' in m && m.entwurf && <span class="nur-lokal">nur lokal</span>}</a>
 						))}
 						<div class="menue-klein">
 							{menueKlein.map((m) => (
@@ -506,6 +511,52 @@ const aktuell: { href: string; text: string; kurz?: string; handy?: string } | u
 		color: var(--grau);
 		cursor: pointer;
 		list-style: none;
+	}
+
+	/* „Menü“ neben den Strichen nur, wenn genug Platz ist (am Handy ist die Leiste ab 320 px knapp bemessen) */
+	.menue-wort {
+		display: none;
+		margin-left: 0.4em;
+		color: var(--text);
+		font-weight: bold;
+	}
+
+	@media (min-width: 700px) {
+		.menue-wort {
+			display: inline;
+		}
+
+		/* am Rechner größer und kräftiger (Striche skalieren mit, dazu etwas dicker) */
+		.menue-striche {
+			width: 35px;
+			height: 30px;
+		}
+
+		.menue-striche path {
+			stroke-width: 5;
+		}
+
+		.menue-striche .gold {
+			stroke-width: 5.5;
+		}
+	}
+
+	/* auf dem Handy etwas Abstand zum rechten Rand */
+	@media (max-width: 699px) {
+		.menue summary {
+			margin-right: 6px;
+		}
+	}
+
+	/* Entwürfe (nur mit „npm run dev“ im Menü): rotes Schild, damit klar ist, dass die Seite öffentlich verborgen ist */
+	.nur-lokal {
+		margin-left: 0.5em;
+		padding: 0.1em 0.45em;
+		background: var(--rot);
+		color: #ffffff;
+		font-size: 0.7rem;
+		font-weight: bold;
+		vertical-align: middle;
 	}
 
 	.menue.hier summary {

@@ -15,6 +15,7 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 	title="Motiv einreichen – D wie Demokratie"
 	description="Gestalte ein Motiv in Schwarz-Rot-Gold für d-wie-demokratie.de: Vorgaben für Farben, Dateien und Druck, deine Rechte und wie du dein Motiv einreichst."
 >
+	{entwurf && <p class="entwurf">Verborgen: nur lokal sichtbar, öffentlich leitet die Seite zu /motive/ weiter</p>}
 	<h1>Gestalte ein Motiv für unsere Demokratie</h1>
 
 	<p class="lead">
@@ -85,6 +86,16 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 </Layout>
 
 <style>
+	/* Hinweis, solange die Seite verborgen ist (nur lokal sichtbar) */
+	.entwurf {
+		display: inline-block;
+		margin: 0 0 0.5em;
+		padding: 0.2em 0.6em;
+		background: var(--rot);
+		color: #ffffff;
+		font-size: 0.8rem;
+		font-weight: bold;
+	}
 	.lead {
 		font-size: 1.3rem;
 	}
