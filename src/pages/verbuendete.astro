@@ -65,13 +65,13 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 
 	<!-- steht direkt hinter dem Abschnitt und läuft sofort, damit er nicht kurz aufblitzt (wie der Lebenslauf auf „Fragen“) -->
 	<script is:inline>
-		(() => {
-			const knopf = document.querySelector('.aufklappen');
-			const bereich = document.getElementById('werte-ziele');
+		// auch für „keine Verpflichtungen“ am Formular (siehe dort); Text ohne JavaScript steht im span direkt hinter dem Knopf
+		window.aufklappbar = (knopf, umamiEreignis, adressen) => {
+			const bereich = document.getElementById(knopf.getAttribute('aria-controls'));
 			const innen = bereich.firstElementChild;
 
 			knopf.hidden = false;
-			document.querySelector('.aufklappen-text').remove();
+			knopf.nextElementSibling.remove();
 			bereich.classList.add('zu');
 			// „until-found“: die Suche im Browser (Strg+F) klappt den Abschnitt bei einem Treffer auf
 			innen.setAttribute('hidden', 'until-found');
@@ -97,19 +97,20 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 				} else {
 					oeffnen();
 					// nur das Aufklappen zählen, nicht das Zuklappen
-					window.umami?.track('werte-ziele-aufklappen');
+					window.umami?.track(umamiEreignis);
 				}
 			});
 
 			innen.addEventListener('beforematch', oeffnen);
 
 			function perAdresse() {
-				if (['#werte', '#werte-ziele'].includes(location.hash) && knopf.getAttribute('aria-expanded') !== 'true') oeffnen();
+				if (adressen.includes(location.hash) && knopf.getAttribute('aria-expanded') !== 'true') oeffnen();
 			}
 			addEventListener('hashchange', perAdresse);
 			addEventListener('pageshow', perAdresse);
 			perAdresse();
-		})();
+		};
+		aufklappbar(document.querySelector('[aria-controls="werte-ziele"]'), 'werte-ziele-aufklappen', ['#werte', '#werte-ziele']);
 	</script>
 
 	<!-- Einladung gleich oben, springt zum Formular weiter unten (bei vielen Verbündeten sonst weit weg) -->
@@ -142,10 +143,28 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 
 	<section class="kasten" id="eintragen" aria-labelledby="eintragen-titel">
 		<h2 id="eintragen-titel" class="vor-dem-senden">Ja, ich verbünde mich!</h2>
-		<p class="vor-dem-senden">
-			Es entstehen keine Verpflichtungen, und es kostet nichts. Wir prüfen jeden
-			Eintrag, bevor er hier erscheint. Ob wir einen Eintrag veröffentlichen, entscheiden wir.
-		</p>
+		<!-- „keine Verpflichtungen“ klappt die Liste auf, die die Angst vor dem Eintragen nimmt (wie „Werte und Ziele“ oben) -->
+		<div class="vor-dem-senden">
+			<p>
+				Es entstehen
+				<button type="button" class="aufklappen" aria-expanded="false" aria-controls="zusagen" hidden>keine Verpflichtungen</button><span>keine Verpflichtungen</span>.
+			</p>
+			<div class="werte-ziele" id="zusagen">
+				<div class="werte-ziele-innen">
+					<ul class="zusagen">
+						<li>Es kostet nichts, und du gehst keine Verpflichtung ein.</li>
+						<li>Wir schicken dir keinen Newsletter und geben deine Daten nicht weiter.</li>
+						<li>Deine E-Mail-Adresse wird nie veröffentlicht.</li>
+						<li>Eine kurze E-Mail genügt, und du stehst nicht mehr drauf.</li>
+						<li>Wir prüfen jeden Eintrag, bevor er hier erscheint.</li>
+						<li>Ob wir einen Eintrag veröffentlichen, entscheiden wir.</li>
+					</ul>
+				</div>
+			</div>
+			<script is:inline>
+				aufklappbar(document.querySelector('[aria-controls="zusagen"]'), 'verpflichtungen-aufklappen', ['#zusagen']);
+			</script>
+		</div>
 
 		<!-- erscheint nur mit JavaScript (schickt die Angaben als JSON ans Intranet); sonst bleibt der Weg per E-Mail -->
 		<form class="formular" data-ziel={anfrageUrl} hidden novalidate>
@@ -157,40 +176,42 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 
 			<div class="nur-person">
 				<div class="zeile">
-					<label class="titel-feld"><span>Titel <span class="frei">(freiwillig)</span></span>
+					<label class="titel-feld">Titel
 						<input name="titel" maxlength="30" autocomplete="honorific-prefix" />
 					</label>
-					<label>Vorname
+					<label><span>Vorname<span class="muss" aria-hidden="true">*</span></span>
 						<input name="vorname" maxlength="100" autocomplete="given-name" data-pflicht-person />
 					</label>
 				</div>
-				<label>Nachname
+				<label><span>Nachname<span class="muss" aria-hidden="true">*</span></span>
+					<span class="hinweis">Der erste Buchstabe genügt.</span>
 					<input name="nachname" maxlength="100" autocomplete="family-name" data-pflicht-person />
 				</label>
 			</div>
 
 			<div class="nur-organisation" hidden>
-				<label>Name der Organisation
+				<label><span>Name der Organisation<span class="muss" aria-hidden="true">*</span></span>
 					<input name="organisation" maxlength="150" autocomplete="organization" data-pflicht-organisation />
 				</label>
 			</div>
 
-			<label>Tätigkeit und Ort
+			<label><span>Tätigkeit und Ort<span class="muss" aria-hidden="true">*</span></span>
 				<span class="hinweis nur-person">z. B. „Lehrerin, Kassel“</span>
 				<span class="hinweis nur-organisation" hidden>z. B. „Sportverein, Leipzig“</span>
 				<input name="taetigkeit" maxlength="150" required />
 			</label>
 
-			<label><span>Website <span class="frei">(freiwillig)</span></span>
+			<label>Website
 				<!-- kein type="url": der verlangt „https://“; das ergänzt das Skript beim Absenden selbst -->
 				<input name="website" inputmode="url" maxlength="200" placeholder="z. B. meine-seite.de" autocomplete="url" />
 			</label>
 
-			<label><span>Warum bist du dabei? Ein Satz genügt. <span class="frei">(freiwillig)</span></span>
+			<label>Warum bist du dabei?
+				<span class="hinweis">Ein Satz genügt.</span>
 				<textarea name="satz" rows="1" maxlength="300"></textarea>
 			</label>
 
-			<label>Deine E-Mail-Adresse
+			<label><span>Deine E-Mail-Adresse<span class="muss" aria-hidden="true">*</span></span>
 				<span class="hinweis">Nur für die Bestätigung und für Rückfragen, wird nicht veröffentlicht.</span>
 				<input name="email" type="email" maxlength="150" autocomplete="email" required />
 			</label>
@@ -330,6 +351,27 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 </Layout>
 
 <style>
+	/* Liste unter „keine Verpflichtungen“: Häkchen statt Punkte */
+	.zusagen {
+		list-style: none;
+		margin: 0 0 1em;
+		padding-left: 0;
+	}
+
+	.zusagen li {
+		position: relative;
+		padding-left: 1.6em;
+		margin: 0.3em 0;
+	}
+
+	.zusagen li::before {
+		content: '✓';
+		position: absolute;
+		left: 0.2em;
+		color: var(--rot);
+		font-weight: bold;
+	}
+
 	/* Hinweis, solange die Liste leer ist */
 	.neu {
 		padding: 0.8em 1em;
@@ -576,7 +618,12 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 		margin-bottom: 1em;
 	}
 
-	.frei,
+	/* schwarzes Sternchen hinter Pflichtfeldern (Bildschirmleser erkennen sie an „required“) */
+	.muss {
+		margin-left: 0.1em;
+		color: var(--schwarz);
+	}
+
 	.hinweis {
 		color: var(--grau);
 		font-size: 0.9rem;
