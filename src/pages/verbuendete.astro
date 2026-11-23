@@ -230,7 +230,17 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 			</label>
 
 			<p class="fehler" role="alert" hidden></p>
-			<button type="submit" class="absenden">Ja, ich verbünde mich!</button>
+			<!-- gelb mit Wasserzeichen wie der Knopf „Ja, ich verbünde mich!“ oben -->
+			<button type="submit" class="absenden einladung-knopf" style={`--wz-url: url(${wasserzeichen.src})`}>Formular absenden</button>
+			<!-- zeigt, was nach dem Absenden passiert (nimmt die Angst vor dem Klick); verschwindet mit dem Formular -->
+			<div class="danach">
+				<p>Nach dem Klick geht es so weiter:</p>
+				<ol>
+					<li>Du bekommst eine E-Mail und bestätigst darin deine Adresse.</li>
+					<li>Wir schauen uns deinen Eintrag an.</li>
+					<li>Du stehst auf der Seite, und wir sagen dir Bescheid.</li>
+				</ol>
+			</div>
 		</form>
 
 		<div class="danke" role="status" hidden>
@@ -339,7 +349,7 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 					zeigeFehler('Das hat leider nicht geklappt. Bitte versuch es später noch einmal oder schreib uns an info@d-wie-demokratie.de.');
 				} finally {
 					knopf.disabled = false;
-					knopf.textContent = 'Ja, ich verbünde mich!';
+					knopf.textContent = 'Formular absenden';
 				}
 			});
 		}
@@ -645,15 +655,29 @@ const mailto = (betreff: string) => `mailto:info@d-wie-demokratie.de?subject=${e
 		font-weight: bold;
 	}
 
+	.danach {
+		color: var(--grau);
+		font-size: 0.9rem;
+	}
+
+	.danach p {
+		margin: 0 0 0.3em;
+	}
+
+	.danach ol {
+		margin: 0;
+		padding-left: 1.4em;
+	}
+
+	.danach li {
+		margin: 0.15em 0;
+	}
+
+	/* Aussehen von .einladung-knopf (gelb, Wasserzeichen), hier nur die Eigenheiten eines <button> */
 	.absenden {
-		justify-self: start;
-		padding: 0.75em 1.4em;
+		width: 100%;
 		border: 0;
-		border-radius: 6px;
-		background: var(--schwarz);
-		color: #ffffff;
-		font: inherit;
-		font-weight: bold;
+		font-family: inherit;
 		cursor: pointer;
 	}
 
