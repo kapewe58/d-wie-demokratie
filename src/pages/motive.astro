@@ -150,6 +150,8 @@ const karo = (farbe: string) => {
 							class="gross-link"
 							href={gross.get(`${motiv.anker}${f.endung}`)}
 							data-titel={`${motiv.bald ? '' : `Motiv ${motiv.nr}: `}${motiv.name}${motiv.fassungen.length > 1 && f.name ? ` – ${f.name}` : ''}`}
+							data-shop={!motiv.bald && shopAktiv ? (f.shop ?? motiv.shop) : undefined}
+							data-nr={motiv.nr}
 							data-stoff={(f.stoff ?? stoff[f.endung] ?? einzelStoff(motiv)) ? karo((f.stoff ?? stoff[f.endung] ?? einzelStoff(motiv))!) : grundStoff}
 						>
 							<Image
@@ -237,6 +239,8 @@ const karo = (farbe: string) => {
 			<p class="gross-titel"></p>
 			<button type="button" class="pfeil weiter" aria-label="Nächstes Motiv">›</button>
 		</div>
+		<!-- Shop-Knopf auch in der Großansicht (Ziel setzt das Skript je Motiv; ohne Shop verborgen) -->
+		<a class="shop-knopf gross-shop" target="_blank" rel="noopener" data-umami-event="shop-oeffnen" hidden>Motiv im Non-Profit-Shop ansehen</a>
 	</dialog>
 
 	<p class="mehr-motive">
@@ -320,6 +324,7 @@ const karo = (farbe: string) => {
 	if (fenster?.showModal) {
 		const bild = fenster.querySelector('img')!;
 		const titel = fenster.querySelector('.gross-titel')!;
+		const shop = fenster.querySelector<HTMLAnchorElement>('.gross-shop')!;
 		// alle Fassungen der Reihe nach, jede wie ein eigenes Motiv (Motiv 1 mit allen Untergründen, dann Motiv 2 …)
 		const alle = [...document.querySelectorAll<HTMLAnchorElement>('.gross-link')];
 		let nr = 0;
@@ -328,6 +333,11 @@ const karo = (farbe: string) => {
 			bild.alt = link.querySelector('img')?.alt ?? '';
 			bild.style.background = link.dataset.stoff || '#fff';
 			titel.textContent = link.dataset.titel ?? '';
+			shop.hidden = !link.dataset.shop;
+			if (link.dataset.shop) {
+				shop.href = link.dataset.shop;
+				shop.dataset.umamiEventMotiv = link.dataset.nr ?? '';
+			}
 		};
 		const blaettern = (schritt: number) => {
 			nr = (nr + schritt + alle.length) % alle.length;
@@ -714,8 +724,18 @@ const karo = (farbe: string) => {
 		box-sizing: border-box;
 		padding: 1.2em;
 		width: 100%;
-		max-height: calc(94vh - 4.5em);
+		/* Platz für Leiste und Shop-Knopf darunter */
+		max-height: calc(94vh - 8em);
 		object-fit: contain;
+	}
+
+	.gross-shop {
+		margin: 0 0.8em 0.8em;
+		width: auto;
+	}
+
+	.gross-shop[hidden] {
+		display: none;
 	}
 
 	.gross-titel {

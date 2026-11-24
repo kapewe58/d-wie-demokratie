@@ -42,6 +42,7 @@ const liste = [
 			{
 				endung: '-dunkel',
 				name: 'Für dunkle Untergründe',
+				shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360830721',
 				text: 'Rand und Schrift weiß, QR-Code auf weißem Feld, dazu ein feiner weißer Rand um das D. Für mittlere und dunkle Farben wie Blau, Grün, Grau oder Schwarz.',
 			},
 		],
