@@ -25,7 +25,7 @@ for (const motiv of motive) {
 }
 // helle Fassungen: dezentes Schachbrett, damit man sieht, was durchsichtig ist (wie in Grafikprogrammen)
 const grundStoff = 'repeating-conic-gradient(#eeeeee 0% 25%, #ffffff 0% 50%) 0 0 / 16px 16px';
-// Motive mit nur einer Fassung (die runden 3–12) zeigen den Hintergrund „für alle Untergründe“ (blaugrau, wie Motiv 1 und 13)
+// Motive mit nur einer Fassung (die runden 3–12) zeigen den Hintergrund „für jeden Untergrund“ (blaugrau, wie Motiv 1 und 13)
 const einzelStoff = (m: { fassungen: unknown[] }) => (m.fassungen.length === 1 ? '#71839b' : undefined);
 // farbige Stoffe (dunkle Fassungen usw.): Schachbrett im Stoffton, das zweite Feld etwas heller
 const karo = (farbe: string) => {
@@ -327,7 +327,7 @@ const karo = (farbe: string) => {
 		const bild = fenster.querySelector('img')!;
 		const titel = fenster.querySelector('.gross-titel')!;
 		const shop = fenster.querySelector<HTMLAnchorElement>('.gross-shop')!;
-		// alle Fassungen der Reihe nach, jede wie ein eigenes Motiv (Motiv 1 mit allen Untergründen, dann Motiv 2 …)
+		// alle Fassungen der Reihe nach, jede wie ein eigenes Motiv (Motiv 1 mit allen Fassungen, dann Motiv 2 …)
 		const alle = [...document.querySelectorAll<HTMLAnchorElement>('.gross-link')];
 		let nr = 0;
 		const zeigen = (link: HTMLAnchorElement) => {
