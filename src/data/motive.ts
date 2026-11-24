@@ -27,11 +27,11 @@ const liste = [
 		// weitere Fassungen: Dateien wie oben, nur mit Endung, z. B. d-wie-demokratie-motiv-1-qr-weiss.png / .pdf
 		varianten: [
 			// mittlerer Ton, damit man das weiße Oval sieht (wie ein Aufkleber auf einem Laptop)
-			{ endung: '', name: 'Für alle Untergründe', text: 'Das weiße Oval erinnert an das alte Länderkennzeichen am Auto und wirkt auf jedem Untergrund.', stoff: '#71839b' },
+			{ endung: '', name: 'Für alle Untergründe', text: 'Motiv mit weißem Hintergrund.', stoff: '#71839b' },
 			{
 				endung: '-qr-weiss',
 				name: 'Für helle Untergründe',
-				text: 'Oval durchsichtig, nur hinter dem QR-Code weiß, damit er sich überall scannen lässt.',
+				text: 'Motiv mit transparentem Hintergrund, nur hinter dem QR-Code weiß, damit er sich überall scannen lässt.',
 			},
 			{
 				endung: '-farbig',
@@ -43,7 +43,7 @@ const liste = [
 				endung: '-dunkel',
 				name: 'Für dunkle Untergründe',
 				shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360830721',
-				text: 'Rand und Schrift weiß, QR-Code auf weißem Feld, dazu ein feiner weißer Rand um das D. Für mittlere und dunkle Farben wie Blau, Grün, Grau oder Schwarz.',
+				text: 'Motiv mit transparentem Hintergrund. Rand und Schrift weiß, QR-Code auf weißem Feld und ein feiner weißer Rand um das D.',
 			},
 		],
 	},
@@ -54,13 +54,13 @@ const liste = [
 		// eine Fassung erscheint erst, wenn ihr PNG da ist (die schwarze folgt noch)
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360826940',
 		varianten: [
-			{ endung: '', name: 'Für helle Untergründe', text: 'Schrift und Augen schwarz. Für Papier, Aufkleber und helle Textilien.' },
+			{ endung: '', name: 'Für helle Untergründe', text: 'Motiv mit transparentem Hintergrund. Schrift und Augen schwarz.' },
 			{ endung: '-farbig', name: 'Für mittlere Untergründe', versteckt: true, text: 'Schrift und Augen weiß. Für farbige Textilien wie Blau, Grün oder Grau.' },
 			{
 				endung: '-dunkel',
 				name: 'Für dunkle Untergründe',
 				shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360830490',
-				text: 'Schrift und Augen weiß, dazu ein feiner weißer Rand um die schwarze Ente. Für mittlere und dunkle Farben wie Blau, Grün, Grau oder Schwarz.',
+				text: 'Motiv mit transparentem Hintergrund. Schrift und Augen weiß und ein feiner weißer Rand um die schwarze Ente.',
 			},
 		],
 	},
@@ -130,8 +130,8 @@ const liste = [
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360870008',
 		alt: 'Die Buchstaben K, R, A, T, I, E in Schwarz, Rot und Gold laufen auf Armen und Beinen in Turnschuhen nebeneinander her und tragen ein Banner mit der Aufschrift „DEMO“, zusammen „DEMOKRATIE“; ganz links ruft einer durch ein Megafon. Darunter d-wie-demokratie.de.',
 		varianten: [
-			{ endung: '-dunkel', name: 'Für alle Untergründe', stoff: '#71839b', shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360869973', text: 'Auf einem weißen Schild mit runden Ecken. Für alle Farben, auch Schwarz.' },
-			{ endung: '', name: 'Für helle Untergründe', text: 'Freigestellt. Für Papier, Aufkleber und helle Textilien.' },
+			{ endung: '-dunkel', name: 'Für alle Untergründe', stoff: '#71839b', shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360869973', text: 'Motiv mit weißem Hintergrund.' },
+			{ endung: '', name: 'Für helle Untergründe', text: 'Motiv mit transparentem Hintergrund.' },
 		],
 	},
 	{
@@ -142,6 +142,15 @@ const liste = [
 		varianten: [
 			{ endung: '', name: 'Für helle Untergründe', text: 'Schrift schwarz. Für Papier, Aufkleber und helle Textilien.' },
 			{ endung: '-dunkel', name: 'Für dunkle Untergründe', shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360886791', text: 'Schrift weiß. Für mittlere und dunkle Farben, auch Schwarz.' },
+		],
+	},
+	{
+		nr: 15,
+		name: 'Freie Fahrt für freie Kinder',
+		alt: 'Ein Mädchen im Stil einer glänzenden Spielfigur fährt entschlossen auf einem gelben Fahrrad nach rechts; es trägt einen roten Anzug mit Schwarz-Rot-Gold am Ärmel, die schwarzen Zöpfe mit gelben Haargummis wehen im Fahrtwind. Oben im Bogen „Freie Fahrt für freie Kinder“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
+		varianten: [
+			{ endung: '', name: 'Für alle Untergründe', stoff: '#71839b', text: 'Motiv mit weißem Hintergrund.' },
+			{ endung: '-transparent', name: 'Für helle Untergründe', text: 'Motiv mit transparentem Hintergrund.' },
 		],
 	},
 	// Entwürfe („Kommt bald“): noch ohne Nummer, Download und Shop; stehen unter den fertigen Motiven.
