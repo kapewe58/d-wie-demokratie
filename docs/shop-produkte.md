@@ -2,14 +2,40 @@
 
 Arbeitsliste für den Non-Profit-Shop (https://d-wie-demokratie.myspreadshop.de/). Wird nicht veröffentlicht.
 
-## Neue Produkte, die noch eingetragen werden sollen
+## Neue Produkte (eingetragen am 24.11.2026)
 
-Noch nichts eingetragen; erst sammeln, dann in einem Durchgang bei allen Designs.
+Am 24.11.2026 in einem Durchgang bei allen 17 aktiven Designs eingetragen und mit dem Katalog abgeglichen. Abweichungen:
+
+- Buttons 56 mm: nicht bei Motiv 2 (Entchen und Schrift zu klein) und nicht bei DEMO „für alle“ (bietet Spreadshirt nicht an); bei Motiv 11 drin (Vorschau ok), bei Tiger hell und DEMO hell drin.
+- Kappe: bei 2, 11, 13 nach Vorschau ergänzt; dunkle Fassungen ohne Burgunderrot.
+- Teenager-Sweatshirt Mini Changer: nicht bei Tiger dunkel (nur helle Farben).
+- Bandana hell: Mauve, Grau meliert, Taubenblau, Weiß; dunkel: Navy, Rot.
+- Motiv 4: Kinderpolo und Kinder-Rucksack ließen sich speichern – prüfen, ob Spreadshirt sie wieder entfernt.
+- Die Stanley/Stella-Tasche ist der „Stanley/Stella recycelter Heavyweight Stoffbeutel“ (war neu). Der kleine Regenschirm war bei 1, 2 und 13 „für alle“ schon da.
 
 | Produkt | Farben | Bei welchen Fassungen |
 |---|---|---|
 | Hunde-Bandana Dreieckstuch (Spreadshirt) | Altrosa, Grau, Rot, Navy, Blau | helle Fassungen: Altrosa, Grau, Blau; dunkle Fassungen: Navy, Rot; „für alle“: alle |
 | Premium Organic Hunde-T-Shirt (SPREAD) | nur Navy | nur dunkle und „für alle“-Fassungen (auf Navy verschwindet schwarze Schrift) |
+| Teenager Organic T-Shirt Mini Creator (Stanley/Stella) | nach Farbregel | alle Fassungen |
+| Teenager Organic Hoodie Mini Cruiser (Stanley/Stella) | nach Farbregel | alle Fassungen; Platzierung „Vollformat vorn“ wie Kinder-Hoodie |
+| Teenager Organic Sweatshirt Mini Changer (Stanley/Stella) | nach Farbregel | alle Fassungen |
+| Unisex Bio-Langarm-Poloshirt Prepster (Stanley/Stella) | nach Farbregel | alle Fassungen; Platzierung „Oben links“ wie Polo |
+| Unisex Bio-T-Shirt CRAFTER (Stanley/Stella) | nach Farbregel | alle Fassungen, wo noch nicht vorhanden |
+| Kinder Organic Poloshirt Mini Sprinter (Stanley/Stella) | Weiß, Rot, Hellblau | „für alle“ und runde: alle; helle: Weiß, Hellblau; dunkle: weglassen (keine dunkle Farbe); Platzierung „Oben links“ |
+| Teenager Bio-Poloshirt MINI SPRINTER (Stanley/Stella) | Weiß, Navy, Hellblau | „für alle“ und runde: alle; helle: Weiß, Hellblau; dunkle: Navy; Platzierung „Oben links“ |
+| Bio-Baseballkappe (Myrtle Beach) | Grau, Bordeaux, Weiß, Navy, Anthrazit | runde Motive (3–10, 12, 15) und Tiger (14); Motiv 1 hat sie schon; bei 2, 11, 13 erst Vorschau prüfen; helle: Grau, Weiß; dunkle: Navy, Anthrazit; „für alle“/runde: alle |
+| Recycelte Patch Beanie (Beechfield) | Anthrazit, Navy (alle) | Druck auf dunklen Patch: nur Fassungen mit weißem Hintergrund (runde 3–10, 12, 15 „für alle“, 1 „für alle“, 11, 13 „für alle“) und dunkle Fassungen (1, 2, 14 dunkel); NICHT helle Fassungen |
+| Kinder Recycelter Patch Beanie (Beechfield) | Navy, Grün, Rot (alle) | wie Patch Beanie |
+| Strick Patch Beanie mit Bommel (Beechfield) | Grau, Bordeaux, Blau, Rot, Navy, Grün (alle) | wie Patch Beanie |
+| Turnbeutel aus Recycling (BagBase) | Grau, Navy | helle Fassungen: Grau; dunkle: Navy; „für alle“/runde: beide |
+| Stanley/Stella recycelte Tasche (Natur, Navy) | Natur, Navy | erst prüfen, ob das nicht schon eine unserer vier Stanley/Stella-Taschen ist; sonst helle: Natur; dunkle: Navy; „für alle“/runde: beide |
+| Kinder Recycelter Rucksack (BagBase) | Salbeigrün, Rosa, Navy, Graublau | helle: Salbeigrün, Rosa; dunkle: Navy; „für alle“/runde: alle; nicht bei Motiv 4 (keine Kinderprodukte) |
+| Regenschirm klein (Fare) | Grün, Navy, Grau, Rot | erst prüfen, ob das der Schirm ist, den Motiv 1, 2 und 13 schon haben; helle: Grau; dunkle: Navy, Grün; „für alle“/runde: alle |
+| Buttons groß 56 mm (5er-Set, Buttonworldshop) | Weiß | runde Motive (3–10, 12, 15) und Motiv 1; bei nicht runden Motiven (11, 13, 14 und 2) erst Vorschau prüfen |
+| Buttons klein 25 mm (5er-Set, Buttonworldshop) | Weiß | nur Motiv 1 (bei den anderen wird die Schrift zu klein) |
+
+„Nach Farbregel“: helle Fassungen nur helle Farben ohne Gelb, dunkle nur dunkle ohne Rot, „für alle“ alle Farben.
 
 ## Aktuelles Sortiment (Stand 24.11.2026)
 
