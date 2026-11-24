@@ -140,8 +140,8 @@ const liste = [
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360892112',
 		alt: 'Ein brüllender Tigerkopf von vorn im Holzschnitt-Stil, gelb mit schwarzen Streifen, die rote Zunge im weit geöffneten Maul. Darüber „SCHNURREN WAR GESTERN“, darunter d-wie-demokratie.de.',
 		varianten: [
-			{ endung: '', name: 'Für helle Untergründe', text: 'Schrift schwarz. Für Papier, Aufkleber und helle Textilien.' },
-			{ endung: '-dunkel', name: 'Für dunkle Untergründe', shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360886791', text: 'Schrift weiß. Für mittlere und dunkle Farben, auch Schwarz.' },
+			{ endung: '', name: 'Für helle Untergründe', text: 'Motiv mit transparentem Hintergrund. Schrift schwarz.' },
+			{ endung: '-dunkel', name: 'Für dunkle Untergründe', shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360886791', text: 'Motiv mit transparentem Hintergrund. Schrift weiß.' },
 		],
 	},
 	{
