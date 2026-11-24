@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-import { motive } from '../data/motive';
+import { motive, shopAktiv, shopStart } from '../data/motive';
 import Werte from '../components/Werte.astro';
 import Layout from '../layouts/Layout.astro';
 // Wasserzeichen im Zitat-Kasten (Nachweis unter dem Kasten)
@@ -159,7 +159,7 @@ const zitatSekunden = 8;
 
 	<!-- Vorschau: alle Motive als kleine Bilder (später nur die neuesten), alles Weitere auf /motive/ -->
 	<h2>Unsere Motive</h2>
-	<p class="vorschau-text">Ernst, frech, lustig oder einfach niedlich: Such dir dein Motiv aus. Laufend kommen neue Motive und weitere Produkte im Shop dazu.</p>
+	<p class="vorschau-text">Ernst, frech, lustig oder einfach niedlich: Such dir dein Motiv aus. Laufend kommen neue Motive und weitere Produkte im {shopAktiv ? <a href={shopStart} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv="startseite">Non-Profit-Shop</a> : 'Non-Profit-Shop'} dazu.</p>
 	<ul class="vorschau">
 		{motive.filter((motiv) => !motiv.bald).map((motiv) => (
 			<li>
