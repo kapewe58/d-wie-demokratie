@@ -116,8 +116,8 @@ const karo = (farbe: string) => {
 		<details id="shop">
 			<summary>Kann ich fertige Produkte mit den Motiven kaufen?</summary>
 			<p>
-				<strong>Ja.</strong> In unserem Shop bei Spreadshirt gibt es T-Shirts, Hoodies und eine Kappe mit unseren
-				Motiven, alle aus Bio-Baumwolle. Bei jedem Motiv weiter unten führt „Zum Shop“ direkt zu den passenden
+				<strong>Ja.</strong> In unserem Shop bei Spreadshirt gibt es T-Shirts, Hoodies, Taschen, Tassen, Sticker und
+				mehr mit unseren Motiven; die Kleidung ist von Stanley/Stella aus Bio-Baumwolle. Bei jedem Motiv weiter unten führt „Motiv im Non-Profit-Shop ansehen“ direkt zu den passenden
 				Produkten.
 			</p>
 			<p>
@@ -210,22 +210,19 @@ const karo = (farbe: string) => {
 										</a>
 									</li>
 								)}
-								{(f.shop ?? motiv.shop) && (
-									<li class="shop-link">
-										{shopAktiv ? (
-											<a class="shop-knopf" href={f.shop ?? motiv.shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv={motiv.nr}>
-												{motiv.nr === 2 ? `Zum Shop ${f.name?.replace(/^Für /, 'für ') ?? ''}` : 'Zum Shop'}
-											</a>
-										) : (
-											<span class="aus">
-												{motiv.nr === 2 ? `Zum Shop ${f.name?.replace(/^Für /, 'für ') ?? ''}` : 'Zum Shop'}
-											</span>
-										)}
-									</li>
-								)}
 							</ul>
 							)}
 						</div>
+						{/* Shop-Knopf über die ganze Breite der Karte */}
+						{!motiv.bald && (f.shop ?? motiv.shop) && (
+							shopAktiv ? (
+								<a class="shop-knopf" href={f.shop ?? motiv.shop} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv={motiv.nr}>
+									Motiv im Non-Profit-Shop ansehen
+								</a>
+							) : (
+								<span class="shop-knopf aus">Motiv im Non-Profit-Shop ansehen</span>
+							)
+						)}
 					</div>
 				))}
 			</li>
@@ -483,6 +480,7 @@ const karo = (farbe: string) => {
 
 	.fassung {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		gap: 1.5em;
 	}
@@ -817,21 +815,31 @@ const karo = (farbe: string) => {
 		font-size: 0.9em;
 	}
 
-	.links li.shop-link {
-		margin-top: 0.9em;
-	}
-
+	/* Shop-Knopf: eigene Zeile unter Bild und Text, über die ganze Breite */
 	.shop-knopf {
-		display: inline-block;
-		padding: 0.35em 0.8em;
+		flex: 1 0 100%;
+		box-sizing: border-box;
+		display: block;
+		padding: 0.6em 1em;
 		border-radius: 999px;
 		background: #f0f0f0;
 		color: var(--text);
+		text-align: center;
 		text-decoration: none;
 	}
 
 	.shop-knopf:hover {
 		background: #e0e0e0;
+	}
+
+	.shop-knopf.aus {
+		color: var(--grau);
+	}
+
+	/* Textspalte neben dem Bild darf schrumpfen, damit sie nicht unter das Bild umbricht (nur der Shop-Knopf bekommt eine eigene Zeile) */
+	.fassung > div {
+		flex: 1 1 0;
+		min-width: 0;
 	}
 
 	.shop-knopf:focus-visible {
@@ -849,6 +857,11 @@ const karo = (farbe: string) => {
 			flex-direction: column;
 			align-items: flex-start;
 			gap: 0.8em;
+		}
+
+		.shop-knopf {
+			flex: none;
+			align-self: stretch;
 		}
 
 		.gross-link {
