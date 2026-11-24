@@ -147,10 +147,11 @@ const liste = [
 	{
 		nr: 15,
 		name: 'Freie Fahrt für freie Kinder',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360899839',
 		alt: 'Ein Mädchen im Stil einer glänzenden Spielfigur fährt entschlossen auf einem gelben Fahrrad nach rechts; es trägt einen roten Anzug mit Schwarz-Rot-Gold am Ärmel, die schwarzen Zöpfe mit gelben Haargummis wehen im Fahrtwind. Oben im Bogen „Freie Fahrt für freie Kinder“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 		varianten: [
 			{ endung: '', name: 'Für alle Produkte', stoff: '#71839b', text: 'Motiv mit weißem Hintergrund.' },
-			{ endung: '-transparent', name: 'Für helle Produkte', text: 'Motiv mit transparentem Hintergrund.' },
+			{ endung: '-transparent', name: 'Für helle Produkte', shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360899887', text: 'Motiv mit transparentem Hintergrund.' },
 		],
 	},
 	// Entwürfe („Kommt bald“): noch ohne Nummer, Download und Shop; stehen unter den fertigen Motiven.
