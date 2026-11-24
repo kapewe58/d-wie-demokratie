@@ -236,11 +236,13 @@ const karo = (farbe: string) => {
 		<img alt="" />
 		<div class="gross-leiste">
 			<button type="button" class="pfeil zurueck" aria-label="Vorheriges Motiv">‹</button>
-			<p class="gross-titel"></p>
+			<!-- Titel und darunter der Shop-Knopf (Ziel setzt das Skript je Motiv; ohne Shop verborgen) -->
+			<div class="gross-mitte">
+				<p class="gross-titel"></p>
+				<a class="shop-knopf gross-shop" target="_blank" rel="noopener" data-umami-event="shop-oeffnen" hidden>Motiv im Non-Profit-Shop ansehen</a>
+			</div>
 			<button type="button" class="pfeil weiter" aria-label="Nächstes Motiv">›</button>
 		</div>
-		<!-- Shop-Knopf auch in der Großansicht (Ziel setzt das Skript je Motiv; ohne Shop verborgen) -->
-		<a class="shop-knopf gross-shop" target="_blank" rel="noopener" data-umami-event="shop-oeffnen" hidden>Motiv im Non-Profit-Shop ansehen</a>
 	</dialog>
 
 	<p class="mehr-motive">
@@ -724,17 +726,26 @@ const karo = (farbe: string) => {
 		box-sizing: border-box;
 		padding: 1.2em;
 		width: 100%;
-		/* Platz für Leiste und Shop-Knopf darunter */
-		max-height: calc(94vh - 8em);
+		/* Platz für die Leiste mit Titel und Shop-Knopf */
+		max-height: calc(94vh - 6.5em);
 		object-fit: contain;
 	}
 
-	.gross-shop {
-		margin: 0 0.8em 0.8em;
+	/* klein und zentriert unter dem Titel, nicht über die ganze Breite */
+	.gross-ansicht .gross-shop {
+		display: inline-block;
 		width: auto;
+		margin-top: 0.35em;
+		padding: 0.35em 0.9em;
+		font-size: 0.9rem;
 	}
 
-	.gross-shop[hidden] {
+	.gross-mitte {
+		flex: 1;
+		text-align: center;
+	}
+
+	.gross-ansicht .gross-shop[hidden] {
 		display: none;
 	}
 
@@ -749,13 +760,11 @@ const karo = (farbe: string) => {
 		display: flex;
 		align-items: center;
 		gap: 0.5em;
-		padding: 0.4em 0.5em;
+		padding: 0.5em 0.5em 0.7em;
 	}
 
 	.gross-leiste .gross-titel {
-		flex: 1;
 		padding: 0;
-		text-align: center;
 	}
 
 	.pfeil {
