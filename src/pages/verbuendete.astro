@@ -30,11 +30,12 @@ type Verbuendeter = {
 // Neue Einträge erst nach Prüfung und schriftlicher Einwilligung aufnehmen.
 // `seit` = Tag der Aufnahme; angezeigt werden die Neuesten zuerst (bei gleichem Tag der später eingetragene oben).
 const verbuendete: Verbuendeter[] = [
-	{ name: 'Heinz Krimmer', art: 'person', seit: '2026-11-20', zusatz: 'Autor und Journalist, Berlin', url: 'https://heinzkrimmer.com' },
-	{ name: 'EduStock', art: 'organisation', seit: '2026-11-20', zusatz: 'Bilder für Bildung, Berlin', url: 'https://edustock.org' },
+	{ name: 'Heinz Krimmer', art: 'person', seit: '2026-11-20', zusatz: 'Autor und Journalist, Berlin', url: 'https://heinzkrimmer.com', zitat: 'Weltweit ist eine Zunahme von autokratischen und undemokratischen Tendenzen und Regierungen zu beobachten. Auch in Europa und bei uns in Deutschland, z. B. durch die AfD. Es ist an der Zeit, diesen Entwicklungen etwas entgegenzusetzen.' },
+	{ name: 'EduStock', art: 'organisation', seit: '2026-11-20', zusatz: 'Bilder für Bildung, Berlin', url: 'https://edustock.org', zitat: 'Es ist eine geschichtliche Tatsache, dass Diktaturen und autokratische Systeme immer nur Folgendes bedeuten: Unterdrückung, Missachtung der Menschenrechte, Konflikte und Gewalt bis zum Krieg. Es lohnt sich deshalb, die Demokratie zu verteidigen.' },
 	{ name: 'Birgit Koch', art: 'person', seit: '2026-11-22', zusatz: 'Fotografin, München', zitat: 'Weil wir unsere Demokratie stärken müssen.' },
 	{ name: 'Klaus P. Wolf', art: 'person', seit: '2026-11-23', zuletzt: true, zusatz: 'Initiator von d-wie-demokratie.de, München', url: 'https://5-finger.com', zitat: 'Ich habe d-wie-demokratie.de gegründet und da muss ich doch mit gutem Vorbild vorangehen :)' },
 	{ name: 'Kieran Oswald', art: 'person', seit: '2026-11-24', zusatz: 'Doktorand, München', zitat: 'Man kann nie genug machen, um unsere Demokratie zu schützen.' },
+	{ name: 'Dr. Jonas Kvarnström', art: 'person', seit: '2026-11-25', zusatz: 'Musikschulleiter, München', url: 'https://jonaskvarnstrom.com', zitat: 'Um auch in Zukunft frei entscheiden zu können.' },
 ];
 // Neueste zuerst: nach Datum absteigend, bei gleichem Datum in umgekehrter Reihenfolge der Liste; `zuletzt` ganz unten
 const sortiert = verbuendete
