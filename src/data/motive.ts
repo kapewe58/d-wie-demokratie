@@ -115,6 +115,14 @@ const liste = [
 		name: 'Dackel lieben Demokratie',
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
+		kommentare: [
+			{
+				name: 'Klaus P. Wolf',
+				zusatz: 'Initiator von d-wie-demokratie.de, München',
+				text: 'Ich liebe Dackel, sie sind mutige Individualisten. Die brauchen wir.',
+				seit: '2026-11-25',
+			},
+		],
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885982',
 		alt: 'Ein fröhlicher Dackel mit heraushängender Zunge und Ringelschwanz, sein Fell in Schwarz, Rot und Gold gestreift, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Dackel lieben Demokratie“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
