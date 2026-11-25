@@ -24,12 +24,12 @@ const menue = [
 	{ href: '/', text: 'Startseite' },
 	{ href: '/haeufige-fragen/', text: 'Fragen' },
 	{ href: '/verbuendete/', text: 'Verbündete' },
-	{ href: '/motive/', text: 'Motive' },
+	{ href: '/motive/', text: 'Motive & Shop' },
 	{ href: '/mitmachen/', text: 'Mitmachen' },
 	{ href: '/unterstuetzen/', text: 'Unterstützen' },
 	// entwurf: nur lokal mit „npm run dev“ im Menü (Motiv einreichen pausiert seit 2026-11-20)
 	{ href: '/motiv-einreichen/', text: 'Motiv einreichen', handy: 'Einreichen', entwurf: true },
-	{ href: '/geschichte-unserer-flagge/', text: 'Kleine Geschichte unserer Flagge', kurz: 'Flaggengeschichte', handy: 'Geschichte' },
+	{ href: '/geschichte-unserer-flagge/', text: 'Kleine Geschichte unserer Flagge', kurz: 'Geschichte', handy: 'Geschichte' },
 	// Anmeldung steht unten auf jeder Seite mit Teilen-Kasten; auf den anderen (Impressum usw.) zur Startseite
 	{ href: teilen ? '#neuigkeiten' : '/#neuigkeiten', text: 'Neuigkeiten per E-Mail' },
 ].filter((m) => !('entwurf' in m && m.entwurf) || import.meta.env.DEV);
@@ -152,13 +152,16 @@ const aktuell: { href: string; text: string; kurz?: string; handy?: string } | u
 		<header class="kopf">
 			<div class="flagge" aria-hidden="true"></div>
 			<div class="leiste">
-				<nav aria-label="Hauptnavigation">
+				<nav aria-label="Hauptnavigation" class:list={{ 'mit-aktuell': aktuell }}>
 					<a href="/" class="logo" aria-current={pfad === '/' ? 'page' : undefined} aria-label="Startseite">
 						<Image src={logo} alt="" width={103} densities={[1, 2, 3]} loading="eager" />
 					</a>
-					<a href="/haeufige-fragen/" aria-current={pfad.startsWith('/haeufige-fragen') ? 'page' : undefined}>Fragen</a>
+					<a href="/haeufige-fragen/" aria-current={pfad.startsWith('/haeufige-fragen') ? 'page' : undefined}><span class="frage-lang">Fragen</span><span class="frage-kurz">FAQ</span></a>
 					<a href="/verbuendete/" aria-current={pfad.startsWith('/verbuendete') ? 'page' : undefined}>Verbündete</a>
-					<a href="/motive/" class:list={{ 'nicht-am-handy': aktuell }} aria-current={pfad.startsWith('/motive') ? 'page' : undefined}>Motive</a>
+					<a href="/motive/" class:list={{ 'nicht-am-handy': aktuell }} aria-current={pfad.startsWith('/motive') ? 'page' : undefined}>
+						{/* „Motive & Shop“, nur unter 340 px „Motive“; wird es eng, heißt „Fragen“ „FAQ“ (siehe Stil .frage-kurz) */}
+						<span class="motive-lang">Motive &amp; Shop</span><span class="motive-kurz">Motive</span>
+					</a>
 					{aktuell && (
 						<a href={aktuell.href} aria-current="page">
 							<span class="name-breit">{aktuell.kurz ?? aktuell.text}</span>
@@ -576,6 +579,43 @@ const aktuell: { href: string; text: string; kurz?: string; handy?: string } | u
 
 		.name-handy {
 			display: none;
+		}
+	}
+
+	/* Platz in der Leiste (gemessen 2026-11-25): „Motive & Shop“ überall außer unter 340 px („Motive“);
+	   „Fragen“ heißt „FAQ“ unter 410 px und am Computer, wenn ein Reiter für die aktuelle Seite dazukommt */
+	.frage-kurz,
+	.motive-kurz {
+		display: none;
+	}
+
+	@media (max-width: 409px) {
+		.frage-lang {
+			display: none;
+		}
+
+		.frage-kurz {
+			display: inline;
+		}
+	}
+
+	@media (max-width: 339px) {
+		.motive-lang {
+			display: none;
+		}
+
+		.motive-kurz {
+			display: inline;
+		}
+	}
+
+	@media (min-width: 700px) {
+		.mit-aktuell .frage-lang {
+			display: none;
+		}
+
+		.mit-aktuell .frage-kurz {
+			display: inline;
 		}
 	}
 

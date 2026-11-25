@@ -7,9 +7,16 @@ import Layout from '../layouts/Layout.astro';
 import Werte from '../components/Werte.astro';
 import Ziele from '../components/Ziele.astro';
 import { gestalterAktiv, gestalterVon } from '../data/gestalter';
-// „Über dieses Motiv“ (kleines i am Titel): nur wenn ein persönlicher Text da ist und gestalterAktiv (vorerst nur lokal)
-const zeigeInfo = (m: unknown) => gestalterAktiv && !!(m as { warum?: string[] }).warum;
-import { motive, pdfLink, shopAktiv, shopStart, stoff } from '../data/motive';
+// „Über dieses Motiv“ (kleines i am Titel): sobald ein Gestalter eingetragen ist und gestalterAktiv (vorerst nur lokal);
+const zeigeInfo = (m: unknown) => gestalterAktiv && !!(m as { gestalter?: string }).gestalter;
+import { motive, pdfLink, shopAktiv, shopStart, stoff, kommentareAktiv, kommentarUrl, type Kommentar } from '../data/motive';
+// Kommentare eines Motivs; lokal zeigt Motiv 1 einen Beispiel-Kommentar, damit man die Darstellung sieht
+const kommentareVon = (m: { nr: number }): (Kommentar & { beispiel?: boolean })[] => {
+	const echte = (m as { kommentare?: Kommentar[] }).kommentare ?? [];
+	if (import.meta.env.DEV && m.nr === 1 && !echte.length)
+		return [{ name: 'Erika Beispiel', zusatz: 'Lehrerin, Köln', text: 'So ein Kommentar würde hier stehen: kurz und persönlich.', seit: '2026-11-25', beispiel: true }];
+	return echte;
+};
 // „Motiv einreichen“ pausiert seit 2026-11-20: Links nur lokal mit „npm run dev“. Zum Wiedereinschalten auf true setzen
 // (dazu entwurf in motiv-einreichen.astro, im Menü in Layout.astro und den Sitemap-Filter in astro.config.mjs).
 const einreichenAktiv = import.meta.env.DEV;
@@ -169,6 +176,21 @@ const karo = (farbe: string) => {
 							<h2>
 								{!motiv.bald && <>Motiv {motiv.nr}: </>}{motiv.name}
 								{zeigeInfo(motiv) && <button type="button" class="info-knopf" aria-expanded="false" aria-label="Über dieses Motiv" title="Über dieses Motiv" hidden>i</button>}
+								{kommentareAktiv && !motiv.bald && (
+									<button
+										type="button"
+										class="kommentar-knopf"
+										aria-expanded="false"
+										aria-controls={`${motiv.anker}-kommentare`}
+										aria-label={kommentareVon(motiv).length ? `${kommentareVon(motiv).length} ${kommentareVon(motiv).length === 1 ? 'Kommentar' : 'Kommentare'} von Verbündeten` : 'Kommentar schreiben'}
+										title={kommentareVon(motiv).length ? 'Kommentare von Verbündeten' : 'Kommentar schreiben'}
+										data-motiv={motiv.nr}
+										hidden
+									>
+										{kommentareVon(motiv).length > 0 && <span class="anzahl">{kommentareVon(motiv).length}</span>}
+										<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c4.7 0 8.5 3.1 8.5 7S16.7 17.5 12 17.5c-1 0-2-.1-2.9-.4L4.5 20l1.4-4C4.4 14.7 3.5 12.7 3.5 10.5c0-3.9 3.8-7 8.5-7z" /></svg>
+									</button>
+								)}
 							</h2>
 							{zeigeInfo(motiv) && (
 								<div class="info-text">
@@ -179,8 +201,6 @@ const karo = (farbe: string) => {
 											{' '}{(motiv as { entstehung?: string }).entstehung}
 										</p>
 									)}
-									<p class="info-titel"><strong>Was ich bei diesem Motiv gefühlt und gedacht habe</strong></p>
-									{(motiv as { warum?: string[] }).warum!.map((t) => <p>{t}</p>)}
 								</div>
 							)}
 							{motiv.fassungen.length > 1 && (
@@ -227,6 +247,53 @@ const karo = (farbe: string) => {
 						)}
 					</div>
 				))}
+				{/* Kommentare von Verbündeten: einmal je Motiv, unter allen Fassungen; nur mit JavaScript (Formular) */}
+				{kommentareAktiv && !motiv.bald && (
+					<section class="kommentare" id={`${motiv.anker}-kommentare`} aria-label={`Kommentare zu Motiv ${motiv.nr}`} hidden>
+						{kommentareVon(motiv).length > 0 && (
+							<ul class="kommentar-liste">
+								{kommentareVon(motiv).map((k) => (
+									<li>
+										<blockquote>„{k.text}“</blockquote>
+										<p class="wer">
+											<a href="/verbuendete/">{k.name}</a>{k.zusatz && <>, {k.zusatz}</>}
+											{k.beispiel && <span class="entwurf">Beispiel, nur lokal</span>}
+										</p>
+									</li>
+								))}
+							</ul>
+						)}
+						<div class="kommentar-schreiben">
+							<p class="kommentar-hinweis">
+								<strong>Verbündete können alle Motive kommentieren.</strong>
+								<a href="/verbuendete/#eintragen">Hier verbünden</a>.
+							</p>
+							<form class="kommentar-formular" data-motiv={`${motiv.nr} – ${motiv.name}`} data-ziel={kommentarUrl} novalidate>
+								<label>
+									Mein Kommentar
+									<textarea name="kommentar" rows="3" maxlength="500" required></textarea>
+								</label>
+								<label>
+									Meine E-Mail-Adresse, mit der ich mich verbündet habe
+									<input type="email" name="email" autocomplete="email" required />
+								</label>
+								{/* Falle für Spam-Programme, für Menschen unsichtbar */}
+								<label class="falle" aria-hidden="true">
+									Website <input type="text" name="webseite2" tabindex="-1" autocomplete="off" />
+								</label>
+								<label class="haken">
+									<input type="checkbox" name="einwilligung" required />
+									<span>Mein Kommentar darf mit meinem Namen und meiner Tätigkeit bei diesem Motiv erscheinen. Mehr in der <a href="/datenschutz/#kommentare">Datenschutzerklärung</a>.</span>
+								</label>
+								<p class="fehler" role="alert" hidden></p>
+								<button type="submit" class="kommentar-absenden">Kommentar senden</button>
+							</form>
+							<p class="kommentar-danke" role="status" hidden>
+								<strong>Danke!</strong> Wir melden uns per E-Mail.
+							</p>
+						</div>
+					</section>
+				)}
 			</li>
 		))}
 	</ul>
@@ -299,6 +366,69 @@ const karo = (farbe: string) => {
 			const auf = knopf.getAttribute('aria-expanded') !== 'true';
 			knopf.setAttribute('aria-expanded', String(auf));
 			text.hidden = !auf;
+		});
+	}
+
+	// Kommentare: 💬 am Titel klappt den Bereich unter dem Motiv auf (alle Fassungen teilen ihn)
+	for (const knopf of document.querySelectorAll<HTMLButtonElement>('.kommentar-knopf')) {
+		const bereich = document.getElementById(knopf.getAttribute('aria-controls')!);
+		if (!bereich) continue;
+		knopf.hidden = false;
+		knopf.addEventListener('click', () => {
+			const auf = bereich.hidden;
+			bereich.hidden = !auf;
+			knopf.closest('li')?.querySelectorAll('.kommentar-knopf').forEach((k) => k.setAttribute('aria-expanded', String(auf)));
+			if (auf) {
+				window.umami?.track('kommentare-aufklappen', { motiv: knopf.dataset.motiv });
+				bereich.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+			}
+		});
+	}
+
+	// Kommentar senden: an das Intranet; was angezeigt wird, ist immer dasselbe, damit niemand herausfinden kann,
+	// welche Adresse zu einem Verbündeten gehört (Klaus prüft und antwortet per E-Mail)
+	const geladen = Date.now();
+	for (const formular of document.querySelectorAll<HTMLFormElement>('.kommentar-formular')) {
+		const fehler = formular.querySelector<HTMLElement>('.fehler')!;
+		const knopf = formular.querySelector<HTMLButtonElement>('.kommentar-absenden')!;
+		const fertig = () => {
+			formular.hidden = true;
+			formular.closest('.kommentar-schreiben')?.querySelector<HTMLElement>('.kommentar-hinweis')?.setAttribute('hidden', '');
+			formular.closest('.kommentar-schreiben')!.querySelector<HTMLElement>('.kommentar-danke')!.hidden = false;
+		};
+		formular.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			fehler.hidden = true;
+			if (!formular.checkValidity()) {
+				formular.reportValidity();
+				return;
+			}
+			const d = new FormData(formular);
+			const wert = (n: string) => String(d.get(n) ?? '').trim();
+			// Spam-Programme füllen die Falle aus oder schicken in Sekunden ab: so tun, als hätte es geklappt
+			if (wert('webseite2') || Date.now() - geladen < 4000) {
+				fertig();
+				return;
+			}
+			knopf.disabled = true;
+			knopf.textContent = 'Wird gesendet …';
+			try {
+				if (!formular.dataset.ziel) throw new Error('kein Ziel');
+				const antwort = await fetch(formular.dataset.ziel, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ cArt: 'Kommentar', emailAddress: wert('email'), cMotiv: formular.dataset.motiv, cKommentar: wert('kommentar') }),
+				});
+				if (!antwort.ok) throw new Error(String(antwort.status));
+				window.umami?.track('kommentar-senden', { motiv: formular.dataset.motiv });
+				fertig();
+			} catch {
+				fehler.textContent = 'Das hat leider nicht geklappt. Bitte versuch es später noch einmal oder schreib uns an info@d-wie-demokratie.de.';
+				fehler.hidden = false;
+			} finally {
+				knopf.disabled = false;
+				knopf.textContent = 'Kommentar senden';
+			}
 		});
 	}
 
@@ -660,8 +790,147 @@ const karo = (farbe: string) => {
 		margin: 0.4em 0;
 	}
 
-	.info-titel {
-		margin-top: 0.9em !important;
+	/* 💬 am Titel: Zahl der Kommentare davor (nur wenn es welche gibt) */
+	.kommentar-knopf {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.15em;
+		height: 1.6em;
+		margin-left: 0.3em;
+		padding: 0 0.15em;
+		border: none;
+		border-radius: 4px;
+		background: none;
+		color: var(--grau);
+		font: bold 0.85em/1 Helvetica, Arial, sans-serif;
+		/* feste Höhe + middle: steht gleich hoch, ob mit Zahl oder ohne */
+		vertical-align: middle;
+		cursor: pointer;
+	}
+
+	/* runde Sprechblase, so groß wie das i daneben und auf derselben Mittellinie */
+	.kommentar-knopf svg {
+		position: relative;
+		top: -0.1em;
+		width: 1.65em;
+		height: 1.65em;
+		/* dasselbe Hellgelb wie der Kommentar-Kasten (und auf /verbuendete/) */
+		fill: #fff8d6;
+		stroke: currentColor;
+		stroke-width: 1.8;
+		stroke-linejoin: round;
+	}
+
+	.kommentar-knopf[hidden] {
+		display: none;
+	}
+
+	.kommentar-knopf[aria-expanded='true'],
+	.kommentar-knopf:hover {
+		color: var(--schwarz);
+	}
+
+	.kommentare {
+		margin-top: 1.2em;
+		padding: 0.8em 1em;
+		border-left: 3px solid var(--gold);
+		background: #fff8d6;
+		font-size: 0.95rem;
+	}
+
+	.kommentare[hidden] {
+		display: none;
+	}
+
+	.kommentar-liste {
+		margin: 0 0 1em;
+		padding: 0;
+		list-style: none;
+	}
+
+	.kommentar-liste li + li {
+		margin-top: 0.8em;
+	}
+
+	.kommentar-liste blockquote {
+		margin: 0;
+	}
+
+	.kommentar-liste .wer {
+		margin: 0.2em 0 0;
+		color: var(--grau);
+		font-size: 0.9rem;
+	}
+
+	.kommentar-liste .wer .entwurf {
+		margin-left: 0.5em;
+	}
+
+	.kommentar-hinweis {
+		margin: 0 0 0.8em;
+	}
+
+	.kommentar-formular label {
+		display: block;
+		margin-bottom: 0.7em;
+	}
+
+	.kommentar-formular textarea,
+	.kommentar-formular input[type='email'] {
+		display: block;
+		box-sizing: border-box;
+		width: 100%;
+		margin-top: 0.25em;
+		padding: 0.45em 0.6em;
+		border: 1px solid #c4c4c4;
+		border-radius: 6px;
+		font: inherit;
+		background: #ffffff;
+	}
+
+	.kommentar-formular textarea {
+		field-sizing: content;
+		min-height: 4.5em;
+		resize: vertical;
+	}
+
+	.kommentar-formular .haken {
+		display: flex;
+		gap: 0.5em;
+		align-items: flex-start;
+		font-size: 0.9rem;
+	}
+
+	.kommentar-formular .haken input {
+		margin-top: 0.2em;
+	}
+
+	.kommentar-formular .falle {
+		position: absolute;
+		left: -9999px;
+	}
+
+	.kommentar-formular .fehler {
+		color: var(--rot);
+	}
+
+	.kommentar-absenden {
+		padding: 0.5em 1.1em;
+		border: none;
+		border-radius: 999px;
+		background: var(--schwarz);
+		color: #ffffff;
+		font: inherit;
+		font-weight: bold;
+		cursor: pointer;
+	}
+
+	.kommentar-absenden:disabled {
+		opacity: 0.6;
+	}
+
+	.kommentar-danke {
+		margin: 0;
 	}
 
 	.fassung-text {

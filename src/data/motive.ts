@@ -14,12 +14,16 @@ const liste = [
 		nr: 1,
 		name: 'D wie Demokratie',
 		// Über dieses Motiv (vorerst nur lokal sichtbar, siehe src/data/gestalter.ts):
-		// gestalter = id aus gestalter.ts, entstehung = wie es entstanden ist, warum = persönlicher Text (Absätze)
+		// gestalter = id aus gestalter.ts, entstehung = wie es entstanden ist (Ich-Form); Persönliches schreibt der Gestalter als Kommentar
 		gestalter: 'klaus-p-wolf',
-		entstehung: 'Gezeichnet als Vektorgrafik in Affinity, damit das Motiv in jeder Größe gestochen scharf bleibt, vom kleinen Aufkleber bis zum Banner.',
-		warum: [
-			'ENTWURF, bitte durch deinen eigenen Text ersetzen: Ich bin mit dem D-Oval am Auto aufgewachsen. Für mich war es immer ein Zeichen von Zugehörigkeit, ganz selbstverständlich und ohne Pathos.',
-			'Genau so wünsche ich mir den Umgang mit unseren Farben: selbstverständlich, offen und demokratisch. Darum steht das D hier für das, was uns verbindet: Demokratie.',
+		entstehung: 'Ich habe das Motiv als Vektorgrafik in Affinity gezeichnet, damit es in jeder Größe gestochen scharf bleibt, vom kleinen Aufkleber bis zum Banner.',
+		kommentare: [
+			{
+				name: 'Klaus P. Wolf',
+				zusatz: 'Initiator von d-wie-demokratie.de, München',
+				text: 'Ich bin mit dem D-Oval am Auto aufgewachsen. Für mich stand das D immer für Deutschland und Deutschland für Demokratie.',
+				seit: '2026-11-25',
+			},
 		],
 		alt: 'Ein großes D in Schwarz-Rot-Gold, darunter „wie Demokratie“ und die Adresse d-wie-demokratie.de, rechts ein QR-Code, in einem Oval wie beim Länderkennzeichen am Auto.',
 		// shop: „Zum Shop“ bei diesem Motiv (Design im Spreadshop, Nummer = mainDesignId); eine Fassung kann ein eigenes shop haben
@@ -50,6 +54,16 @@ const liste = [
 	{
 		nr: 2,
 		name: 'Drei Entchen für die Demokratie',
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Den Umriss der Entchen habe ich nach meinen Vorgaben mit KI (ChatGPT) entwerfen lassen und das Motiv dann als Vektorgrafik in Affinity ausgearbeitet.',
+		kommentare: [
+			{
+				name: 'Klaus P. Wolf',
+				zusatz: 'Initiator von d-wie-demokratie.de, München',
+				text: 'Wer Loriots „Herren im Bad“ kennt, weiß, wie wichtig Entchen sind.',
+				seit: '2026-11-25',
+			},
+		],
 		alt: 'Drei Badeenten nebeneinander, gezeichnet in Schwarz, Rot und Gold, darunter die Adresse d-wie-demokratie.de.',
 		// eine Fassung erscheint erst, wenn ihr PNG da ist (die schwarze folgt noch)
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360826940',
@@ -67,66 +81,88 @@ const liste = [
 	{
 		nr: 3,
 		name: 'Gesunde Vielfalt',
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885813',
 		alt: 'Schwarze Johannisbeeren, rote Erdbeeren mit Blüte und goldgelbe Aprikosen mit Blättern, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Gesunde Vielfalt“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 4,
 		name: 'Demokratie braucht Schutz',
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885974',
 		alt: 'Eine Schildkröte, deren Panzer in Schwarz, Rot und Gold gestreift ist, blickt wachsam nach vorn, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Demokratie braucht Schutz“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 5,
 		name: 'Demokratie braucht Stacheln',
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885979',
 		alt: 'Ein Igel, dessen Stacheln von Schwarz über Rot zu Gold übergehen, blickt wachsam nach vorn, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Demokratie braucht Stacheln“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 6,
 		name: 'Demokratie braucht Schärfe',
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885892',
 		alt: 'Drei Chilischoten in Schwarz, Rot und Gelb liegen schräg und gestaffelt nebeneinander, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Demokratie braucht Schärfe“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 7,
 		name: 'Dackel lieben Demokratie',
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885982',
 		alt: 'Ein fröhlicher Dackel mit heraushängender Zunge und Ringelschwanz, sein Fell in Schwarz, Rot und Gold gestreift, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Dackel lieben Demokratie“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 8,
 		name: 'Farbe bekennen!',
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360886012',
 		alt: 'Ein fröhlicher Dackel hat drei Farbeimer umgeworfen und sich selbst in Schwarz, Rot und Gold angemalt, um ihn herum laufen schwarze, rote und gelbe Farbpfützen aus. Oben im Bogen „Farbe bekennen!“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 9,
 		name: 'Alles wird Hut',
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885891',
 		alt: 'Drei Hüte in Schwarz, Rot und Gold: ein schwarzer Zylinder mit rotem Band, eine rote Baskenmütze und ein gelber Hut mit schwarzem Band. Darüber „Alles wird Hut“, darunter d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 10,
 		name: 'Keine Angst, Hasen!',
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360886023',
 		alt: 'Drei Hasen in Schwarz, Rot und Gold sitzen eng beieinander, der schwarze zeigt den Daumen hoch, der rote zwinkert, der gelbe streckt die Zunge heraus. Darüber „Keine Angst, Hasen!“, darunter d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 11,
 		name: 'Entchen gut, alles gut',
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360861765',
 		alt: 'Drei flauschige Entenküken in Schwarz, Rot und Gold sitzen dicht nebeneinander und schnattern fröhlich, gezeichnet im Stil eines alten Kupferstichs. Darüber im Bogen „Entchen gut, alles gut“, darunter d-wie-demokratie.de, in einem Oval.',
 	},
 	{
 		nr: 12,
 		name: 'Hinschauen. Zuhören. Mund aufmachen.',
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360886052',
 		alt: 'Drei Schimpansen mit Halstüchern in Schwarz, Rot und Gold, gezeichnet im Stil eines alten Kupferstichs: Der linke formt mit den Händen ein Fernglas vor den Augen, der mittlere legt die Hände hinter die Ohren, der rechte ruft mit den Händen am Mund. Oben im Bogen „Hinschauen. Zuhören. Mund aufmachen.“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
 	{
 		nr: 13,
 		name: 'DEMO',
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Die laufenden Buchstaben habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und in Photoshop hochgerechnet. Schrift und weißen Hintergrund habe ich in Affinity gestaltet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360870008',
 		alt: 'Die Buchstaben K, R, A, T, I, E in Schwarz, Rot und Gold laufen auf Armen und Beinen in Turnschuhen nebeneinander her und tragen ein Banner mit der Aufschrift „DEMO“, zusammen „DEMOKRATIE“; ganz links ruft einer durch ein Megafon. Darunter d-wie-demokratie.de.',
 		varianten: [
@@ -137,6 +173,8 @@ const liste = [
 	{
 		nr: 14,
 		name: 'Schnurren war gestern',
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Den Tiger habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und in Photoshop hochgerechnet. Die Schrift habe ich in Affinity gesetzt.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360892112',
 		alt: 'Ein brüllender Tigerkopf von vorn im Holzschnitt-Stil, gelb mit schwarzen Streifen, die rote Zunge im weit geöffneten Maul. Darüber „SCHNURREN WAR GESTERN“, darunter d-wie-demokratie.de.',
 		varianten: [
@@ -147,6 +185,16 @@ const liste = [
 	{
 		nr: 15,
 		name: 'Freie Fahrt für freie Kinder',
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Das Mädchen auf dem Fahrrad habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und in Photoshop hochgerechnet. Ring, Schrift und weißen Hintergrund habe ich in Affinity gestaltet.',
+		kommentare: [
+			{
+				name: 'Klaus P. Wolf',
+				zusatz: 'Initiator von d-wie-demokratie.de, München',
+				text: 'Das ist mein Lieblingsmotiv. In den 70er Jahren wurden wegen der Ölkrise nicht nur Sonntagsfahrverbote verhängt, sondern es wurde auch über ein Tempolimit diskutiert. Der ADAC ließ daraufhin eine Million Protestaufkleber mit dem Slogan ‚Freie Bürger fordern freie Fahrt!‘ drucken und hatte damit Erfolg bis heute. Lasst uns den ADAC von damals zum Vorbild nehmen und den Aufkleber ebenso oft und mit dem gleichen Erfolg verbreiten.',
+				seit: '2026-11-25',
+			},
+		],
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360899839',
 		alt: 'Ein Mädchen im Stil einer glänzenden Spielfigur fährt entschlossen auf einem gelben Fahrrad nach rechts; es trägt einen roten Anzug mit Schwarz-Rot-Gold am Ärmel, die schwarzen Zöpfe mit gelben Haargummis wehen im Fahrtwind. Oben im Bogen „Freie Fahrt für freie Kinder“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 		varianten: [
@@ -200,4 +248,14 @@ export const pdfLink = (nr: number, endung = '') => {
 // nicht eingebettet, damit diese Website frei von Cookies und Inhalten Dritter bleibt.
 // false: „Zum Shop“ steht bei den Motiven grau und ohne Link da (Shop vorübergehend abgeschaltet)
 export const shopAktiv = true;
+
+// Kommentare von Verbündeten zu einem Motiv (💬 am Titel). Nur Verbündete dürfen kommentieren: das Formular schickt
+// Kommentar + E-Mail an das Intranet (Lead Capture „Kommentare zu Motiven“, Art „Kommentar“); Klaus prüft, ob die
+// Adresse zu einem Verbündeten gehört, dann kommt der Kommentar hier beim Motiv in `kommentare`
+// ({ name, zusatz, text, seit: 'JJJJ-MM-TT' }) und der Verbündete bekommt die Mail „Wir haben deinen Kommentar eingetragen“.
+// false: Kommentare (💬 und Formular) ausblenden.
+export const kommentareAktiv = true;
+// öffentlich wie beim Verbündeten-Formular: der Schlüssel erlaubt nur das Anlegen von Kommentaren als Leads
+export const kommentarUrl = 'https://intranet.d-wie-demokratie.de/api/v1/LeadCapture/a6d7fbe06ebdc04426a9ec3ec01ddc1f';
+export type Kommentar = { name: string; zusatz?: string; text: string; seit: string };
 export const shopStart = 'https://d-wie-demokratie.myspreadshop.de/';

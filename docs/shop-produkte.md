@@ -10,7 +10,6 @@ Am 24.11.2026 in einem Durchgang bei allen 17 aktiven Designs eingetragen und mi
 - Kappe: bei 2, 11, 13 nach Vorschau ergänzt; dunkle Fassungen ohne Burgunderrot.
 - Teenager-Sweatshirt Mini Changer: nicht bei Tiger dunkel (nur helle Farben).
 - Bandana hell: Mauve, Grau meliert, Taubenblau, Weiß; dunkel: Navy, Rot.
-- Motiv 4: Kinderpolo und Kinder-Rucksack ließen sich speichern – prüfen, ob Spreadshirt sie wieder entfernt.
 - Die Stanley/Stella-Tasche ist der „Stanley/Stella recycelter Heavyweight Stoffbeutel“ (war neu). Der kleine Regenschirm war bei 1, 2 und 13 „für alle“ schon da.
 
 | Produkt | Farben | Bei welchen Fassungen |
@@ -58,5 +57,5 @@ Bei allen Designs, soweit Spreadshirt das Produkt für das Design anbietet:
 
 ### Besonderheiten
 
-- **Motiv 4 (Schildkröte):** Spreadshirt bietet keine Kinderprodukte an. Anfrage an den Support läuft.
+- **Motiv 4 (Schildkröte):** Kinderprodukte waren gesperrt wegen des Worts „Panzer“ (Antwort Spreadshirt Legal Service, 24.11.2026). Wieder freigeschaltet; „Panzer“ am 25.11. aus Beschreibung und Tags entfernt. Bei Kinderprodukten keine Wörter, die nach Waffen oder Krieg klingen.
 - **DEMO „für alle“:** keine Sticker und keine weißen Tassen möglich, nur „Tasse einfarbig“ (schwarz) und Schürze Rot.

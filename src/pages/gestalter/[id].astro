@@ -1,6 +1,6 @@
 ---
 // Seite je Gestalter/in: Foto, Text, Link zur eigenen Homepage und alle Motive dieser Person.
-// Vorerst nur lokal (gestalterAktiv in src/data/gestalter.ts); im Build entstehen ohne gestalterAktiv keine Seiten.
+// Sichtbar, solange gestalterAktiv in src/data/gestalter.ts true ist; sonst entstehen im Build keine Seiten.
 import { Image } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import { gestalter, gestalterAktiv, type Gestalter } from '../../data/gestalter';

@@ -2,11 +2,11 @@
 // die automatisch alle ihre Motive zeigt (Feld `gestalter` in src/data/motive.ts).
 // Andere Personen nur mit schriftlicher Einwilligung aufnehmen (Name, Foto, Text, Link); bei Kindern nur Vorname
 // und Klasse/Schule, kein Foto, Einwilligung der Eltern.
-// SICHTBARKEIT: vorerst nur lokal (npm run dev); `gestalterAktiv` auf true setzen, um es zu veröffentlichen.
+// SICHTBARKEIT: seit 2026-11-25 öffentlich; `gestalterAktiv = import.meta.env.DEV` blendet es wieder aus (nur lokal).
 import type { ImageMetadata } from 'astro';
 import portraitKlaus from '../assets/klaus-p-wolf.jpg';
 
-export const gestalterAktiv = import.meta.env.DEV;
+export const gestalterAktiv = true;
 
 export type Gestalter = {
 	id: string;
@@ -24,7 +24,7 @@ export const gestalter: Gestalter[] = [
 	{
 		id: 'klaus-p-wolf',
 		name: 'Klaus P. Wolf',
-		kurz: 'Initiator von D wie Demokratie',
+		kurz: 'Initiator von d-wie-demokratie.de',
 		bild: portraitKlaus,
 		url: 'https://5-finger.com',
 		text: [
