@@ -36,11 +36,24 @@ Am 24.11.2026 in einem Durchgang bei allen 17 aktiven Designs eingetragen und mi
 
 „Nach Farbregel“: helle Fassungen nur helle Farben ohne Gelb, dunkle nur dunkle ohne Rot, „für alle“ alle Farben.
 
-## Beschlossen, noch nicht umgesetzt (25.11.2026)
+## Umgestellt am 26.11.2026 (bei allen 20 Designs)
 
-**Raus bei allen Designs** (Klaus): Stanley/Stella recycelter Gym Bag, Midweight recycelter Stoffbeutel, Stanley/Stella Unisex Bio-T-Shirt CRAFTER. Erst umsetzen, wenn entschieden ist, was neu dazukommt; dann alles in einem Durchgang.
+**Raus:** Stanley/Stella recycelter Gym Bag, Midweight recycelter Stoffbeutel, Stanley/Stella Unisex Bio-T-Shirt CRAFTER.
 
-**Rein bei allen Designs** (Klaus, 25.11.2026): Kühlschrankmagnet rund, Poster, Kinder Organic Sweatshirt Mini Changer (Stanley/Stella), Stanley/Stella recycelter Bucket Hat. **Trinkflasche:** noch offen, welche. Material und Herkunft vorher auf den Produktseiten prüfen.
+**Rein**, soweit Spreadshirt das Produkt für das Design anbietet:
+
+- **Kinder Organic Sweatshirt Mini Changer** (Stanley/Stella): hell nur Pastelltürkis und Lavendel-Violett, dunkel nur Schwarz
+- **Stanley/Stella recycelter Bucket Hat:** hell Naturweiß und Grau meliert, dunkel Schwarz
+- **Runder Kühlschrankmagnet:** nur „für alle“ und hell, nicht bei dunklen Fassungen
+- **Poster 40 × 40 cm:** nur „für alle“ und hell, nicht bei dunklen Fassungen
+- **Isolierflasche:** „für alle“ Lightsilver, hell Weiß und Lightsilver, dunkel keine
+- **Trinkflasche mit Karabiner 750 ml:** „für alle“ alle Farben, hell Weiß und Lightsilver, dunkel Schwarz, Kelly Green und Königsblau
+
+**Ausnahmen:**
+
+- **DEMO „für alle“:** Magnet, Poster und Isolierflasche bietet Spreadshirt für dieses Design nicht an.
+- **Tiger dunkel:** Mini Changer und Bucket Hat gibt es nicht in dunklen Farben, Trinkflasche nur Kelly Green und Königsblau (kein Schwarz).
+- **Vor dem Umbau schon da:** Bucket Hat bei Motiv 1 „für alle“, Motiv 2 hell und Motiv 2 dunkel; Poster bei Motiv 1 „für alle“, Motiv 2 hell und Motiv 11.
 
 ## Aktuelles Sortiment (Stand 24.11.2026)
 
