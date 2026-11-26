@@ -36,6 +36,12 @@ Am 24.11.2026 in einem Durchgang bei allen 17 aktiven Designs eingetragen und mi
 
 „Nach Farbregel“: helle Fassungen nur helle Farben ohne Gelb, dunkle nur dunkle ohne Rot, „für alle“ alle Farben.
 
+## Beschlossen, noch nicht umgesetzt (25.11.2026)
+
+**Raus bei allen Designs** (Klaus): Stanley/Stella recycelter Gym Bag, Midweight recycelter Stoffbeutel, Stanley/Stella Unisex Bio-T-Shirt CRAFTER. Erst umsetzen, wenn entschieden ist, was neu dazukommt; dann alles in einem Durchgang.
+
+**Rein bei allen Designs** (Klaus, 25.11.2026): Kühlschrankmagnet rund, Poster, Kinder Organic Sweatshirt Mini Changer (Stanley/Stella), Stanley/Stella recycelter Bucket Hat. **Trinkflasche:** noch offen, welche. Material und Herkunft vorher auf den Produktseiten prüfen.
+
 ## Aktuelles Sortiment (Stand 24.11.2026)
 
 Bei allen Designs, soweit Spreadshirt das Produkt für das Design anbietet:
