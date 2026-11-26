@@ -814,8 +814,7 @@ const karo = (farbe: string) => {
 		top: -0.1em;
 		width: 1.65em;
 		height: 1.65em;
-		/* dasselbe Hellgelb wie der Kommentar-Kasten (und auf /verbuendete/) */
-		fill: #fff8d6;
+		fill: #fff;
 		stroke: currentColor;
 		stroke-width: 1.8;
 		stroke-linejoin: round;
@@ -828,6 +827,11 @@ const karo = (farbe: string) => {
 	.kommentar-knopf[aria-expanded='true'],
 	.kommentar-knopf:hover {
 		color: var(--schwarz);
+	}
+
+	/* geöffnet: kräftiger als das Hellgelb des Kastens, damit es auffällt */
+	.kommentar-knopf[aria-expanded='true'] svg {
+		fill: #ffe27a;
 	}
 
 	.kommentare {

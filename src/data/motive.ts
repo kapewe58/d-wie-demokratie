@@ -99,6 +99,14 @@ const liste = [
 		name: 'Demokratie braucht Stacheln',
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
+		kommentare: [
+			{
+				name: 'Klaus P. Wolf',
+				zusatz: 'Initiator von d-wie-demokratie.de, München',
+				text: 'Ein Igel greift niemanden an. Aber wer ihn packen will, sticht sich. So stelle ich mir eine wehrhafte Demokratie vor: friedlich, aber nicht wehrlos.',
+				seit: '2026-11-26',
+			},
+		],
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885979',
 		alt: 'Ein Igel, dessen Stacheln von Schwarz über Rot zu Gold übergehen, blickt wachsam nach vorn, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Demokratie braucht Stacheln“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
@@ -107,6 +115,14 @@ const liste = [
 		name: 'Demokratie braucht Schärfe',
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
+		kommentare: [
+			{
+				name: 'Klaus P. Wolf',
+				zusatz: 'Initiator von d-wie-demokratie.de, München',
+				text: 'Demokratie ist kein lauwarmer Eintopf. Sie lebt vom Streit um die beste Lösung, mit Respekt, aber gern mit Würze.',
+				seit: '2026-11-26',
+			},
+		],
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885892',
 		alt: 'Drei Chilischoten in Schwarz, Rot und Gelb liegen schräg und gestaffelt nebeneinander, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Demokratie braucht Schärfe“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
@@ -139,6 +155,14 @@ const liste = [
 		name: 'Alles wird Hut',
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
+		kommentare: [
+			{
+				name: 'Klaus P. Wolf',
+				zusatz: 'Initiator von d-wie-demokratie.de, München',
+				text: 'Zylinder, Baskenmütze, Sonnenhut: Demokratie bringt sehr verschiedene Köpfe unter einen Hut, ohne dass alle gleich aussehen müssen.',
+				seit: '2026-11-26',
+			},
+		],
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885891',
 		alt: 'Drei Hüte in Schwarz, Rot und Gold: ein schwarzer Zylinder mit rotem Band, eine rote Baskenmütze und ein gelber Hut mit schwarzem Band. Darüber „Alles wird Hut“, darunter d-wie-demokratie.de, in einem runden Abzeichen.',
 	},
