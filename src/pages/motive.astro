@@ -256,9 +256,21 @@ const karo = (farbe: string) => {
 					<section class="kommentare" id={`${motiv.anker}-kommentare`} aria-label={`Kommentare zu Motiv ${motiv.nr}`} hidden>
 						{kommentareVon(motiv).length > 0 && (
 							<ul class="kommentar-liste">
-								{kommentareVon(motiv).map((k) => (
-									<li>
-										<blockquote>„{k.text}“</blockquote>
+								{/* Jeder Kommentar hat eine eigene Adresse /motive/#motiv-<nr>-kommentar-<n> (n = Reihenfolge in
+								    `kommentare`, daher neue Kommentare immer HINTEN anhängen, sonst zeigen alte Links falsch) */}
+								{kommentareVon(motiv).map((k, i) => (
+									<li id={`${motiv.anker}-kommentar-${i + 1}`}>
+										{/* 🔗 rechtsbündig am Ende der letzten Zeile: kopiert den Link (Handy: Teilen-Menü);
+										    am Computer zeigt es beim Darüberfahren „Link zu diesem Kommentar kopieren“ */}
+										<blockquote>
+											„{k.text}“<button
+												type="button"
+												class="kommentar-link"
+												data-motiv={`${motiv.nr} – ${motiv.name}`}
+												aria-label="Link zu diesem Kommentar kopieren"
+												hidden
+											><span class="kopiert" role="status"></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4l-1.1 1.1" /><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1.1-1.1" /></svg></button>
+										</blockquote>
 										<p class="wer">
 											<a href="/verbuendete/">{k.name}</a>{k.zusatz && <>, {k.zusatz}</>}
 											{k.beispiel && <span class="entwurf">Beispiel, nur lokal</span>}
@@ -385,6 +397,47 @@ const karo = (farbe: string) => {
 			if (auf) {
 				window.umami?.track('kommentare-aufklappen', { motiv: knopf.dataset.motiv });
 				bereich.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+			}
+		});
+	}
+
+	// Link zu einem Kommentar (/motive/#motiv-5-kommentar-1): Bereich aufklappen, hinscrollen, kurz hervorheben
+	function zumKommentar() {
+		if (!/^#[\w-]+-kommentar-\d+$/.test(location.hash)) return;
+		const kommentar = document.getElementById(location.hash.slice(1));
+		const bereich = kommentar?.closest<HTMLElement>('.kommentare');
+		if (!kommentar || !bereich) return;
+		bereich.hidden = false;
+		document.querySelectorAll(`.kommentar-knopf[aria-controls="${bereich.id}"]`).forEach((k) => k.setAttribute('aria-expanded', 'true'));
+		kommentar.scrollIntoView({ block: 'start' });
+		kommentar.classList.remove('hervor');
+		kommentar.offsetHeight;
+		kommentar.classList.add('hervor');
+	}
+	addEventListener('hashchange', zumKommentar);
+	zumKommentar();
+
+	// 🔗 am Kommentar: auf dem Handy Teilen-Menü, sonst Link in die Zwischenablage und kurz „Link kopiert“
+	for (const knopf of document.querySelectorAll<HTMLButtonElement>('.kommentar-link')) {
+		knopf.hidden = false;
+		const meldung = knopf.querySelector<HTMLElement>('.kopiert')!;
+		knopf.addEventListener('click', async () => {
+			const url = `${location.origin}${location.pathname}#${knopf.closest('li')!.id}`;
+			window.umami?.track('kommentar-link', { motiv: knopf.dataset.motiv });
+			if (navigator.share && matchMedia('(pointer: coarse)').matches) {
+				try {
+					await navigator.share({ title: 'Kommentar auf D wie Demokratie', url });
+				} catch {
+					// abgebrochen – nichts zu tun
+				}
+				return;
+			}
+			try {
+				await navigator.clipboard.writeText(url);
+				meldung.textContent = 'Link kopiert';
+				setTimeout(() => (meldung.textContent = ''), 2500);
+			} catch {
+				prompt('Link zu diesem Kommentar:', url);
 			}
 		});
 	}
@@ -862,6 +915,11 @@ const karo = (farbe: string) => {
 		list-style: none;
 	}
 
+	/* Sprung per Link: Kommentar im oberen Drittel, nicht unter der festen Kopfzeile */
+	.kommentar-liste li {
+		scroll-margin-top: 30vh;
+	}
+
 	.kommentar-liste li + li {
 		margin-top: 0.8em;
 	}
@@ -878,6 +936,94 @@ const karo = (farbe: string) => {
 
 	.kommentar-liste .wer .entwurf {
 		margin-left: 0.5em;
+	}
+
+	/* 🔗 klein und grau, rechtsbündig in der letzten Zeile des Kommentars */
+	.kommentar-link {
+		position: relative;
+		float: right;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4em;
+		margin-left: 0.5em;
+		padding: 0.1em 0.2em;
+		border: 0;
+		background: none;
+		color: var(--grau);
+		font: inherit;
+		cursor: pointer;
+	}
+
+	.kommentar-link[hidden] {
+		display: none;
+	}
+
+	.kommentar-link:hover {
+		color: var(--schwarz);
+	}
+
+	.kommentar-link svg {
+		width: 1.05em;
+		height: 1.05em;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 2;
+		stroke-linecap: round;
+	}
+
+	.kommentar-link .kopiert {
+		font-size: 0.85rem;
+	}
+
+	.kommentar-link .kopiert:empty {
+		display: none;
+	}
+
+	/* nur am Computer: beim Darüberfahren sofort „Link zu diesem Kommentar kopieren“ */
+	@media (hover: hover) {
+		.kommentar-link:hover::after {
+			content: 'Link zu diesem Kommentar kopieren';
+			position: absolute;
+			right: 0;
+			bottom: calc(100% + 4px);
+			padding: 0.25em 0.5em;
+			border-radius: 4px;
+			background: var(--schwarz);
+			color: #fff;
+			font-size: 0.8rem;
+			white-space: nowrap;
+			pointer-events: none;
+		}
+
+		/* nach dem Klicken steht schon „Link kopiert“ daneben */
+		.kommentar-link:has(.kopiert:not(:empty))::after {
+			display: none;
+		}
+	}
+
+	/* nach dem rechts schwebenden 🔗 wieder unter dem ganzen Kommentar weiter */
+	.kommentar-liste blockquote::after {
+		content: '';
+		display: block;
+		clear: both;
+	}
+
+	/* Kommentar, zu dem ein Link geführt hat: kurz gelb hinterlegt */
+	.kommentar-liste li.hervor {
+		animation: hervor 2.5s ease-out;
+		border-radius: 4px;
+	}
+
+	@keyframes hervor {
+		0%,
+		40% {
+			background: #ffe27a;
+			box-shadow: 0 0 0 0.4em #ffe27a;
+		}
+		100% {
+			background: transparent;
+			box-shadow: 0 0 0 0.4em transparent;
+		}
 	}
 
 	.kommentar-hinweis {
