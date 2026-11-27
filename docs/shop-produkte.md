@@ -78,3 +78,12 @@ Bei allen Designs, soweit Spreadshirt das Produkt für das Design anbietet:
 
 - **Motiv 4 (Schildkröte):** Kinderprodukte waren gesperrt wegen des Worts „Panzer“ (Antwort Spreadshirt Legal Service, 24.11.2026). Wieder freigeschaltet; „Panzer“ am 25.11. aus Beschreibung und Tags entfernt. Bei Kinderprodukten keine Wörter, die nach Waffen oder Krieg klingen.
 - **DEMO „für alle“:** keine Sticker und keine weißen Tassen möglich, nur „Tasse einfarbig“ (schwarz) und Schürze Rot.
+
+## Motiv 16 „Aufwachen, Demokraten!“ (27.11.2026)
+
+Zwei neue Designs mit voller Produktliste nach den Regeln oben:
+
+- **Für alle Produkte** (weiße Scheibe), Design 360934726: 44 Produkte, alle Farben (Isolierflasche nur Lightsilver, Buttons 25 mm nicht).
+- **Für helle Produkte** (transparent), Design 360934678: 40 Produkte in hellen Farben (ohne Hunde-T-Shirt und die drei Patch-Beanies, die nur auf dunklem Patch drucken).
+
+Polos „Oben links“, Kinder- und Teenager-Hoodie „Vollformat vorn“.

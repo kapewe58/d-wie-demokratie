@@ -236,15 +236,16 @@ const liste = [
 	},
 	{
 		// 2026-11-27, erstes Motiv, das Klaus selbst Schritt für Schritt druckfertig gemacht hat
-		// (Arbeitsdateien: iCloud Drive/Affinity/D wie Demokratie/Motive/Motiv 16 – Hahn/). Shop-Links folgen.
+		// (Arbeitsdateien: iCloud Drive/Affinity/D wie Demokratie/Motive/Motiv 16 – Hahn/).
 		nr: 16,
 		name: 'Aufwachen, Demokraten!',
 		gestalter: 'klaus-p-wolf',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360934726',
 		entstehung: 'Den Hahn habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt, in Photoshop hochgerechnet und den Pfahl mit der KI-Funktion von Photoshop verlängert. Ring und Schrift habe ich in Affinity gestaltet.',
 		alt: 'Ein krähender Hahn mit Gefieder in Schwarz, Rot und Gold steht mit erhobenem Kopf auf einem Holzpfahl. Oben im Bogen „Aufwachen, Demokraten!“, rechts unten d-wie-demokratie.de, in einem runden Abzeichen.',
 		varianten: [
 			{ endung: '', name: 'Für alle Produkte', stoff: '#71839b', text: 'Motiv mit weißem Hintergrund.' },
-			{ endung: '-transparent', name: 'Für helle Produkte', text: 'Motiv mit transparentem Hintergrund.' },
+			{ endung: '-transparent', name: 'Für helle Produkte', shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360934678', text: 'Motiv mit transparentem Hintergrund.' },
 		],
 	},
 	// Entwürfe („Kommt bald“): noch ohne Nummer, Download und Shop; stehen unter den fertigen Motiven.
