@@ -242,6 +242,14 @@ const liste = [
 		gestalter: 'klaus-p-wolf',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360934726',
 		entstehung: 'Den Hahn habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt, in Photoshop hochgerechnet und den Pfahl mit der KI-Funktion von Photoshop verlängert. Ring und Schrift habe ich in Affinity gestaltet.',
+		kommentare: [
+			{
+				name: 'Klaus P. Wolf',
+				zusatz: 'Initiator von d-wie-demokratie.de, München',
+				text: 'Ich bin 1958 in München geboren, 13 Jahre nach dem Ende des Zweiten Weltkriegs. Ich habe nur die Demokratie erlebt und hielt sie lange für selbstverständlich. Jetzt weiß ich, dass es nicht so ist. Höchste Zeit für alle Demokraten, aufzuwachen und irgendwie aktiv zu werden, um unsere gefährdete Demokratie zu retten.',
+				seit: '2026-11-27',
+			},
+		],
 		alt: 'Ein krähender Hahn mit Gefieder in Schwarz, Rot und Gold steht mit erhobenem Kopf auf einem Holzpfahl. Oben im Bogen „Aufwachen, Demokraten!“, rechts unten d-wie-demokratie.de, in einem runden Abzeichen.',
 		varianten: [
 			{ endung: '', name: 'Für alle Produkte', stoff: '#71839b', text: 'Motiv mit weißem Hintergrund.' },
