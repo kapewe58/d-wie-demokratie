@@ -234,35 +234,24 @@ const liste = [
 			{ endung: '-transparent', name: 'Für helle Produkte', shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360899887', text: 'Motiv mit transparentem Hintergrund.' },
 		],
 	},
+	{
+		// 2026-11-27, erstes Motiv, das Klaus selbst Schritt für Schritt druckfertig gemacht hat
+		// (Arbeitsdateien: iCloud Drive/Affinity/D wie Demokratie/Motive/Motiv 16 – Hahn/). Shop-Links folgen.
+		nr: 16,
+		name: 'Aufwachen, Demokraten!',
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Den Hahn habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt, in Photoshop hochgerechnet und den Pfahl mit der KI-Funktion von Photoshop verlängert. Ring und Schrift habe ich in Affinity gestaltet.',
+		alt: 'Ein krähender Hahn mit Gefieder in Schwarz, Rot und Gold steht mit erhobenem Kopf auf einem Holzpfahl. Oben im Bogen „Aufwachen, Demokraten!“, rechts unten d-wie-demokratie.de, in einem runden Abzeichen.',
+		varianten: [
+			{ endung: '', name: 'Für alle Produkte', stoff: '#71839b', text: 'Motiv mit weißem Hintergrund.' },
+			{ endung: '-transparent', name: 'Für helle Produkte', text: 'Motiv mit transparentem Hintergrund.' },
+		],
+	},
 	// Entwürfe („Kommt bald“): noch ohne Nummer, Download und Shop; stehen unter den fertigen Motiven.
 	// id = Sprungmarke (/motive/#<id>), Vorschaubild src/assets/motive/bald/<id>.png.
 	// Regel: Eine Nummer bekommt ein Motiv erst, wenn es fertig ist (Druck-PNG da), und zwar die nächste freie,
 	// egal in welcher Reihenfolge die Entwürfe fertig werden. Dann bald und id löschen, nr eintragen, PNG ablegen.
 	// Auf der Startseite erscheinen Entwürfe nicht.
-	// NUR LOKAL (npm run dev): Idee zum Zeigen, Bild aus der Sendung „Kompressor“ (Deutschlandfunk Kultur), Rechte nicht
-	// geklärt. Das Bild ist per .gitignore ausgeschlossen, auf der Website erscheint der Eintrag nie.
-	...(import.meta.env.DEV
-		? [
-				{
-					bald: true,
-					id: 'deutschlandfunk',
-					hinweis: 'Das ist nur ein Dummy',
-					name: 'Deutschlandfunk statt Verschwörungsschund',
-					gestalter: 'deutschlandfunk',
-					entstehung: 'Das Bild stammt aus der Sendung „Kompressor“ von Deutschlandfunk Kultur.',
-					alt: 'Eine Person mit Hasenmaske hält sich die Hände vors Gesicht, darüber Bahnen in Schwarz, Rot und Gold. Darunter „Deutschlandfunk statt Verschwörungsschund“ und d-wie-demokratie.de.',
-				},
-				{
-					bald: true,
-					id: 'deutschlandfunk-tonart',
-					hinweis: 'Das ist nur ein Dummy',
-					name: 'Deutschlandfunk statt Verschwörungsschund',
-					gestalter: 'deutschlandfunk',
-					entstehung: 'Das Bild stammt aus der Sendung „Tonart“ von Deutschlandfunk Kultur.',
-					alt: 'Eine Sängerin als Silhouette auf der Bühne reckt die Arme in die Höhe, dahinter Bahnen in Schwarz, Rot und Gold. Darunter „Deutschlandfunk statt Verschwörungsschund“ und d-wie-demokratie.de.',
-				},
-			]
-		: []),
 ];
 
 // stoff: Hintergrund der Vorschau, sonst je nach Endung (dunkel/schwarz) bzw. ein heller Stoffton
