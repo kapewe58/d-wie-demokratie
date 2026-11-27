@@ -157,6 +157,18 @@ const zitatSekunden = 8;
 	<noscript><style is:inline>#wz-lizenz { display: inline; }</style></noscript>
 	</div>
 
+	<!-- Weitere Stimmen: Kampagne „Sommer für Demokratie 2024“ (Artikel 1 – Initiative für Menschenwürde e.V.).
+	     #brxe-idyuix = Überschrift „Erstunterzeichnerinnen und Erstunterzeichner“ (vom Seitenbaukasten vergeben).
+	     Keine Textmarke (:~:text=), die träfe zuerst denselben Wortlaut im PDF-Absatz darüber. Neuer Tab. -->
+	<p class="mehr-stimmen">
+		Viele weitere Stimmen für unsere Demokratie, von Ministerpräsidenten bis zu Künstlerinnen:
+		<a
+			href="https://demokratie-liebe.de/#brxe-idyuix"
+			target="_blank"
+			rel="noopener"
+			data-umami-event="mehr-stimmen">„Sommer für Demokratie“ (2024)&nbsp;↗</a>
+	</p>
+
 	<!-- Vorschau: alle Motive als kleine Bilder (später nur die neuesten), alles Weitere auf /motive/ -->
 	<h2>Unsere Motive</h2>
 	<p class="vorschau-text">Ernst, frech, lustig oder einfach niedlich: Such dir dein Motiv aus. Laufend kommen neue Motive und weitere Produkte im {shopAktiv ? <a href={shopStart} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv="startseite">Non-Profit-Shop</a> : 'Non-Profit-Shop'} dazu.</p>
@@ -501,6 +513,21 @@ const zitatSekunden = 8;
 		position: relative;
 		min-height: 28px;
 		margin-top: 0.3em;
+	}
+
+	/* Link zu weiteren Stimmen: klein unter den Punkten des Zitat-Kastens */
+	.mehr-stimmen {
+		margin: 0.4em 0 0;
+		font-size: 0.9rem;
+		color: var(--grau);
+	}
+
+	/* Link in eigener Zeile rechtsbündig (table + margin-left: auto, damit nur der Text klickbar ist) */
+	.mehr-stimmen a {
+		display: table;
+		margin-left: auto;
+		color: var(--schwarz);
+		white-space: nowrap;
 	}
 
 	.unter-zitaten .wz-nachweis {
