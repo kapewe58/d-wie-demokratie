@@ -147,9 +147,16 @@ const karo = (farbe: string) => {
 		</details>
 	</div>
 
+	{/* Reihenfolge: Standard „Neueste zuerst“ (per JavaScript umsortiert, Wahl im Browser gemerkt);
+	    ohne JavaScript stehen die Motive von 1 aufwärts. Entwürfe („Kommt bald“) bleiben immer unten. */}
+	<div class="sortierung" role="group" aria-label="Reihenfolge der Motive" hidden>
+		<button type="button" data-sortierung="neu" aria-pressed="true">Neueste zuerst</button>
+		<button type="button" data-sortierung="alt" aria-pressed="false">Älteste zuerst</button>
+	</div>
+
 	<ul class="motive">
 		{motive.map((motiv) => (
-			<li id={motiv.anker}>
+			<li id={motiv.anker} data-nr={motiv.bald ? undefined : motiv.nr}>
 				{/* mehrere Fassungen: Knöpfe wechseln zwischen ihnen; ohne JavaScript stehen alle untereinander */}
 				{motiv.fassungen.map((f, i) => (
 					<div class="fassung" data-fassung={i}>
@@ -335,6 +342,42 @@ const karo = (farbe: string) => {
 </Layout>
 
 <script>
+	// Reihenfolge der Motive: „Neueste zuerst“ (Standard) oder „Älteste zuerst“; die Wahl merkt sich der Browser.
+	// Läuft zuerst, damit Sprünge wie /motive/#motiv-5 danach an der richtigen Stelle landen.
+	{
+		const liste = document.querySelector<HTMLUListElement>('ul.motive');
+		const leiste = document.querySelector<HTMLElement>('.sortierung');
+		if (liste && leiste) {
+			const fertige = [...liste.querySelectorAll<HTMLLIElement>(':scope > li[data-nr]')];
+			const entwuerfe = [...liste.querySelectorAll<HTMLLIElement>(':scope > li:not([data-nr])')];
+			const sortieren = (art: string) => {
+				const reihe = [...fertige].sort((a, b) => Number(a.dataset.nr) - Number(b.dataset.nr));
+				if (art === 'neu') reihe.reverse();
+				liste.append(...reihe, ...entwuerfe);
+				leiste.querySelectorAll('button').forEach((k) => k.setAttribute('aria-pressed', String(k.dataset.sortierung === art)));
+			};
+			let art = 'neu';
+			try {
+				if (localStorage.getItem('motive-sortierung') === 'alt') art = 'alt';
+			} catch {
+				// Speicher gesperrt (privates Fenster) – Standard bleibt
+			}
+			sortieren(art);
+			leiste.hidden = false;
+			leiste.addEventListener('click', (e) => {
+				const knopf = (e.target as Element).closest<HTMLButtonElement>('button[data-sortierung]');
+				if (!knopf) return;
+				sortieren(knopf.dataset.sortierung!);
+				try {
+					localStorage.setItem('motive-sortierung', knopf.dataset.sortierung!);
+				} catch {
+					// nicht speicherbar – gilt dann nur bis zum Neuladen
+				}
+			});
+			if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+		}
+	}
+
 	// Links wie /motive/#herunterladen oder /motive/#shop klappen die passende Frage gleich auf.
 	function aufklappen() {
 		const ziel = location.hash && document.querySelector(location.hash);
@@ -659,6 +702,35 @@ const karo = (farbe: string) => {
 	}
 
 	/* Motive untereinander: Bild links, Links rechts; auf dem Handy Bild oben */
+	/* „Neueste zuerst / Älteste zuerst“: Knöpfe wie bei den Fassungen, rechtsbündig über der Liste */
+	.sortierung {
+		display: flex;
+		justify-content: flex-end;
+		gap: 0.4em;
+		margin: 2em 0 -1.2em;
+	}
+
+	.sortierung[hidden] {
+		display: none;
+	}
+
+	.sortierung button {
+		padding: 0.25em 0.7em;
+		border: 1px solid #c4c4c4;
+		border-radius: 999px;
+		background: #ffffff;
+		color: var(--text);
+		font: inherit;
+		font-size: 0.85rem;
+		cursor: pointer;
+	}
+
+	.sortierung button[aria-pressed='true'] {
+		border-color: var(--schwarz);
+		background: var(--schwarz);
+		color: var(--gold);
+	}
+
 	.motive {
 		margin: 2em 0 0;
 		padding: 0;
