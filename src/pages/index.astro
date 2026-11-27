@@ -19,6 +19,8 @@ import fotoReichstag from '../assets/flagge/1990-reichstag.jpg';
 const querformate = import.meta.glob<{ default: ImageMetadata }>('../assets/slider/motiv-*.jpg', { eager: true });
 const bilder: { src: ImageMetadata; motiv: number; foto?: boolean; alt: string; text: string }[] = motive
 	.filter((m) => !m.bald && querformate[`../assets/slider/motiv-${m.nr}.jpg`])
+	// neuestes Motiv zuerst (wie die Vorschau und /motive/)
+	.sort((a, b) => b.nr - a.nr)
 	.map((m) => ({
 		src: querformate[`../assets/slider/motiv-${m.nr}.jpg`].default,
 		motiv: m.nr,
@@ -169,11 +171,12 @@ const zitatSekunden = 8;
 			data-umami-event="mehr-stimmen">„Sommer für Demokratie“ (2024)&nbsp;↗</a>
 	</p>
 
-	<!-- Vorschau: alle Motive als kleine Bilder (später nur die neuesten), alles Weitere auf /motive/ -->
+	<!-- Vorschau: alle Motive als kleine Bilder, neueste zuerst (wie der Standard auf /motive/; später nur die neuesten),
+	     alles Weitere auf /motive/ -->
 	<h2>Unsere Motive</h2>
 	<p class="vorschau-text">Ernst, frech, lustig oder einfach niedlich: Such dir dein Motiv aus. Laufend kommen neue Motive und weitere Produkte im {shopAktiv ? <a href={shopStart} target="_blank" rel="noopener" data-umami-event="shop-oeffnen" data-umami-event-motiv="startseite">Non-Profit-Shop</a> : 'Non-Profit-Shop'} dazu.</p>
 	<ul class="vorschau">
-		{motive.filter((motiv) => !motiv.bald).map((motiv) => (
+		{motive.filter((motiv) => !motiv.bald).sort((a, b) => b.nr - a.nr).map((motiv) => (
 			<li>
 				<a href={`/motive/#motiv-${motiv.nr}`}>
 					<Image src={motiv.fassungen[0].bild!} alt={motiv.alt} width={300} widths={[300, 600]} sizes="(max-width: 540px) 45vw, 300px" />
