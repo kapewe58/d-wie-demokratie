@@ -32,6 +32,17 @@ export const gestalter: Gestalter[] = [
 			'Er hat einiges von der Welt gesehen und lebt sehr gerne in unserem wunderbaren Land. Er ist in keiner politischen Partei.',
 		],
 	},
+	// NUR LOKAL: gehört zum Entwurf „Deutschlandfunk statt Verschwörungsschund“ in motive.ts
+	...(import.meta.env.DEV
+		? [
+				{
+					id: 'deutschlandfunk',
+					name: 'Deutschlandfunk Kultur',
+					kurz: 'Sendung „Kompressor“',
+					url: 'https://www.deutschlandfunkkultur.de/',
+				},
+			]
+		: []),
 ];
 
 export const gestalterVon = (id?: string) => gestalter.find((g) => g.id === id);

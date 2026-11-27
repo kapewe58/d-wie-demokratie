@@ -17,3 +17,6 @@ npm-debug.log*
 
 # Arbeitsordner mit allen Motiv-Dateien (PDF + PNG); Claude übernimmt Neues/Geändertes in die Website
 /motive/
+
+# nur lokale Entwürfe mit ungeklärten Bildrechten (nie hochladen)
+/src/assets/motive/bald/deutschlandfunk*.png

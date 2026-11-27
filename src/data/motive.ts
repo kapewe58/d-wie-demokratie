@@ -239,6 +239,30 @@ const liste = [
 	// Regel: Eine Nummer bekommt ein Motiv erst, wenn es fertig ist (Druck-PNG da), und zwar die nächste freie,
 	// egal in welcher Reihenfolge die Entwürfe fertig werden. Dann bald und id löschen, nr eintragen, PNG ablegen.
 	// Auf der Startseite erscheinen Entwürfe nicht.
+	// NUR LOKAL (npm run dev): Idee zum Zeigen, Bild aus der Sendung „Kompressor“ (Deutschlandfunk Kultur), Rechte nicht
+	// geklärt. Das Bild ist per .gitignore ausgeschlossen, auf der Website erscheint der Eintrag nie.
+	...(import.meta.env.DEV
+		? [
+				{
+					bald: true,
+					id: 'deutschlandfunk',
+					hinweis: 'Das ist nur ein Dummy',
+					name: 'Deutschlandfunk statt Verschwörungsschund',
+					gestalter: 'deutschlandfunk',
+					entstehung: 'Das Bild stammt aus der Sendung „Kompressor“ von Deutschlandfunk Kultur.',
+					alt: 'Eine Person mit Hasenmaske hält sich die Hände vors Gesicht, darüber Bahnen in Schwarz, Rot und Gold. Darunter „Deutschlandfunk statt Verschwörungsschund“ und d-wie-demokratie.de.',
+				},
+				{
+					bald: true,
+					id: 'deutschlandfunk-tonart',
+					hinweis: 'Das ist nur ein Dummy',
+					name: 'Deutschlandfunk statt Verschwörungsschund',
+					gestalter: 'deutschlandfunk',
+					entstehung: 'Das Bild stammt aus der Sendung „Tonart“ von Deutschlandfunk Kultur.',
+					alt: 'Eine Sängerin als Silhouette auf der Bühne reckt die Arme in die Höhe, dahinter Bahnen in Schwarz, Rot und Gold. Darunter „Deutschlandfunk statt Verschwörungsschund“ und d-wie-demokratie.de.',
+				},
+			]
+		: []),
 ];
 
 // stoff: Hintergrund der Vorschau, sonst je nach Endung (dunkel/schwarz) bzw. ein heller Stoffton

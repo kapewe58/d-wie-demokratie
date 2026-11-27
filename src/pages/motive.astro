@@ -212,10 +212,14 @@ const karo = (farbe: string) => {
 							)}
 							{f.text && <p class="fassung-text">{f.name && <strong class="ohne-js">{f.name}: </strong>}{f.text}</p>}
 							{motiv.bald ? (
+								(motiv as { hinweis?: string }).hinweis ? (
+									<p class="bald">{(motiv as { hinweis?: string }).hinweis}</p>
+								) : (
 								<p class="bald">
 									<span class="bald-marke">Kommt bald</span>
 									Wir bereiten das Motiv für den Druck vor. Bald kannst du es hier herunterladen und im Shop bestellen.
 								</p>
+								)
 							) : (
 							<ul class="links">
 								<li>
