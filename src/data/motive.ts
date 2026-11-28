@@ -234,7 +234,7 @@ const liste = [
 	{
 		nr: 15,
 		name: 'Freie Fahrt für freie Kinder',
-		stichwoerter: ['Kinder', 'Fahrrad', 'Radfahren', 'Mädchen', 'Kinderrechte', 'Mut', 'Zukunft'],
+		stichwoerter: ['Kinder', 'Fahrrad', 'Radfahren', 'Mädchen', 'Kinderrechte', 'Freiheit', 'Mut', 'Zukunft', 'Kindheit', 'Spielzeug', 'Zöpfe', 'Bewegung', 'Familie'],
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Das Mädchen auf dem Fahrrad habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und in Photoshop hochgerechnet. Ring, Schrift und weißen Hintergrund habe ich in Affinity gestaltet.',
 		kommentare: [
@@ -257,7 +257,7 @@ const liste = [
 		// (Arbeitsdateien: iCloud Drive/Affinity/D wie Demokratie/Motive/Motiv 16 – Hahn/).
 		nr: 16,
 		name: 'Aufwachen, Demokraten!',
-		stichwoerter: ['Hahn', 'Gockel', 'Vogel', 'Weckruf', 'Aufwachen', 'Mut', 'Haltung', 'Tiere'],
+		stichwoerter: ['Hahn', 'Gockel', 'Vogel', 'Weckruf', 'Aufwachen', 'Krähen', 'Wachsam', 'Engagement', 'Freiheit', 'Mut', 'Haltung', 'Tiere', 'Bauernhof', 'Illustration'],
 		gestalter: 'klaus-p-wolf',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360940165',
 		entstehung: 'Den Hahn habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt, in Photoshop hochgerechnet und den Pfahl mit der KI-Funktion von Photoshop verlängert. Ring und Schrift habe ich in Affinity gestaltet.',
