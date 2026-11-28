@@ -149,14 +149,34 @@ const karo = (farbe: string) => {
 
 	{/* Reihenfolge: Standard „Neueste zuerst“ (per JavaScript umsortiert, Wahl im Browser gemerkt);
 	    ohne JavaScript stehen die Motive von 1 aufwärts. Entwürfe („Kommt bald“) bleiben immer unten. */}
-	<div class="sortierung" role="group" aria-label="Reihenfolge der Motive" hidden>
-		<button type="button" data-sortierung="neu" aria-pressed="true">Neueste zuerst</button>
-		<button type="button" data-sortierung="alt" aria-pressed="false">Älteste zuerst</button>
+	{/* Suche: filtert beim Tippen nach Titel, Bildbeschreibung, Nummer, Stichwörtern (motive.ts) und Gestalter;
+	    läuft nur im Browser, die Suche steht in der Adresse (/motive/?suche=vogel). Ohne JavaScript unsichtbar. */}
+	<div class="werkzeuge" hidden>
+		<div class="suche">
+			<label for="motiv-suche" class="sr-only">Motiv suchen</label>
+			<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m15.5 15.5 5 5" /></svg>
+			<input id="motiv-suche" type="search" placeholder="Motiv suchen, z. B. Hund, Vogel, Mut" autocomplete="off" enterkeyhint="search" />
+		</div>
+		<div class="sortierung" role="group" aria-label="Reihenfolge der Motive">
+			<button type="button" data-sortierung="neu" aria-pressed="true">Neueste zuerst</button>
+			<button type="button" data-sortierung="alt" aria-pressed="false">Älteste zuerst</button>
+		</div>
 	</div>
+	<p class="treffer" role="status" hidden></p>
 
 	<ul class="motive">
 		{motive.map((motiv) => (
-			<li id={motiv.anker} data-nr={motiv.bald ? undefined : motiv.nr}>
+			<li
+				id={motiv.anker}
+				data-nr={motiv.bald ? undefined : motiv.nr}
+				data-suche={[
+					motiv.bald ? '' : `${motiv.nr} motiv ${motiv.nr}`,
+					motiv.name,
+					motiv.alt,
+					...((motiv as { stichwoerter?: string[] }).stichwoerter ?? []),
+					gestalterVon((motiv as { gestalter?: string }).gestalter)?.name ?? '',
+				].join(' | ')}
+			>
 				{/* mehrere Fassungen: Knöpfe wechseln zwischen ihnen; ohne JavaScript stehen alle untereinander */}
 				{motiv.fassungen.map((f, i) => (
 					<div class="fassung" data-fassung={i}>
@@ -335,6 +355,10 @@ const karo = (farbe: string) => {
 		</div>
 	</dialog>
 
+	<p class="keine-treffer" hidden>
+		Kein Motiv gefunden. Vielleicht ist es bald dabei, <a href="#neuigkeiten">wir informieren dich gerne</a>.
+	</p>
+
 	<p class="mehr-motive">
 		Weitere Motive kommen bald. <a href="#neuigkeiten">Wir informieren dich gerne.</a>
 		{einreichenAktiv && <>Oder gestalte selbst eins: <a href="/motiv-einreichen/">Motiv einreichen</a>. <span class="entwurf">nur lokal</span></>}
@@ -346,7 +370,7 @@ const karo = (farbe: string) => {
 	// Läuft zuerst, damit Sprünge wie /motive/#motiv-5 danach an der richtigen Stelle landen.
 	{
 		const liste = document.querySelector<HTMLUListElement>('ul.motive');
-		const leiste = document.querySelector<HTMLElement>('.sortierung');
+		const leiste = document.querySelector<HTMLElement>('.werkzeuge');
 		if (liste && leiste) {
 			const fertige = [...liste.querySelectorAll<HTMLLIElement>(':scope > li[data-nr]')];
 			const entwuerfe = [...liste.querySelectorAll<HTMLLIElement>(':scope > li:not([data-nr])')];
@@ -354,7 +378,7 @@ const karo = (farbe: string) => {
 				const reihe = [...fertige].sort((a, b) => Number(a.dataset.nr) - Number(b.dataset.nr));
 				if (art === 'neu') reihe.reverse();
 				liste.append(...reihe, ...entwuerfe);
-				leiste.querySelectorAll('button').forEach((k) => k.setAttribute('aria-pressed', String(k.dataset.sortierung === art)));
+				leiste.querySelectorAll('.sortierung button').forEach((k) => k.setAttribute('aria-pressed', String((k as HTMLElement).dataset.sortierung === art)));
 			};
 			let art = 'neu';
 			try {
@@ -375,6 +399,60 @@ const karo = (farbe: string) => {
 				}
 			});
 			if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+
+			// Suche: alle Wörter müssen vorkommen (Groß/klein und ä/ae egal); eine reine Zahl sucht die Motivnummer
+			const feld = leiste.querySelector<HTMLInputElement>('#motiv-suche')!;
+			const treffer = document.querySelector<HTMLElement>('.treffer')!;
+			const keine = document.querySelector<HTMLElement>('.keine-treffer')!;
+			const alle = [...fertige, ...entwuerfe];
+			const norm = (s: string) =>
+				s
+					.toLowerCase()
+					.replace(/ä/g, 'ae')
+					.replace(/ö/g, 'oe')
+					.replace(/ü/g, 'ue')
+					.replace(/ß/g, 'ss')
+					.normalize('NFD')
+					.replace(/[̀-ͯ]/g, '');
+			const texte = new Map(alle.map((li) => [li, norm(li.dataset.suche ?? '')]));
+			let gezaehlt = false;
+			const suchen = () => {
+				const roh = feld.value.trim();
+				const woerter = norm(roh).split(/[\s,]+/).filter(Boolean);
+				let n = 0;
+				for (const li of alle) {
+					const passt =
+						!woerter.length ||
+						(/^\d+$/.test(roh) ? li.dataset.nr === roh : woerter.every((w) => texte.get(li)!.includes(w)));
+					li.hidden = !passt;
+					if (passt && li.dataset.nr) n++;
+				}
+				treffer.hidden = !woerter.length;
+				treffer.textContent = `${n} von ${fertige.length} Motiven`;
+				keine.hidden = !woerter.length || n > 0;
+				// Suche in der Adresse, damit man sie teilen kann (/motive/?suche=vogel)
+				const url = new URL(location.href);
+				if (roh) url.searchParams.set('suche', roh);
+				else url.searchParams.delete('suche');
+				history.replaceState(null, '', url);
+				// Statistik zählt nur, dass gesucht wurde, nicht wonach
+				if (woerter.length && !gezaehlt) {
+					gezaehlt = true;
+					window.umami?.track('motive-suche');
+				}
+			};
+			feld.addEventListener('input', suchen);
+			feld.addEventListener('keydown', (e) => {
+				if (e.key === 'Escape') {
+					feld.value = '';
+					suchen();
+				}
+			});
+			const vorgabe = new URLSearchParams(location.search).get('suche');
+			if (vorgabe) {
+				feld.value = vorgabe;
+				suchen();
+			}
 		}
 	}
 
@@ -702,16 +780,75 @@ const karo = (farbe: string) => {
 	}
 
 	/* Motive untereinander: Bild links, Links rechts; auf dem Handy Bild oben */
-	/* „Neueste zuerst / Älteste zuerst“: Knöpfe wie bei den Fassungen, rechtsbündig über der Liste */
-	.sortierung {
+	/* über der Liste: Suchfeld links, „Neueste zuerst / Älteste zuerst“ rechts; auf schmalen Bildschirmen untereinander */
+	.werkzeuge {
 		display: flex;
-		justify-content: flex-end;
-		gap: 0.4em;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.6em 1em;
 		margin: 2em 0 -1.2em;
 	}
 
-	.sortierung[hidden] {
+	.werkzeuge[hidden] {
 		display: none;
+	}
+
+	.suche {
+		position: relative;
+		flex: 1 1 15em;
+		max-width: 22em;
+	}
+
+	.suche svg {
+		position: absolute;
+		top: 50%;
+		left: 0.7em;
+		width: 1.05em;
+		height: 1.05em;
+		transform: translateY(-50%);
+		fill: none;
+		stroke: var(--grau);
+		stroke-width: 2;
+		stroke-linecap: round;
+		pointer-events: none;
+	}
+
+	.suche input {
+		box-sizing: border-box;
+		width: 100%;
+		padding: 0.45em 0.8em 0.45em 2.1em;
+		border: 1px solid #c4c4c4;
+		border-radius: 999px;
+		background: #ffffff;
+		color: var(--text);
+		font: inherit;
+		font-size: 0.95rem;
+	}
+
+	.suche input:focus {
+		border-color: var(--schwarz);
+		outline: 2px solid var(--gold);
+		outline-offset: 1px;
+	}
+
+	.sortierung {
+		display: flex;
+		gap: 0.4em;
+		margin-left: auto;
+	}
+
+	/* „3 von 40 Motiven“ unter dem Suchfeld */
+	.treffer {
+		margin: 1.6em 0 -1.2em;
+		color: var(--grau);
+		font-size: 0.9rem;
+	}
+
+	.keine-treffer {
+		margin: 0;
+		padding: 1.2em 0;
+		border-top: 1px solid #e5e5e5;
 	}
 
 	.sortierung button {

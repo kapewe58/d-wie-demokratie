@@ -5,6 +5,9 @@
 //   PDF (CMYK, Druckgröße):           public/download/d-wie-demokratie-motiv-<nr>.pdf
 // Ein Motiv erscheint erst, wenn sein PNG da ist; fehlen PDF oder Shop-Link, wird nur dieser Link weggelassen.
 // Jedes Motiv ist verlinkbar: /motive/#motiv-<nr> (alte Links /#motiv-<nr> leitet die Startseite weiter)
+// stichwoerter: für die Suche auf /motive/ (zusätzlich zu Titel, Bildbeschreibung und Nummer). Nur Besonderes, nichts,
+// was bei fast allen passt (Demokratie, Schwarz-Rot-Gold, Grundgesetz …). Dieselben Wörter dienen als Tags im Spreadshop
+// (dort zusätzlich die allgemeinen); übernommen am 2026-11-28 aus den Spreadshop-Tags, „Tiere“/„Vogel“ ergänzt.
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import type { ImageMetadata } from 'astro';
@@ -13,6 +16,7 @@ const liste = [
 	{
 		nr: 1,
 		name: 'D wie Demokratie',
+		stichwoerter: ['Logo', 'Oval', 'Deutschlandfahne', 'Deutschlandflagge', 'Länderkennzeichen', 'Auto', 'QR-Code'],
 		// Über dieses Motiv (vorerst nur lokal sichtbar, siehe src/data/gestalter.ts):
 		// gestalter = id aus gestalter.ts, entstehung = wie es entstanden ist (Ich-Form); Persönliches schreibt der Gestalter als Kommentar
 		gestalter: 'klaus-p-wolf',
@@ -54,6 +58,7 @@ const liste = [
 	{
 		nr: 2,
 		name: 'Drei Entchen für die Demokratie',
+		stichwoerter: ['Entchen', 'Enten', 'Badeenten', 'Tiere', 'Humor', 'lustig'],
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Den Umriss der Entchen habe ich nach meinen Vorgaben mit KI (ChatGPT) entwerfen lassen und das Motiv dann als Vektorgrafik in Affinity ausgearbeitet.',
 		kommentare: [
@@ -81,6 +86,7 @@ const liste = [
 	{
 		nr: 3,
 		name: 'Gesunde Vielfalt',
+		stichwoerter: ['Früchte', 'Obst', 'Erdbeeren', 'Aprikosen', 'Johannisbeeren', 'Vielfalt'],
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885813',
@@ -89,6 +95,7 @@ const liste = [
 	{
 		nr: 4,
 		name: 'Demokratie braucht Schutz',
+		stichwoerter: ['Schildkröte', 'Schutz', 'wehrhafte Demokratie', 'Tiere', 'Natur', 'Kupferstich', 'Vintage'],
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360885974',
@@ -97,6 +104,7 @@ const liste = [
 	{
 		nr: 5,
 		name: 'Demokratie braucht Stacheln',
+		stichwoerter: ['Igel', 'Stacheln', 'wehrhafte Demokratie', 'Tiere', 'Natur', 'Kupferstich', 'Vintage', 'niedlich'],
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		kommentare: [
@@ -113,6 +121,7 @@ const liste = [
 	{
 		nr: 6,
 		name: 'Demokratie braucht Schärfe',
+		stichwoerter: ['Chili', 'Chilischoten', 'scharf', 'Schärfe', 'Streitkultur', 'Meinungsfreiheit', 'Küche', 'Kupferstich', 'Vintage'],
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		kommentare: [
@@ -129,6 +138,7 @@ const liste = [
 	{
 		nr: 7,
 		name: 'Dackel lieben Demokratie',
+		stichwoerter: ['Dackel', 'Hund', 'Hunde', 'Teckel', 'Dackelliebe', 'Hundeliebhaber', 'Tiere', 'niedlich', 'lustig', 'Kupferstich'],
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		kommentare: [
@@ -145,6 +155,7 @@ const liste = [
 	{
 		nr: 8,
 		name: 'Farbe bekennen!',
+		stichwoerter: ['Dackel', 'Hund', 'Teckel', 'Farbeimer', 'Farbe bekennen', 'Hundeliebhaber', 'Tiere', 'lustig', 'Comic'],
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360886012',
@@ -153,6 +164,7 @@ const liste = [
 	{
 		nr: 9,
 		name: 'Alles wird Hut',
+		stichwoerter: ['Hut', 'Hüte', 'Zylinder', 'Baskenmütze', 'Strohhut', 'Alles wird gut', 'Zuversicht', 'Wortspiel', 'lustig'],
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		kommentare: [
@@ -169,6 +181,7 @@ const liste = [
 	{
 		nr: 10,
 		name: 'Keine Angst, Hasen!',
+		stichwoerter: ['Hasen', 'Hase', 'Kaninchen', 'Keine Angst', 'Mut', 'Freundschaft', 'Tiere', 'niedlich', 'lustig'],
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360886023',
@@ -177,6 +190,7 @@ const liste = [
 	{
 		nr: 11,
 		name: 'Entchen gut, alles gut',
+		stichwoerter: ['Entchen', 'Enten', 'Küken', 'Entenküken', 'Ende gut, alles gut', 'Zuversicht', 'Wortspiel', 'Tiere', 'niedlich', 'Kupferstich'],
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360861765',
@@ -185,6 +199,7 @@ const liste = [
 	{
 		nr: 12,
 		name: 'Hinschauen. Zuhören. Mund aufmachen.',
+		stichwoerter: ['Zivilcourage', 'drei Affen', 'Affen', 'Schimpansen', 'Meinungsfreiheit', 'Mitreden', 'drei Weisheiten', 'Tiere', 'Kupferstich'],
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Bild und Schrift habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und für den Druck in Photoshop hochgerechnet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360886052',
@@ -193,6 +208,7 @@ const liste = [
 	{
 		nr: 13,
 		name: 'DEMO',
+		stichwoerter: ['Demo', 'Demonstration', 'Banner', 'Megafon', 'Mitmachen', 'Humor', 'lustig'],
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Die laufenden Buchstaben habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und in Photoshop hochgerechnet. Schrift und weißen Hintergrund habe ich in Affinity gestaltet.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360870008',
@@ -205,6 +221,7 @@ const liste = [
 	{
 		nr: 14,
 		name: 'Schnurren war gestern',
+		stichwoerter: ['Tiger', 'Raubkatze', 'wehrhafte Demokratie', 'Biss', 'Mut', 'Haltung', 'Tiere', 'Holzschnitt'],
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Den Tiger habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und in Photoshop hochgerechnet. Die Schrift habe ich in Affinity gesetzt.',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360892112',
@@ -217,6 +234,7 @@ const liste = [
 	{
 		nr: 15,
 		name: 'Freie Fahrt für freie Kinder',
+		stichwoerter: ['Kinder', 'Fahrrad', 'Radfahren', 'Mädchen', 'Kinderrechte', 'Mut', 'Zukunft'],
 		gestalter: 'klaus-p-wolf',
 		entstehung: 'Das Mädchen auf dem Fahrrad habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und in Photoshop hochgerechnet. Ring, Schrift und weißen Hintergrund habe ich in Affinity gestaltet.',
 		kommentare: [
@@ -239,6 +257,7 @@ const liste = [
 		// (Arbeitsdateien: iCloud Drive/Affinity/D wie Demokratie/Motive/Motiv 16 – Hahn/).
 		nr: 16,
 		name: 'Aufwachen, Demokraten!',
+		stichwoerter: ['Hahn', 'Gockel', 'Vogel', 'Weckruf', 'Aufwachen', 'Mut', 'Haltung', 'Tiere'],
 		gestalter: 'klaus-p-wolf',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360934726',
 		entstehung: 'Den Hahn habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt, in Photoshop hochgerechnet und den Pfahl mit der KI-Funktion von Photoshop verlängert. Ring und Schrift habe ich in Affinity gestaltet.',
