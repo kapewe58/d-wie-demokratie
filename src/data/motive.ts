@@ -275,6 +275,29 @@ const liste = [
 			{ endung: '-transparent', name: 'Für helle Produkte', shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360934678', text: 'Motiv mit transparentem Hintergrund.' },
 		],
 	},
+	{
+		// 2026-11-28, erstes Motiv mit dem Ring in Schwarz-Rot-Gold (seitdem auch 15 und 16)
+		// (Arbeitsdateien: iCloud Drive/Affinity/D wie Demokratie/Motive/Motiv 17 – Vögel/).
+		nr: 17,
+		name: 'Amsel, Gimpel und Pirol',
+		stichwoerter: ['Amsel', 'Gimpel', 'Pirol', 'Vogel', 'Vögel', 'Singvögel', 'Gesang', 'Zusammenhalt', 'Vielfalt', 'Natur', 'Tiere'],
+		gestalter: 'klaus-p-wolf',
+		entstehung: 'Die drei Vögel habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und in Photoshop hochgerechnet und bereinigt. Ring und Schrift habe ich in Affinity gestaltet.',
+		kommentare: [
+			{
+				name: 'Klaus P. Wolf',
+				zusatz: 'Initiator von d-wie-demokratie.de, München',
+				text: 'Als Tierfotograf hätte ich in der Natur dieses Motiv nie bekommen. Mit ChatGPT habe ich es geschafft. Mit diesem Prompt:',
+				anhang: 'motiv-17-prompt',
+				seit: '2026-11-28',
+			},
+		],
+		alt: 'Eine schwarze Amsel, ein Gimpel mit roter Brust und ein goldgelber Pirol sitzen nebeneinander auf einem Zweig mit hellgrünen Blättern und singen, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Amsel, Gimpel und Pirol“, unten d-wie-demokratie.de, in einem runden Abzeichen mit Rand in Schwarz, Rot und Gold.',
+		varianten: [
+			{ endung: '', name: 'Für alle Produkte', stoff: '#71839b', text: 'Motiv mit weißem Hintergrund.' },
+			{ endung: '-transparent', name: 'Für helle Produkte', text: 'Motiv mit transparentem Hintergrund.' },
+		],
+	},
 	// Entwürfe („Kommt bald“): noch ohne Nummer, Download und Shop; stehen unter den fertigen Motiven.
 	// id = Sprungmarke (/motive/#<id>), Vorschaubild src/assets/motive/bald/<id>.png.
 	// Regel: Eine Nummer bekommt ein Motiv erst, wenn es fertig ist (Druck-PNG da), und zwar die nächste freie,
@@ -330,5 +353,7 @@ export const shopAktiv = true;
 export const kommentareAktiv = true;
 // öffentlich wie beim Verbündeten-Formular: der Schlüssel erlaubt nur das Anlegen von Kommentaren als Leads
 export const kommentarUrl = 'https://intranet.d-wie-demokratie.de/api/v1/LeadCapture/a6d7fbe06ebdc04426a9ec3ec01ddc1f';
-export type Kommentar = { name: string; zusatz?: string; text: string; seit: string };
+// anhang: Name einer Markdown-Datei in src/data/kommentare/ (ohne .md), wird unter dem Text angezeigt (z. B. ein Prompt).
+// Kommentare über 10 Zeilen zeigt /motive/ gekürzt mit „Mehr anzeigen“ (gemessen im Browser).
+export type Kommentar = { name: string; zusatz?: string; text: string; seit: string; anhang?: string };
 export const shopStart = 'https://d-wie-demokratie.myspreadshop.de/';

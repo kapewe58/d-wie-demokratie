@@ -10,6 +10,9 @@ import { gestalterAktiv, gestalterVon } from '../data/gestalter';
 // „Über dieses Motiv“ (kleines i am Titel): sobald ein Gestalter eingetragen ist und gestalterAktiv (vorerst nur lokal);
 const zeigeInfo = (m: unknown) => gestalterAktiv && !!(m as { gestalter?: string }).gestalter;
 import { motive, pdfLink, shopAktiv, shopStart, stoff, kommentareAktiv, kommentarUrl, type Kommentar } from '../data/motive';
+// Anhänge zu Kommentaren (Markdown, z. B. der Prompt eines Motivs), Feld `anhang` in motive.ts
+const anhaenge = import.meta.glob<{ Content: (props: Record<string, never>) => unknown }>('../data/kommentare/*.md', { eager: true });
+const Anhang = (name: string) => anhaenge[`../data/kommentare/${name}.md`]?.Content;
 // Kommentare eines Motivs; lokal zeigt Motiv 1 einen Beispiel-Kommentar, damit man die Darstellung sieht
 const kommentareVon = (m: { nr: number }): (Kommentar & { beispiel?: boolean })[] => {
 	const echte = (m as { kommentare?: Kommentar[] }).kommentare ?? [];
@@ -285,12 +288,13 @@ const karo = (farbe: string) => {
 							<ul class="kommentar-liste">
 								{/* Jeder Kommentar hat eine eigene Adresse /motive/#motiv-<nr>-kommentar-<n> (n = Reihenfolge in
 								    `kommentare`, daher neue Kommentare immer HINTEN anhängen, sonst zeigen alte Links falsch) */}
-								{kommentareVon(motiv).map((k, i) => (
+								{kommentareVon(motiv).map((k, i) => { const Inhalt = k.anhang ? Anhang(k.anhang) : undefined; return (
 									<li id={`${motiv.anker}-kommentar-${i + 1}`}>
 										{/* 🔗 rechtsbündig am Ende der letzten Zeile: kopiert den Link (Handy: Teilen-Menü);
-										    am Computer zeigt es beim Darüberfahren „Link zu diesem Kommentar kopieren“ */}
-										<blockquote>
-											„{k.text}“<button
+										    am Computer zeigt es beim Darüberfahren „Link zu diesem Kommentar kopieren“.
+										    Kommentare über 10 Zeilen kürzt das Skript unten („Mehr anzeigen“, 🔗 daneben). */}
+										<blockquote id={`${motiv.anker}-kommentar-${i + 1}-text`}>
+											„{k.text}{!Inhalt && '“'}{Inhalt && <div class="anhang"><Inhalt /></div>}<button
 												type="button"
 												class="kommentar-link"
 												data-motiv={`${motiv.nr} – ${motiv.name}`}
@@ -303,7 +307,7 @@ const karo = (farbe: string) => {
 											{k.beispiel && <span class="entwurf">Beispiel, nur lokal</span>}
 										</p>
 									</li>
-								))}
+								); })}
 							</ul>
 						)}
 						<div class="kommentar-schreiben">
@@ -521,6 +525,74 @@ const karo = (farbe: string) => {
 			}
 		});
 	}
+
+	// Lange Kommentare (mehr als 10 Zeilen): nur 10 Zeilen, rechts darunter „Mehr anzeigen“ (🔗 daneben).
+	// Jeder Klick zeigt 30 Zeilen mehr („Noch mehr anzeigen“), „Weniger anzeigen“ klappt immer ganz auf 10 Zeilen zurück.
+	// Gemessen wird im Browser, sobald der Kommentarbereich sichtbar ist und wenn sich die Breite ändert
+	// (Handy kürzt früher als Computer). Ohne JavaScript ist alles ganz zu sehen.
+	const ANFANG = 10;
+	const SCHRITT = 30;
+	const zeigeZeilen = (text: HTMLElement, zeilen: number) => {
+		const zeile = text.nextElementSibling as HTMLElement;
+		const mehr = zeile.querySelector<HTMLButtonElement>('.kommentar-mehr')!;
+		const weniger = zeile.querySelector<HTMLButtonElement>('.kommentar-weniger')!;
+		text.dataset.zeilen = String(zeilen);
+		text.style.setProperty('--zeilen', String(zeilen));
+		text.classList.add('zu');
+		const ende = text.scrollHeight <= text.clientHeight + 2;
+		text.classList.toggle('zu', !ende);
+		mehr.hidden = ende;
+		mehr.textContent = zeilen > ANFANG ? 'Noch mehr anzeigen' : 'Mehr anzeigen';
+		weniger.hidden = zeilen === ANFANG;
+		mehr.setAttribute('aria-expanded', String(ende));
+		return ende;
+	};
+	const pruefeKommentar = (text: HTMLElement) => {
+		let zeile = text.nextElementSibling as HTMLElement | null;
+		if (!zeile?.classList.contains('mehr-zeile')) {
+			zeile = document.createElement('p');
+			zeile.className = 'mehr-zeile';
+			zeile.hidden = true;
+			const knopf = (klasse: string, beschriftung: string) => {
+				const b = document.createElement('button');
+				b.type = 'button';
+				b.className = klasse;
+				b.textContent = beschriftung;
+				b.setAttribute('aria-controls', text.id);
+				zeile!.append(b);
+				return b;
+			};
+			knopf('kommentar-mehr', 'Mehr anzeigen').addEventListener('click', () =>
+				zeigeZeilen(text, Number(text.dataset.zeilen || ANFANG) + SCHRITT),
+			);
+			knopf('kommentar-weniger', 'Weniger anzeigen').addEventListener('click', () => {
+				zeigeZeilen(text, ANFANG);
+				// nicht irgendwo mitten im langen Text stehen bleiben
+				if (text.getBoundingClientRect().top < 0) text.closest('li')?.scrollIntoView({ block: 'start' });
+			});
+			text.after(zeile);
+		}
+		const link = text.closest('li')!.querySelector('.kommentar-link');
+		// schon weiter aufgeklappt: nur prüfen, ob das Ende jetzt erreicht ist
+		if (Number(text.dataset.zeilen) > ANFANG) {
+			zeigeZeilen(text, Number(text.dataset.zeilen));
+			return;
+		}
+		const lang = !zeigeZeilen(text, ANFANG);
+		zeile.hidden = !lang;
+		if (!lang) text.classList.remove('zu');
+		if (link) (lang ? zeile : text).append(link);
+	};
+	const breiten = new WeakMap<Element, number>();
+	const beobachter = new ResizeObserver((eintraege) => {
+		for (const e of eintraege) {
+			const breite = Math.round(e.contentRect.width);
+			if (!breite || breiten.get(e.target) === breite) continue;
+			breiten.set(e.target, breite);
+			e.target.querySelectorAll<HTMLElement>('.kommentar-liste blockquote').forEach(pruefeKommentar);
+		}
+	});
+	document.querySelectorAll('.kommentare').forEach((bereich) => beobachter.observe(bereich));
 
 	// Link zu einem Kommentar (/motive/#motiv-5-kommentar-1): Bereich aufklappen, hinscrollen, kurz hervorheben
 	function zumKommentar() {
@@ -1215,6 +1287,81 @@ const karo = (farbe: string) => {
 		content: '';
 		display: block;
 		clear: both;
+	}
+
+	/* Langer Kommentar, gekürzt: --zeilen Zeilen (10, dann je 30 mehr), die letzten anderthalb Zeilen weich ausgeblendet */
+	.kommentar-liste blockquote:global(.zu) {
+		max-height: calc(var(--zeilen, 10) * 1lh);
+		overflow: hidden;
+		-webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 1.5lh), transparent);
+		mask-image: linear-gradient(to bottom, #000 calc(100% - 1.5lh), transparent);
+	}
+
+	/* rechts unter dem gekürzten Kommentar: „Mehr anzeigen“ und daneben das 🔗 */
+	.kommentar-liste :global(.mehr-zeile) {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		gap: 0.6em;
+		margin: 0.2em 0 0;
+	}
+
+	.kommentar-liste :global(.mehr-zeile[hidden]) {
+		display: none;
+	}
+
+	.kommentar-liste :global(.mehr-zeile) .kommentar-link {
+		float: none;
+		margin-left: 0;
+	}
+
+	.kommentar-liste :global(:is(.kommentar-mehr, .kommentar-weniger)) {
+		padding: 0;
+		border: 0;
+		background: none;
+		color: inherit;
+		font: inherit;
+		cursor: pointer;
+	}
+
+	.kommentar-liste :global(.kommentar-mehr)::after {
+		content: ' ▾';
+	}
+
+	.kommentar-liste :global(.kommentar-weniger)::after {
+		content: ' ▴';
+	}
+
+	.kommentar-liste :global(:is(.kommentar-mehr, .kommentar-weniger)[hidden]) {
+		display: none;
+	}
+
+	.kommentar-liste :global(:is(.kommentar-mehr, .kommentar-weniger):hover) {
+		text-decoration: underline;
+	}
+
+	/* Anhang (z. B. Prompt): abgesetzt unter dem Kommentar, Überschriften klein */
+	.kommentar-liste .anhang {
+		margin-top: 0.6em;
+		padding-left: 0.8em;
+		font-size: 0.9rem;
+	}
+
+	.kommentar-liste .anhang :is(h4, h5, h6) {
+		margin: 1em 0 0.3em;
+		font-size: 1em;
+	}
+
+	.kommentar-liste .anhang h4 {
+		margin-top: 0;
+	}
+
+	.kommentar-liste .anhang :is(p, ul, ol) {
+		margin: 0.4em 0;
+	}
+
+	.kommentar-liste .anhang :is(ul, ol) {
+		padding-left: 1.3em;
 	}
 
 	/* Kommentar, zu dem ein Link geführt hat: kurz gelb hinterlegt */
