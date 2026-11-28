@@ -17,7 +17,7 @@ import fotoReichstag from '../assets/flagge/1990-reichstag.jpg';
 // „foto: true“ blendet beim Bild den Hinweis „KI-generiert“ ein (Pflicht nach Art. 50 KI-Verordnung für KI-Fotos;
 // seit 2026-11-21 gibt es keine KI-Fotos mehr, später echte Fotos von Shirts usw. hier ergänzen).
 const querformate = import.meta.glob<{ default: ImageMetadata }>('../assets/slider/motiv-*.jpg', { eager: true });
-const bilder: { src: ImageMetadata; motiv: number; foto?: boolean; alt: string; text: string }[] = motive
+const bilder: { src: ImageMetadata; motiv: number; foto?: boolean; alt: string; text: string; video?: string }[] = motive
 	.filter((m) => !m.bald && querformate[`../assets/slider/motiv-${m.nr}.jpg`])
 	// neuestes Motiv zuerst (wie die Vorschau und /motive/)
 	.sort((a, b) => b.nr - a.nr)
@@ -26,6 +26,8 @@ const bilder: { src: ImageMetadata; motiv: number; foto?: boolean; alt: string; 
 		motiv: m.nr,
 		alt: m.alt,
 		text: `Motiv ${m.nr} von ${motive.filter((x) => !x.bald).length}`,
+		// Video mit Ton (Feld `video` in motive.ts): ▶ auf dem Bild, startet erst beim Klick
+		video: (m as { video?: string }).video,
 	}));
 const sekunden = 5;
 
@@ -86,15 +88,23 @@ const zitatSekunden = 8;
 		{bilder.map((bild, i) => (
 			<div class:list={['folie', { sichtbar: i === 0 }]} data-foto={bild.foto ? '' : undefined}>
 				{/* nur das Bild ist ein Link; die Zeile darunter nicht, damit man neben den Pfeilen nicht versehentlich zu den Motiven springt */}
-				<a href={`/motive/#motiv-${bild.motiv}`} tabindex={i === 0 ? undefined : -1}>
-					<Image
-					src={bild.src}
-					alt={bild.alt}
-					widths={[400, 700, 1360]}
-					sizes="(max-width: 680px) 100vw, 680px"
-						loading={i === 0 ? 'eager' : 'lazy'}
-					/>
-				</a>
+				<div class="bildfeld">
+					<a href={`/motive/#motiv-${bild.motiv}`} tabindex={i === 0 ? undefined : -1}>
+						<Image
+						src={bild.src}
+						alt={bild.alt}
+						widths={[400, 700, 1360]}
+						sizes="(max-width: 680px) 100vw, 680px"
+							loading={i === 0 ? 'eager' : 'lazy'}
+						/>
+					</a>
+					{/* ▶ nur bei Motiven mit Video; das Video wird erst beim Klick geladen und spielt mit Ton an dieser Stelle */}
+					{bild.video && (
+						<button type="button" class="abspielen" data-video={bild.video} tabindex={i === 0 ? undefined : -1} aria-label={`Video mit Ton abspielen: Motiv ${bild.motiv}`}>
+							<span class="play" aria-hidden="true"></span>
+						</button>
+					)}
+				</div>
 				<p class="folie-text">{bild.text}</p>
 			</div>
 		))}
@@ -201,13 +211,26 @@ const zitatSekunden = 8;
 		const hinweis = document.querySelector<HTMLElement>('.ki-hinweis');
 		let aktuell = 0;
 
+		// Video (nur bei Motiven mit ▶): beim Blättern anhalten und wieder das Bild zeigen
+		let video: HTMLVideoElement | null = null;
+		const videoWeg = () => {
+			video?.pause();
+			video?.remove();
+			video = null;
+			slider.querySelectorAll('.bildfeld.spielt').forEach((f) => f.classList.remove('spielt'));
+			slider.querySelectorAll<HTMLElement>('.abspielen').forEach((k) => (k.hidden = false));
+		};
+
 		const zeige = (n: number) => {
+			videoWeg();
 			const fokusDrin = links[aktuell] === document.activeElement;
 			folien[aktuell].classList.remove('sichtbar');
 			links[aktuell].tabIndex = -1;
 			aktuell = (n + folien.length) % folien.length;
 			folien[aktuell].classList.add('sichtbar');
 			links[aktuell].removeAttribute('tabindex');
+			// ▶ nur auf dem sichtbaren Bild per Tab erreichbar
+			folien.forEach((f, j) => f.querySelector('.abspielen')?.setAttribute('tabindex', j === aktuell ? '0' : '-1'));
 			if (fokusDrin) links[aktuell].focus();
 			if (hinweis) hinweis.hidden = !('foto' in folien[aktuell].dataset);
 		};
@@ -231,6 +254,27 @@ const zitatSekunden = 8;
 			else if (e.key === 'ArrowLeft') blaettern(-1);
 		});
 		if (folien.length > 1) pfeile.hidden = false;
+
+		// ▶: Wechsel anhalten, Video an Stelle des Bildes mit Ton abspielen; am Ende bleibt das letzte Bild
+		// (= das Motiv) stehen und ▶ erscheint wieder. Klick aufs laufende Video hält an bzw. spielt weiter.
+		for (const knopf of slider.querySelectorAll<HTMLButtonElement>('.abspielen')) {
+			knopf.addEventListener('click', () => {
+				clearInterval(takt);
+				videoWeg();
+				const v = document.createElement('video');
+				v.src = knopf.dataset.video!;
+				v.playsInline = true;
+				v.setAttribute('aria-label', knopf.getAttribute('aria-label') ?? '');
+				v.addEventListener('ended', () => (knopf.hidden = false));
+				v.addEventListener('click', () => (v.paused ? v.play() : v.pause()));
+				const feld = knopf.closest('.bildfeld')!;
+				feld.append(v);
+				feld.classList.add('spielt');
+				video = v;
+				knopf.hidden = true;
+				v.play();
+			});
+		}
 	}
 
 	// Zitate im Flaggen-Kasten: wechseln wie die Fotos, ein Klick auf einen Punkt hält an
@@ -333,6 +377,98 @@ const zitatSekunden = 8;
 		height: auto;
 		aspect-ratio: 3 / 2;
 		object-fit: cover;
+	}
+
+	/* Bild mit ▶ für Motive mit Video; das Video liegt beim Abspielen genau über dem Bild (beide 3:2) */
+	.bildfeld {
+		position: relative;
+	}
+
+	.bildfeld :global(video) {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		background: #fff;
+		cursor: pointer;
+		/* Videoweiß ist nach der Komprimierung minimal grau; so verschmilzt es mit dem Weiß der Seite */
+		mix-blend-mode: multiply;
+		/* Chrome zeigt Videoweiß etwas dunkler als Seitenweiß an; leicht aufhellen, damit kein grauer Kasten bleibt */
+		filter: brightness(1.04);
+	}
+
+	/* solange das Video da ist, das starre Bild darunter ausblenden (sonst scheint es durch) */
+	.bildfeld.spielt img {
+		visibility: hidden;
+	}
+
+	/* Weiß dahinter, damit „multiply“ das Videoweiß zu reinem Weiß macht (die Folie ist eine eigene Ebene) */
+	.bildfeld.spielt {
+		background: #fff;
+	}
+
+	/* ▶ schräg rechts unten außen am Ring, wie ein Anstecker am Abzeichen. Das Abzeichen im 1200 × 800-Bild:
+	   Mitte in der Bildmitte, Radius 380 px = 31,67 % der Breite bzw. 47,5 % der Höhe; Knopfmitte auf 45° außerhalb des Rings,
+	   am Computer gut 20 px Luft, auf dem Handy etwas weniger, damit der Knopf nicht an die Pfeile darunter stößt, so passt es bei jeder Bildbreite */
+	.abspielen {
+		position: absolute;
+		left: calc(50% + 22.39% + clamp(18px, 4.4%, 30px));
+		top: calc(50% + 33.59% + clamp(18px, 6.6%, 30px));
+		transform: translate(-50%, -50%);
+		z-index: 1;
+		padding: 0;
+		border: 0;
+		background: none;
+		cursor: pointer;
+	}
+
+	.abspielen[hidden] {
+		display: none;
+	}
+
+	/* runder Knopf, weiß mit rotem Dreieck */
+	.play {
+		position: relative;
+		display: block;
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.92);
+		box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+		transition: transform 0.2s;
+	}
+
+	.play::after {
+		content: '';
+		position: absolute;
+		left: 16px;
+		top: 12px;
+		border-style: solid;
+		border-width: 8px 0 8px 13px;
+		border-color: transparent transparent transparent var(--rot);
+	}
+
+	.abspielen:hover .play,
+	.abspielen:focus-visible .play {
+		transform: scale(1.1);
+	}
+
+	/* nur am Computer: beim Darüberfahren „Video mit Ton abspielen“ */
+	@media (hover: hover) {
+		.abspielen:hover::after {
+			content: 'Video mit Ton abspielen';
+			position: absolute;
+			right: 0;
+			bottom: calc(100% + 6px);
+			padding: 0.25em 0.5em;
+			border-radius: 4px;
+			background: var(--schwarz);
+			color: #fff;
+			font-size: 0.8rem;
+			white-space: nowrap;
+			pointer-events: none;
+		}
 	}
 
 	/* Zeile unter dem Bild, z. B. „Motiv 3 von 14“ (kein Link) */

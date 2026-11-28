@@ -257,6 +257,8 @@ const liste = [
 		// (Arbeitsdateien: iCloud Drive/Affinity/D wie Demokratie/Motive/Motiv 16 – Hahn/).
 		nr: 16,
 		name: 'Aufwachen, Demokraten!',
+		// Video mit Ton (1200 × 800 wie das Startseiten-Bild, Ende = Motivpose): ▶ auf der Startseite und in der Großansicht
+		video: '/video/motiv-16.mp4',
 		stichwoerter: ['Hahn', 'Gockel', 'Vogel', 'Weckruf', 'Aufwachen', 'Krähen', 'Wachsam', 'Engagement', 'Freiheit', 'Mut', 'Haltung', 'Tiere', 'Bauernhof', 'Illustration'],
 		gestalter: 'klaus-p-wolf',
 		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360940165',

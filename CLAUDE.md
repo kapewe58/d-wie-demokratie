@@ -46,9 +46,15 @@ Push to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`), which b
 
 For each new motif Klaus posts a status on WhatsApp: `python3 scripts/whatsapp-status.py <nr>` builds `~/Downloads/whatsapp-status-motiv-<nr>.jpg` (1080 × 1920; black-red-gold stripes, „Neues Motiv“, title in red from `motive.ts`, motif from the first PNG, „Kostenlos herunterladen oder im Non-Profit-Shop bestellen: d-wie-demokratie.de“). Caption link: `https://d-wie-demokratie.de/motive/#motiv-<nr>`.
 
-## Instagram post image
+## Motif videos on the website
 
-Account @d_wie_demokratie (since 2026-11-28). `python3 scripts/instagram-beitrag.py <nr>` builds `~/Downloads/instagram-motiv-<nr>.jpg` (1080 × 1350, 4:5; stripes, motif large, „Kostenlos herunterladen oder im Non-Profit-Shop bestellen – Link im Profil“; no extra title or URL, both are in the motif). When posting choose 4:5 in the crop step, switch on the AI label and use the motif's `alt` as alt text; caption: title, one or two sentences, download/shop note, hashtags (no politically loaded ones).
+A motif can have a video (field `video` in `motive.ts`, file in `public/video/motiv-<nr>.mp4`, 1200 × 800 like the slider image, H.264 + AAC with sound, ~2–3 MB, last frame = the static motif). The play button is always a small white circle with a red triangle docked diagonally at the bottom right just outside the ring (like a pin on the badge; landing page by CSS percentages, Großansicht positioned by script from image/video size, ring radius = 47.5 % of the square); on hover (computer only) a dark label „Video mit Ton abspielen“. Landing page: click stops the slider and plays the video in place with sound (loaded only on click; the still image is hidden meanwhile); at the end the motif stays and ▶ comes back; paging removes the video. Motive page: ▶ on the first version's thumbnail opens the Großansicht and plays at once (the hover magnifier moves to bottom left there); in the Großansicht ▶ plays the video; on the thumbnail ▶ sits in the bottom-right corner (cropped square on white). Chrome shows video white slightly darker than page white, hence `filter: brightness(1.04)` plus `mix-blend-mode: multiply` on the video. Self-hosted, no third party, nothing counted. Built with `scripts/reel/` (`python3 reel_hahn.py web` + `swift kodieren2.swift … 1200 800 1800000 …`); since 2026-11-28 Motiv 16.
+
+## Instagram
+
+Account @d_wie_demokratie (since 2026-11-28). Klaus posts **only Reels** there, no image posts (decided 2026-11-28; the first two image posts were deleted). Reel of Motiv 16: KI video (Kling in Adobe Firefly) of the freed animal composited into the fixed ring and text with `scripts/reel/` (Python frames + Swift/AVFoundation, no ffmpeg on this Intel Mac); videos over ~10 MB Klaus selects himself in the upload dialog.
+
+Older image-post helper (kept for other uses): `python3 scripts/instagram-beitrag.py <nr>` builds `~/Downloads/instagram-motiv-<nr>.jpg` (1080 × 1350, 4:5; stripes, motif large, „Kostenlos herunterladen oder im Non-Profit-Shop bestellen – Link im Profil“; no extra title or URL, both are in the motif). When posting choose 4:5 in the crop step, switch on the AI label and use the motif's `alt` as alt text; caption: title, one or two sentences, download/shop note, hashtags (no politically loaded ones).
 
 ## Statistics
 

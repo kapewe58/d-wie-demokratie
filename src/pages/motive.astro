@@ -189,6 +189,7 @@ const karo = (farbe: string) => {
 							data-titel={`${motiv.bald ? '' : `Motiv ${motiv.nr}: `}${motiv.name}${motiv.fassungen.length > 1 && f.name ? ` – ${f.name}` : ''}`}
 							data-shop={!motiv.bald && shopAktiv ? (f.shop ?? motiv.shop) : undefined}
 							data-nr={motiv.nr}
+							data-video={i === 0 ? (motiv as { video?: string }).video : undefined}
 							data-stoff={(f.stoff ?? stoff[f.endung] ?? einzelStoff(motiv)) ? karo((f.stoff ?? stoff[f.endung] ?? einzelStoff(motiv))!) : grundStoff}
 						>
 							<Image
@@ -201,6 +202,7 @@ const karo = (farbe: string) => {
 								style={(f.stoff ?? stoff[f.endung] ?? einzelStoff(motiv)) ? `background: ${karo((f.stoff ?? stoff[f.endung] ?? einzelStoff(motiv))!)}` : undefined}
 							/>
 							<span class="lupe" aria-hidden="true">⤢</span>
+							{i === 0 && (motiv as { video?: string }).video && <span class="video-marke" aria-hidden="true"></span>}
 						</a>
 						<div>
 							<h2>
@@ -347,7 +349,14 @@ const karo = (farbe: string) => {
 
 	<dialog class="gross-ansicht" aria-label="Motiv in groß">
 		<button type="button" class="schliessen" aria-label="Schließen">×</button>
-		<img alt="" />
+		<!-- Bild; bei Motiven mit Video zusätzlich ▶, das Video ersetzt dann das Bild -->
+		<div class="gross-bild">
+			<img alt="" />
+			<video playsinline hidden></video>
+			<button type="button" class="abspielen" aria-label="Video mit Ton abspielen" hidden>
+				<span class="play" aria-hidden="true"></span>
+			</button>
+		</div>
 		<div class="gross-leiste">
 			<button type="button" class="pfeil zurueck" aria-label="Vorheriges Motiv">‹</button>
 			<!-- Titel und darunter der Shop-Knopf (Ziel setzt das Skript je Motiv; ohne Shop verborgen) -->
@@ -705,12 +714,23 @@ const karo = (farbe: string) => {
 	const fenster = document.querySelector<HTMLDialogElement>('.gross-ansicht');
 	if (fenster?.showModal) {
 		const bild = fenster.querySelector('img')!;
+		const video = fenster.querySelector('video')!;
+		const abspielen = fenster.querySelector<HTMLButtonElement>('.abspielen')!;
+		const videoAus = () => {
+			video.pause();
+			video.hidden = true;
+			video.removeAttribute('src');
+			bild.hidden = false;
+		};
 		const titel = fenster.querySelector('.gross-titel')!;
 		const shop = fenster.querySelector<HTMLAnchorElement>('.gross-shop')!;
 		// alle Fassungen der Reihe nach, jede wie ein eigenes Motiv (Motiv 1 mit allen Fassungen, dann Motiv 2 …)
 		const alle = [...document.querySelectorAll<HTMLAnchorElement>('.gross-link')];
 		let nr = 0;
 		const zeigen = (link: HTMLAnchorElement) => {
+			videoAus();
+			abspielen.hidden = !link.dataset.video;
+			abspielen.dataset.video = link.dataset.video ?? '';
 			bild.src = link.href;
 			bild.alt = link.querySelector('img')?.alt ?? '';
 			bild.style.background = link.dataset.stoff || '#fff';
@@ -720,6 +740,30 @@ const karo = (farbe: string) => {
 				shop.href = link.dataset.shop;
 				shop.dataset.umamiEventMotiv = link.dataset.nr ?? '';
 			}
+		};
+		// ▶ schräg rechts unten an den Ring setzen: Abzeichen-Radius im Motiv-PNG = 50 % der Seite (Ring bis an den Rand),
+		// im Video 47,5 % (1200 × 800 quadratisch zugeschnitten, Ring 760 px)
+		const platzieren = () => {
+			const el = video.hidden ? bild : video;
+			const feld = abspielen.parentElement!.getBoundingClientRect();
+			const r = el.getBoundingClientRect();
+			if (!r.width) return;
+			const p = parseFloat(getComputedStyle(el).paddingLeft) || 0;
+			const seite = Math.min(r.width, r.height) - 2 * p;
+			const abstand = 0.7071 * ((el === video ? 0.475 : 0.5) * seite + 44);
+			abspielen.style.setProperty('--x', `${r.left - feld.left + r.width / 2 + abstand}px`);
+			abspielen.style.setProperty('--y', `${r.top - feld.top + r.height / 2 + abstand}px`);
+			abspielen.style.setProperty('--verschieben', 'translate(-50%, -50%)');
+			abspielen.style.right = abspielen.style.bottom = 'auto';
+		};
+		bild.addEventListener('load', platzieren);
+		addEventListener('resize', platzieren);
+		const spielen = () => {
+			video.src = abspielen.dataset.video!;
+			bild.hidden = true;
+			video.hidden = false;
+			abspielen.hidden = true;
+			video.play();
 		};
 		const blaettern = (schritt: number) => {
 			nr = (nr + schritt + alle.length) % alle.length;
@@ -731,12 +775,24 @@ const karo = (farbe: string) => {
 				nr = alle.indexOf(link);
 				zeigen(link);
 				fenster.showModal();
+				if (bild.complete) platzieren();
+				// ▶ im Vorschaubild: Großansicht öffnen und das Video gleich abspielen
+				if ((e.target as Element).closest('.video-marke')) spielen();
 			});
 		}
 		fenster.addEventListener('click', (e) => {
-			const pfeil = (e.target as Element).closest<HTMLElement>('.pfeil');
+			const ziel = e.target as Element;
+			const pfeil = ziel.closest<HTMLElement>('.pfeil');
 			if (pfeil) blaettern(pfeil.classList.contains('weiter') ? 1 : -1);
+			// ▶: Video an Stelle des Bildes mit Ton; am Ende bleibt das letzte Bild (das Motiv) stehen, ▶ erscheint wieder
+			else if (ziel.closest('.abspielen')) spielen();
+			// Klick aufs Video hält an bzw. spielt weiter, statt das Fenster zu schließen
+			else if (ziel === video) video.paused ? video.play() : video.pause();
 			else fenster.close();
+		});
+		video.addEventListener('ended', () => {
+			abspielen.hidden = false;
+			platzieren();
 		});
 		fenster.addEventListener('keydown', (e) => {
 			if (e.key === 'ArrowRight') blaettern(1);
@@ -751,6 +807,7 @@ const karo = (farbe: string) => {
 		});
 		// Beim Schließen dorthin, wo man in der Großansicht zuletzt war: Motiv in die Mitte holen und dessen Fassung zeigen
 		fenster.addEventListener('close', () => {
+			videoAus();
 			bild.removeAttribute('src');
 			const link = alle[nr];
 			const fassung = link.closest<HTMLElement>('.fassung');
@@ -1490,6 +1547,132 @@ const karo = (farbe: string) => {
 		opacity: 1;
 	}
 
+	/* ▶ im Vorschaubild: Motiv hat ein Video (immer sichtbar, rechts unten in der Ecke, außerhalb des runden Motivs);
+	   ein Klick darauf öffnet die Großansicht und spielt das Video gleich ab */
+	.video-marke {
+		position: absolute;
+		right: 3px;
+		bottom: 3px;
+		width: 28px;
+		height: 28px;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.92);
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+		cursor: pointer;
+		transition: transform 0.2s;
+	}
+
+	.video-marke::before {
+		content: '';
+		position: absolute;
+		left: 11px;
+		top: 8px;
+		border-style: solid;
+		border-width: 6px 0 6px 10px;
+		border-color: transparent transparent transparent var(--rot);
+	}
+
+	.video-marke:hover {
+		transform: scale(1.1);
+	}
+
+	/* bei Motiven mit Video rückt die Lupe nach links unten */
+	.gross-link:has(.video-marke) .lupe {
+		right: auto;
+		left: 6px;
+	}
+
+	/* nur am Computer: beim Darüberfahren „Video mit Ton abspielen“ */
+	@media (hover: hover) {
+		.video-marke:hover::after,
+		.abspielen:hover::after {
+			content: 'Video mit Ton abspielen';
+			position: absolute;
+			right: 0;
+			bottom: calc(100% + 6px);
+			padding: 0.25em 0.5em;
+			border-radius: 4px;
+			background: var(--schwarz);
+			color: #fff;
+			font-size: 0.8rem;
+			line-height: 1.3;
+			white-space: nowrap;
+			pointer-events: none;
+		}
+	}
+
+	/* Großansicht: Bild bzw. Video mit ▶ rechts unten */
+	.gross-bild {
+		position: relative;
+	}
+
+	/* quadratisch zugeschnitten (das Video ist 3:2 mit weißen Rändern links und rechts), damit das Abzeichen
+	   so groß erscheint wie im Bild davor */
+	.gross-ansicht video {
+		display: block;
+		box-sizing: border-box;
+		width: min(100%, calc(94vh - 6.5em));
+		aspect-ratio: 1 / 1;
+		margin: 0 auto;
+		padding: 1.2em;
+		background: #fff;
+		object-fit: cover;
+		cursor: pointer;
+		/* Videoweiß ist nach der Komprimierung minimal grau; so verschmilzt es mit dem Weiß des Fensters */
+		mix-blend-mode: multiply;
+		/* Chrome zeigt Videoweiß etwas dunkler als Seitenweiß an; leicht aufhellen, damit kein grauer Kasten bleibt */
+		filter: brightness(1.04);
+	}
+
+	.gross-ansicht video[hidden],
+	.gross-ansicht img[hidden] {
+		display: none;
+	}
+
+	/* ▶ schräg rechts unten außen am Ring; die Lage (--x, --y) berechnet das Skript aus Bild- bzw. Videogröße */
+	.abspielen {
+		position: absolute;
+		left: var(--x, auto);
+		top: var(--y, auto);
+		right: 10px;
+		bottom: 10px;
+		transform: var(--verschieben, none);
+		padding: 0;
+		border: 0;
+		background: none;
+		cursor: pointer;
+	}
+
+	.abspielen[hidden] {
+		display: none;
+	}
+
+	.play {
+		position: relative;
+		display: block;
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.92);
+		box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+		transition: transform 0.2s;
+	}
+
+	.play::after {
+		content: '';
+		position: absolute;
+		left: 16px;
+		top: 12px;
+		border-style: solid;
+		border-width: 8px 0 8px 13px;
+		border-color: transparent transparent transparent var(--rot);
+	}
+
+	.abspielen:hover .play,
+	.abspielen:focus-visible .play {
+		transform: scale(1.1);
+	}
+
 	/* Großansicht */
 	.gross-ansicht {
 		width: min(92vw, 720px);
@@ -1575,6 +1758,8 @@ const karo = (farbe: string) => {
 		position: absolute;
 		top: 8px;
 		right: 8px;
+		/* über Bild und Video (.gross-bild ist eine eigene Ebene), sonst trifft der Klick das Video und hält es nur an */
+		z-index: 2;
 		width: 2.2em;
 		height: 2.2em;
 		border: none;
