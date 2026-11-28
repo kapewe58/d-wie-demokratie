@@ -26,7 +26,7 @@ const bilder: { src: ImageMetadata; motiv: number; foto?: boolean; alt: string; 
 		motiv: m.nr,
 		alt: m.alt,
 		text: `Motiv ${m.nr} von ${motive.filter((x) => !x.bald).length}`,
-		// Video mit Ton (Feld `video` in motive.ts): ▶ auf dem Bild, startet erst beim Klick
+		// Video mit Ton (Feld `video` in motive.ts): „▶ Video abspielen“ neben den Pfeilen, startet erst beim Klick
 		video: (m as { video?: string }).video,
 	}));
 const sekunden = 5;
@@ -98,14 +98,15 @@ const zitatSekunden = 8;
 							loading={i === 0 ? 'eager' : 'lazy'}
 						/>
 					</a>
-					{/* ▶ nur bei Motiven mit Video; das Video wird erst beim Klick geladen und spielt mit Ton an dieser Stelle */}
-					{bild.video && (
-						<button type="button" class="abspielen" data-video={bild.video} tabindex={i === 0 ? undefined : -1} aria-label={`Video mit Ton abspielen: Motiv ${bild.motiv}`}>
-							<span class="play" aria-hidden="true"></span>
-						</button>
-					)}
 				</div>
 				<p class="folie-text">{bild.text}</p>
+				{/* „▶ Video abspielen“ rechts in der Zeile unter dem Bild (nur bei Motiven mit Video); das Video wird erst
+				    beim Klick geladen und spielt mit Ton an Stelle des Bildes */}
+				{bild.video && (
+					<button type="button" class="abspielen" data-video={bild.video} tabindex={i === 0 ? undefined : -1} aria-label={`Video mit Ton abspielen: Motiv ${bild.motiv}`}>
+						<span class="play" aria-hidden="true"></span><span class="play-wort">Video abspielen</span>
+					</button>
+				)}
 			</div>
 		))}
 		<div class="pfeile" hidden>
@@ -114,7 +115,7 @@ const zitatSekunden = 8;
 		</div>
 	</div>
 
-	<div class="unter-slider">
+	<div class:list={['unter-slider', { leer: !bilder.some((b) => b.foto) }]}>
 		<!-- Kennzeichnung nach Art. 50 KI-Verordnung -->
 		<p class="ki-hinweis" hidden={!bilder[0].foto}>KI-Bilder, bald ersetzen wir sie durch echte.</p>
 	</div>
@@ -218,7 +219,7 @@ const zitatSekunden = 8;
 			video?.remove();
 			video = null;
 			slider.querySelectorAll('.bildfeld.spielt').forEach((f) => f.classList.remove('spielt'));
-			slider.querySelectorAll<HTMLElement>('.abspielen').forEach((k) => (k.hidden = false));
+			slider.querySelectorAll<HTMLElement>('.abspielen').forEach((k) => (k.style.visibility = ''));
 		};
 
 		const zeige = (n: number) => {
@@ -265,13 +266,14 @@ const zitatSekunden = 8;
 				v.src = knopf.dataset.video!;
 				v.playsInline = true;
 				v.setAttribute('aria-label', knopf.getAttribute('aria-label') ?? '');
-				v.addEventListener('ended', () => (knopf.hidden = false));
+				v.addEventListener('ended', () => (knopf.style.visibility = ''));
 				v.addEventListener('click', () => (v.paused ? v.play() : v.pause()));
-				const feld = knopf.closest('.bildfeld')!;
+				const feld = knopf.closest('.folie')!.querySelector('.bildfeld')!;
 				feld.append(v);
 				feld.classList.add('spielt');
 				video = v;
-				knopf.hidden = true;
+				// unsichtbar statt verborgen, damit die Zeile auf dem Handy nicht springt
+				knopf.style.visibility = 'hidden';
 				v.play();
 			});
 		}
@@ -379,6 +381,14 @@ const zitatSekunden = 8;
 		object-fit: cover;
 	}
 
+	/* Handy: Motivbilder quadratisch zuschneiden (nur das Weiß links und rechts fällt weg), damit das runde Motiv
+	   fast die ganze Breite füllt; das Video wird mit object-fit: cover genauso beschnitten. Fotos (data-foto) bleiben 3:2. */
+	@media (max-width: 599px) {
+		.folie:not([data-foto]) img {
+			aspect-ratio: 1 / 1;
+		}
+	}
+
 	/* Bild mit ▶ für Motive mit Video; das Video liegt beim Abspielen genau über dem Bild (beide 3:2) */
 	.bildfeld {
 		position: relative;
@@ -408,50 +418,56 @@ const zitatSekunden = 8;
 		background: #fff;
 	}
 
-	/* ▶ schräg rechts unten außen am Ring, wie ein Anstecker am Abzeichen. Das Abzeichen im 1200 × 800-Bild:
-	   Mitte in der Bildmitte, Radius 380 px = 31,67 % der Breite bzw. 47,5 % der Höhe; Knopfmitte auf 45° außerhalb des Rings,
-	   am Computer gut 20 px Luft, auf dem Handy etwas weniger, damit der Knopf nicht an die Pfeile darunter stößt, so passt es bei jeder Bildbreite */
+	/* „▶ Video abspielen“: länglicher Knopf, so hoch wie die Pfeile; am Computer 12 px rechts neben „‹ Motiv 16 von 17 ›“,
+	   auf dem Handy mittig in einer eigenen Zeile darunter */
+	.folie {
+		position: relative;
+	}
+
 	.abspielen {
-		position: absolute;
-		left: calc(50% + 22.39% + clamp(18px, 4.4%, 30px));
-		top: calc(50% + 33.59% + clamp(18px, 6.6%, 30px));
-		transform: translate(-50%, -50%);
-		z-index: 1;
-		padding: 0;
-		border: 0;
-		background: none;
+		position: relative;
+		display: flex;
+		margin: 6px auto 0;
+		align-items: center;
+		gap: 0.45em;
+		height: 40px;
+		padding: 0 0.95em 0 0.5em;
+		border: none;
+		border-radius: 20px;
+		background: #f0f0f0;
+		color: var(--schwarz);
+		font: inherit;
+		font-weight: bold;
+		white-space: nowrap;
 		cursor: pointer;
 	}
 
-	.abspielen[hidden] {
-		display: none;
+	.abspielen:hover,
+	.abspielen:focus-visible {
+		background: #e2e2e2;
 	}
 
-	/* runder Knopf, weiß mit rotem Dreieck */
+	.play-wort {
+		font-size: 0.82em;
+	}
+
+	/* rotes Dreieck in weißem Kreis */
 	.play {
 		position: relative;
-		display: block;
-		width: 40px;
-		height: 40px;
+		width: 28px;
+		height: 28px;
 		border-radius: 50%;
-		background: rgba(255, 255, 255, 0.92);
-		box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
-		transition: transform 0.2s;
+		background: #fff;
 	}
 
 	.play::after {
 		content: '';
 		position: absolute;
-		left: 16px;
-		top: 12px;
+		left: 11px;
+		top: 8px;
 		border-style: solid;
-		border-width: 8px 0 8px 13px;
+		border-width: 6px 0 6px 10px;
 		border-color: transparent transparent transparent var(--rot);
-	}
-
-	.abspielen:hover .play,
-	.abspielen:focus-visible .play {
-		transform: scale(1.1);
 	}
 
 	/* nur am Computer: beim Darüberfahren „Video mit Ton abspielen“ */
@@ -466,8 +482,27 @@ const zitatSekunden = 8;
 			background: var(--schwarz);
 			color: #fff;
 			font-size: 0.8rem;
-			white-space: nowrap;
+			font-weight: normal;
 			pointer-events: none;
+		}
+	}
+
+	/* Handy: die Pfeile bleiben auf Höhe der Zeile „Motiv 16 von 17“ (die Knopfzeile darunter gilt für alle Folien,
+	   damit die Seite beim Wechsel nicht springt) */
+	@media (max-width: 699px) {
+		.slider:has(.abspielen) .pfeile {
+			bottom: 46px;
+		}
+	}
+
+	/* Computer: rechts neben dem Pfeil › (die Pfeilzeile ist 13em breit und mittig; em wie dort, daher keine eigene Schriftgröße) */
+	@media (min-width: 700px) {
+		.abspielen {
+			position: absolute;
+			left: calc(50% + 6.5em + 12px);
+			bottom: 0;
+			z-index: 1;
+			margin: 0;
 		}
 	}
 
@@ -498,6 +533,13 @@ const zitatSekunden = 8;
 	.ki-hinweis[hidden] {
 		display: block;
 		visibility: hidden;
+	}
+
+	/* Handy: ohne KI-Fotos im Wechsel bleibt die Zeile ganz weg, damit „Wir zeigen Flagge“ näher an den Bildern steht */
+	@media (max-width: 699px) {
+		.unter-slider.leer {
+			display: none;
+		}
 	}
 
 	/* auf dem Handy steht der Hinweis über den Punkten, direkt unter dem Bild */
@@ -568,7 +610,7 @@ const zitatSekunden = 8;
 		position: absolute;
 		left: 50%;
 		bottom: 0;
-		width: 17em;
+		width: 13em;
 		max-width: 100%;
 		display: flex;
 		justify-content: space-between;
