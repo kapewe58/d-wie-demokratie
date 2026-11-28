@@ -87,3 +87,17 @@ Zwei neue Designs mit voller Produktliste nach den Regeln oben:
 - **Für helle Produkte** (transparent), Design 360934678: 40 Produkte in hellen Farben (ohne Hunde-T-Shirt und die drei Patch-Beanies, die nur auf dunklem Patch drucken).
 
 Polos „Oben links“, Kinder- und Teenager-Hoodie „Vollformat vorn“.
+
+## Neuer Rand Schwarz-Rot-Gold: Motive 15, 16 und 17 (28.11.2026)
+
+Sechs neue Designs mit voller Produktliste nach den Regeln oben, Polos „Oben links“, Kinder- und Teenager-Hoodie „Vollformat vorn“:
+
+| Motiv | Für alle Produkte | Für helle Produkte |
+|---|---|---|
+| 15 „Freie Fahrt für freie Kinder“ | 360940099 (44 Produkte) | 360940170 (40) |
+| 16 „Aufwachen, Demokraten!“ | 360940165 (44) | 360940098 (40) |
+| 17 „Amsel, Gimpel und Pirol“ | 360940172 (44) | 360940149 (40) |
+
+Alte Designs von 15 (360899839, 360899887) und 16 (360934726, 360934678) mit schwarzem Rand depubliziert, nicht gelöscht.
+
+Motiv 17 hat als erstes Motiv 25 Stichwörter (das Maximum bei Spreadshirt): Klaus will künftig mehr, aber passende Stichwörter, damit man Motive bei vielen Motiven noch findet.

@@ -245,11 +245,11 @@ const liste = [
 				seit: '2026-11-25',
 			},
 		],
-		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360899839',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360940099',
 		alt: 'Ein Mädchen im Stil einer glänzenden Spielfigur fährt entschlossen auf einem gelben Fahrrad nach rechts; es trägt einen roten Anzug mit Schwarz-Rot-Gold am Ärmel, die schwarzen Zöpfe mit gelben Haargummis wehen im Fahrtwind. Oben im Bogen „Freie Fahrt für freie Kinder“, unten d-wie-demokratie.de, in einem runden Abzeichen.',
 		varianten: [
 			{ endung: '', name: 'Für alle Produkte', stoff: '#71839b', text: 'Motiv mit weißem Hintergrund.' },
-			{ endung: '-transparent', name: 'Für helle Produkte', shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360899887', text: 'Motiv mit transparentem Hintergrund.' },
+			{ endung: '-transparent', name: 'Für helle Produkte', shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360940170', text: 'Motiv mit transparentem Hintergrund.' },
 		],
 	},
 	{
@@ -259,7 +259,7 @@ const liste = [
 		name: 'Aufwachen, Demokraten!',
 		stichwoerter: ['Hahn', 'Gockel', 'Vogel', 'Weckruf', 'Aufwachen', 'Mut', 'Haltung', 'Tiere'],
 		gestalter: 'klaus-p-wolf',
-		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360934726',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360940165',
 		entstehung: 'Den Hahn habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt, in Photoshop hochgerechnet und den Pfahl mit der KI-Funktion von Photoshop verlängert. Ring und Schrift habe ich in Affinity gestaltet.',
 		kommentare: [
 			{
@@ -272,7 +272,7 @@ const liste = [
 		alt: 'Ein krähender Hahn mit Gefieder in Schwarz, Rot und Gold steht mit erhobenem Kopf auf einem Holzpfahl. Oben im Bogen „Aufwachen, Demokraten!“, rechts unten d-wie-demokratie.de, in einem runden Abzeichen.',
 		varianten: [
 			{ endung: '', name: 'Für alle Produkte', stoff: '#71839b', text: 'Motiv mit weißem Hintergrund.' },
-			{ endung: '-transparent', name: 'Für helle Produkte', shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360934678', text: 'Motiv mit transparentem Hintergrund.' },
+			{ endung: '-transparent', name: 'Für helle Produkte', shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360940098', text: 'Motiv mit transparentem Hintergrund.' },
 		],
 	},
 	{
@@ -280,8 +280,9 @@ const liste = [
 		// (Arbeitsdateien: iCloud Drive/Affinity/D wie Demokratie/Motive/Motiv 17 – Vögel/).
 		nr: 17,
 		name: 'Amsel, Gimpel und Pirol',
-		stichwoerter: ['Amsel', 'Gimpel', 'Pirol', 'Vogel', 'Vögel', 'Singvögel', 'Gesang', 'Zusammenhalt', 'Vielfalt', 'Natur', 'Tiere'],
+		stichwoerter: ['Amsel', 'Gimpel', 'Pirol', 'Vogel', 'Vögel', 'Singvögel', 'Vogelgesang', 'Gesang', 'Singen', 'Musizieren', 'Tiere', 'Natur', 'Frühling', 'Kupferstich', 'Vogelillustration', 'Zusammenhalt', 'Vielfalt', 'Gemeinschaft'],
 		gestalter: 'klaus-p-wolf',
+		shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360940172',
 		entstehung: 'Die drei Vögel habe ich nach meinen Vorgaben mit KI (ChatGPT) erstellt und in Photoshop hochgerechnet und bereinigt. Ring und Schrift habe ich in Affinity gestaltet.',
 		kommentare: [
 			{
@@ -295,7 +296,7 @@ const liste = [
 		alt: 'Eine schwarze Amsel, ein Gimpel mit roter Brust und ein goldgelber Pirol sitzen nebeneinander auf einem Zweig mit hellgrünen Blättern und singen, gezeichnet im Stil eines alten Kupferstichs. Oben im Bogen „Amsel, Gimpel und Pirol“, unten d-wie-demokratie.de, in einem runden Abzeichen mit Rand in Schwarz, Rot und Gold.',
 		varianten: [
 			{ endung: '', name: 'Für alle Produkte', stoff: '#71839b', text: 'Motiv mit weißem Hintergrund.' },
-			{ endung: '-transparent', name: 'Für helle Produkte', text: 'Motiv mit transparentem Hintergrund.' },
+			{ endung: '-transparent', name: 'Für helle Produkte', shop: 'https://d-wie-demokratie.myspreadshop.de/all?mainDesignId=360940149', text: 'Motiv mit transparentem Hintergrund.' },
 		],
 	},
 	// Entwürfe („Kommt bald“): noch ohne Nummer, Download und Shop; stehen unter den fertigen Motiven.
